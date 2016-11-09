@@ -1,0 +1,28 @@
+\documentclass[12pt]{article}
+
+
+\title{A loot at an Intrusion Detection System for OpenStack High Performance Compute Nodes}
+\author{Aleksander Okonski \\ aleksander.oko@gmail.com}
+\date{}
+
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+OpenStack is an open course cloud computer solution that focuses on infrastructure as a service. OpenStack is used by the SNICScienceCloud as a platform to proved a high performance computer node to university research and projects. The project is also know expanding to the classroom where students are being taught about cloud computing via the SNIC cloud. As the SNIC cloud will expand from research into education larger security problems will arise. As machines are provisioned, and deployed into this hybrid cloud they will be accessible from the internet. This would typically not be an issue however as students are learning there can be mistakes made and machines compromised. The proposal for this project is to look at the ability to create a intrusion detection system (IDS) for the OpenStack SNIC cloud. The goal would be to recognise the pattern that a correctly provisioned machine has for a particularly task. If the machine starts to differ then an admin can be notified and then the machine can be terminated. Traditionally an IDS come in two forms, host based IDS and network based IDS\@. A traditional host based IDS would sit on the virtual machine and view logs, processes, etc\@. and compare these to a set of rules. This would be an impractical solution for a cloud provider as all machines that would be created would need to have software on them that would be able to perform this type of scanning. For this project a look at implementing a IDS system that would be run on the OpenStack platform in parallel with the kvm/qemu layer. As calls are made between the hardware and virtual machine they can be annualised with a set of known expected calls. This can be accomplished via several methods, one such method would be using systemTap on the OpenStack platform. SystemTap is a linux kernel/system level probing tool that has little to no overhead.
+
+\section{Background}
+There has been several papers published about the states of cloud security and IDS systems on the cloud. There however has been very little work done on the OpenStack IDS front. Also there has been no published work (that I could find) on an IDS system that sits between the VMs and bare metal.
+
+
+SystemTap on the OpenStack platform recourses:
+https://github.com/pyKun/openstack-systemtap-toolkit
+https://wiki.openstack.org/wiki/Successes
+https://openstack-in-production.blogspot.se/2015/09/ept-huge-pages-and-benchmarking.html
+
+
+\section{Proposal}
+
+\end{document}
+
