@@ -1,1 +1,21 @@
 https://www.openstack.org/summit/vancouver-2015/summit-videos/presentation/unobtrusive-intrusion-detection-in-openstack
+
+
+
+open ports in cloud
+The network communication from vms to networks!
+Low security int he cloud currently
+Create a vm that would monitor ports /
+systemtap idea!
+
+
+Honey porsts
+
+
+
+write the proposable
+find reviewer
+trifecat of things:
+First create a document for what the vms should be doing. example: ssh is on port 222 and public/private keys only
+Secound implement a VM that would be working on scanning ports, getting logs, etc. making sure that the doccuemntation is beeing floowed. If not email someone!
+Third implement a low level KVM hook to do systemtap on vms and see what they are doing when running!
