@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 
-\title{A Look at Implementing Security Rules and Safeguards in OpenStack for SNICScienceCloud}
+\title{Implementing Security Rules, Safeguards, and IDS tools in OpenStack for SNICScienceCloud}
 \author{Aleksander Okonski \\ aleksander.oko@gmail.com}
 \date{}
 
@@ -9,18 +9,18 @@
 \maketitle
 
 \section{Background}
-Uppsala University has several high performance computer nodes (HPCs). One of the uses for these HPCs is to run the SNICScienceCloud (SNIC). The SNIC project lets researchers and professor's run cloud based projects on the HPC recourses. The SNIC cloud uses OpenStack as its underlying cloud framework. OpenStack is an open source cloud computer solution that focuses on infrastructure as a service. OpenStack is used by the SNIC cloud as a platform to provide high performance computer nodes to university research and projects. This service is now expanding to the classroom where students are using SNIC cloud for cloud computing courses. As the SNIC cloud expands from research into education it provides larger security exposure. As machines are provisioned, and deployed into this hybrid cloud they will be accessible from the Internet. This will increase the risk of machines being compromised. This poses a security problem as these users may not be aware of security rules and proper guidelines to use when initializing VMs. This has already been a small issue with several VMs being infected and joining bot-nets that then issued denial of service attacks on other machines. As the SNIC project grows so will the vulnerability of the cloud. It is therefor necessary to look into the ability to protect the SNIC cloud and ensure users are following best practices.
+Uppsala University has several high performance compute nodes (HPCs). One of the uses for these HPCs is to run the SNICScienceCloud (SNIC). The SNIC project lets researchers and professors run cloud based projects on the HPC recourses. The SNIC cloud uses OpenStack as its underlying cloud framework. OpenStack is an open source cloud computer solution that focuses on infrastructure as a service.  This service is now expanding to the classroom where students are using SNIC cloud for cloud computing courses. As the SNIC cloud becomes more poplar among researchers and student projects the security surface gradually expands. As machines are provisioned, and deployed into this hybrid cloud they will be accessible from the Internet.  This poses a security risk as these users may not be aware of security rules and proper guidelines to use when managing virtual machines (VMs) in the cloud. There have already been issues with several VMs being infected and joining bot-nets. As the SNIC project grows so will the vulnerability of the cloud. It is therefor necessary to look into the ability to protect the SNIC cloud and ensure users are following best practices.
 
 \section{Proposal}
-The proposal for this project is to assess and implement a three step solution to monitor and protect the SNIC cloud infrastructure. The first part will be to write a user guild for setting up and provisioning vms. The second part will be to implement a "watch dog" VM that would monitor the other VMs in the project. The final part would be to look into implementing a system that would allow a VM to be monitored through the underlying hypervisor.
+The proposal for this project is to assess and implement a three step solution to monitor and protect the SNIC cloud infrastructure. The first part will be to write a user guild for setting up and provisioning vms. The second part will be to implement a "watch dog" VM that would monitor the other VMs in the cluster externally for misconfiguration. The final part would be to look into implementing a system that would allow a VM to be monitored through the underlying hypervisor for internal configuration scanning.
 
 \section{Tasks}
 
 \begin{enumerate}
     \item Create a guide for uses to provision a VM.
-    \item Create the "Watch Dog" VM.
-    \item Ensure that the "Watch Dog" VM functions and is intuitive / easy to use.
-    \item Study and look into a way that the hypervisor can be used to view VM activities.
+    \item Create the "Watch Dog" VM to aggregate logs and scan for misconfiguration.
+    \item Ensure that the "Watch Dog" VM is properly tested and can be extended.
+    \item Study and look into a way that the hypervisor can be used to view VM activities and internal configurations.
 \end{enumerate}
 
 \section{Time Line}
@@ -28,8 +28,8 @@ The proposal for this project is to assess and implement a three step solution t
     \item Week 1-2 Ramp up and write documentation on different specifications that are needed in the cloud.
     \item Week 3-6 Start building the "Watch Dog" server.
     \item Week 7 Finish up and test the "Watch Dog" server.
-    \item Week 8-10 Start looking into ways of implementing a hypervisor based solution for viewing VM activities.
-    \item Week 10-17 Implement the hypervisor based solution for viewing VM activities.
+    \item Week 8-10 Start looking into ways of implementing a hypervisor based solution for viewing VM activities and configuration.
+    \item Week 10-17 Implement the hypervisor based solution for viewing VM activities and configurations.
     \item Week 17-19 Fix bugs and ensure that all created components are working as expected.
     \item Week 20 Finish up the report and prepare for presentation.
 \end{enumerate}
