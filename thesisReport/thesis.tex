@@ -34,20 +34,25 @@ In the cloud computing space several different computational models exist \cite{
 \end{itemize}
 
 \subsection{Cloud Infrastructure}
-At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several different virtual environments to use the same hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having a similar outcome however a different approach to the problem.
+At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several different virtual environments to use the same hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
 
+\subsection{Cloud Roles}
+When cloud computing first started to take off, the main type of computing resource provided was IaaS in the public cloud \cite{sourcedigit}. This started to change in the recent years when two new types models for cloud computing emerged. Public and Hybrid clouds allowed for companies to utilize the power of the cloud while still having some or all of there recourses located in there own datacenters.
 
-%talk about hypervisores
+\subsection{Cloud Computing vs Standard Models}
+Cloud computing has some distinct differences from regular computing.
 
-%Talk about how the cloud space looks like
-%Talk about the diffrent models
-%talk about openstack vs amazome / digitalocian
-%Talk about security
-%Talk about the security side of cloud and how its diffrent then the normal aspects
-%
+\begin{itemize}
+    \item Systems do not usually stay active for long. Users will provision and destroy systems with a high turnover.
+    \item Users may spin up several machines at once.
+    \item There may not be a dedicated team used to ensure uptime / health of systems.
+    \item Users will usually have full control of the systems.
+\end{itemize}
+
+Cloud computing also has a different threat model compared to a normal dedicated server \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. With normal server infrastructure the infrastructure and system are built once and then ran for extended periods of time. The systems themselves are not refreshed or rebuilt as happens in the cloud.
 
 \section{Related Work}
-A good starting article \cite{SurveyOfIDS}
+In this work we will be looking at ways to protect VM clusters by ensuring proper configuration steps are setup and used with the addition of looking at ways to implement an IDS solution into the cloud environment. Before starting the work we looked into previous work done in this field. Cloud security had been a hot topic in recent times therefor several papers have been written \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. These particular papers focus on the different aspects and concerns that are present when running in a cloud environment. They are a nice starting point to look at how the threat landscape in the cloud differs from the slandered model. The second set of articles looked at was about intrusion detection systems (IDS), more specifically how these can be used within the cloud.  A good starting article for \cite{SurveyOfIDS}
 
 \newpage
 \bibliographystyle{plain}
