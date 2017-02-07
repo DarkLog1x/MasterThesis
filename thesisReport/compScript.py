@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
-import subprocess, sys
-
+import subprocess
+import sys
+thesis = "thesis"
 commands = [
-    ['pdflatex', sys.argv[1] + '.tex'],
-    ['bibtex', sys.argv[1] + '.aux'],
-    ['pdflatex', sys.argv[1] + '.tex'],
-    ['pdflatex', sys.argv[1] + '.tex']
+    ['pdflatex', thesis + '.tex'],
+    ['bibtex', thesis + '.aux'],
+    ['pdflatex', thesis + '.tex'],
+    ['pdflatex', thesis + '.tex']
 ]
 
 for c in commands:
