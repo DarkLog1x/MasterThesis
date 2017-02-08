@@ -69,6 +69,12 @@ OpenStack is an open source platform for cloud computing \cite{wiki:OpenStack}. 
 %Terms related to cloud security (what is IDS)
 % what are the main streams in security
 % introduction to network security
+\section{Security}
+The field of computer security is large and diverse \cite{ComputerSecurity}. The general focus of computer security is to ensure that computer systems follow the CIA model of confidentiality, integrity, and availability. "The design artifacts that describe how the security controls (= security countermeasures) are positioned, and how they relate to the overall IT Architecture. These controls serve the purpose to maintain the system's quality attributes, among them confidentiality, integrity, availability, accountability and assurance." \cite{it_security_architecture} The disciplines that are focused on in this paper include: intrusion detection systems, network security, and system security.
+Intrusion detection systems come in two main forms, host based and network based. A host based system runs on the host and attempts to detect any security threats on the host machine. A network based IDS is connected on the network and inspects network traffic, trying to find threats by inspecting network traffic patterns. Both of these systems have advantages and disadvantages. With a host based system software must be installed and configured on each system. In a network IDS system the packets are monitored for unusual traffic patterns. There are disadvantages to this type of solution also, mainly network traffic can be encrypted and the overall volume of traffic encountered. Some examples of network based IDS tools are \href{https://www.snort.org/}{Snort}.
+
+%For a cloud system where machines are provisioned and destroy setting up this type of system would be difficult. There for a network based IDS system was chosen.
+
 \section{User Recommendation}
 The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some of the security features in the OpenStack platform.
 
