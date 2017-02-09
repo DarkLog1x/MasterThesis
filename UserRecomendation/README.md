@@ -9,15 +9,26 @@ Securing access to the Virtual Machine
 
 1. Ensure that one has created an ssh key pair.
     * In a terminal run the following command:
-        ```bash
-        # ssh-keygen -t rsa -b 4096
         ```
-        * The `ssh-keygen` command will create the key
-        * The `-t` option will set the cryptosystem 
+        $ ssh-keygen -t rsa -b 4096
+        # The `ssh-keygen` command will create the key
+        # The `-t` option will set the cryptosystem to rsa
+        # The `-b` will set the key length to 4096 bits 
+        Generating public/private rsa key pair.
+        Enter file in which to save the key (/home/groot/.ssh/id_rsa): #Your path goes here
+        Enter passphrase (empty for no passphrase): #Enter a password
+        Enter same passphrase again: #Reenter your password
+        ...
+        ``` 
+    * You now will have an public and private key pair in the location that you specifed. You can then submit your publick key (`.pub`) when you try and `ssh` into a machine. 
+        ```
+        $ ssh -i #Path to your private key# username@machine
+        ```
+2.  
+     
 
 ### Creating a new machine ###
 
 ### Security Roles ###
 
 ### Security Groups ###
-
