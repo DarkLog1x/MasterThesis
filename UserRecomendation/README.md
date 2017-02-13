@@ -28,7 +28,7 @@ Securing access to the Virtual Machine
 ### Creating a new machine ###
 
 1. Access the main control panel for OpenStack
-    ![Control Panel](/pic/2017-02-13-110643_954x888_scrot.png)
+    ![Control Panel](/UserRecomendation/pic/2017-02-13-110643_954x888_scrot.png)
 
 ### Security Roles ###
 
