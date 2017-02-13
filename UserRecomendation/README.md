@@ -7,6 +7,8 @@ Understanding the user interface
 Securing access to the Virtual Machine
 --------------------------------------
 
+One of the easiest ways for an advisory to get access to a virtual machine in the cloud is through poorly configured login credentials. there are bots on the web that will try to brute force login username and passwords on exposed ssh interfaces. It is therefore important for all machines to use strong login methods. One of these methods is to use a public private key pair instead of a password. Bellow are the instrustions on how to set up an ssh keypair. 
+
 1. Ensure that one has created an ssh key pair.
     * In a terminal run the following command:
         ```
