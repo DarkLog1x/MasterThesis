@@ -20,19 +20,19 @@ Securing access to the Virtual Machine
         Enter same passphrase again: #Reenter your password
         ...
         ``` 
-    * You now will have an public and private key pair in the location that you specifed. You can then submit your publick key (`.pub`) when you try and `ssh` into a machine. 
+    * You now will have a public and private key pair in the location that you specified. You can then submit your public key (`.pub`) when you try and `ssh` into a machine. 
         ```
         $ ssh -i #Path to your private key# username@machine
         ```
 
 2. You must upload your public key into OpenStack control panel:
-    * Login to the OpenStack administration panel and select "Access & Security" in the left hand collum. 
-    * Next select the "key Pair" located to bellow the "Acess & Security" title.
+    * Login to the OpenStack administration panel and select "Access & Security" in the left hand column. 
+    * Next select the "key Pair" located to bellow the "Access & Security" title.
         ![Key Pair field](/UserRecomendation/pic/2017-02-13-211146_956x359_scrot.png)
-    * Once on the page procced to click on the "Import Key Pair" button located at the top right of the screen.
-    * A popup should apper that looks similar to the following:
+    * Once on the page proceed to click on the "Import Key Pair" button located at the top right of the screen.
+    * A pop-up should appear that looks similar to the following:
         ![Key Import](/UserRecomendation/pic/2017-02-13-211418_811x636_scrot.png)
-    * Go back to your terminal and find your publick key (`.pub`). Copy the contents and paste them into the field marked "Public Key". Then add a name to your key and click the "Import Key Pair" button at the bottom of the popup.
+    * Go back to your terminal and find your public key (`.pub`). Copy the contents and paste them into the field marked "Public Key". Then add a name to your key and click the "Import Key Pair" button at the bottom of the pop-up.
 
 ### Creating a new machine ###
 
