@@ -25,10 +25,15 @@ Securing access to the Virtual Machine
         $ ssh -i #Path to your private key# username@machine
         ```
 
+2. You must upload your public key into OpenStack control panel:
+    * Login to the OpenStack administration panel and select 
+
 ### Creating a new machine ###
 
-1. Access the main control panel for OpenStack
+1. Access the main control panel for OpenStack:
     ![Control Panel](/UserRecomendation/pic/2017-02-13-110643_954x888_scrot.png)
+
+2. Select the 
 
 ### Security Roles ###
 
