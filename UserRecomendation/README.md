@@ -24,10 +24,11 @@ Securing access to the Virtual Machine
         ```
         $ ssh -i #Path to your private key# username@machine
         ```
-2.  
-     
 
 ### Creating a new machine ###
+
+1. Access the main control panel for OpenStack
+    ![Control Panel](/pic/2017-02-13-110643_954x888_scrot.png)
 
 ### Security Roles ###
 
