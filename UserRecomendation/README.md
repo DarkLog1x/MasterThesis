@@ -30,10 +30,10 @@ One of the easiest ways for an advisory to get access to a virtual machine in th
 2. You must upload your public key into OpenStack control panel:
     * Login to the OpenStack administration panel and select "Access & Security" in the left hand column. 
     * Next select the "key Pair" located to bellow the "Access & Security" title.
-        ![Key Pair field](/UserRecomendation/pic/2017-02-13-211146_956x359_scrot.png =250x)
+        ![Key Pair field](/UserRecomendation/pic/2017-02-13-211146_956x359_scrot.png)
     * Once on the page proceed to click on the "Import Key Pair" button located at the top right of the screen.
     * A pop-up should appear that looks similar to the following:
-        ![Key Import](/UserRecomendation/pic/2017-02-13-211418_811x636_scrot.png =250x)
+        ![Key Import](/UserRecomendation/pic/2017-02-13-211418_811x636_scrot.png)
     * Go back to your terminal and find your public key (`.pub`). Copy the contents and paste them into the field marked "Public Key". Then add a name to your key and click the "Import Key Pair" button at the bottom of the pop-up.
 
 ### Creating a new machine ###
