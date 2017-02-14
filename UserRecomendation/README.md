@@ -39,9 +39,18 @@ One of the easiest ways for an advisory to get access to a virtual machine in th
 ### Creating a new machine ###
 
 1. Access the main control panel for OpenStack:
-    ![Control Panel](/UserRecomendation/pic/2017-02-13-110643_954x888_scrot.png)
+   ![Control Panel](/UserRecomendation/pic/2017-02-13-110643_954x888_scrot.png)
 
-2. Select the 
+2. Select the "Instance" tab on the left hand side of the screen.
+
+3. Now select the "Launch Instance" button on the upper right hand side of the screen. 
+
+4. A pop-up should apper that look similar to the following:
+   ![Instance Panel]()
+   
+5. Fill out the necacasry setting. 
+   * Ensure that the "Security Group" tab has the correct group assigned to the VM.
+   * Ensure that the correct public key is selected in the "Key Pair" tab
 
 ### Security Roles ###
 
