@@ -71,4 +71,12 @@ Security rules are a set of instructions that can be placed on to VMs that will 
    * "Port Range" what ports that rule applies to for that machine
    * "Remote IP Prefix" describes what IP address the trafic should come from
 
+As with any computer system accessible to the internet great lengths should be taken to ensure that a machine can not be compromised. As cloud based solutions often see machines turning on and off frequently a strong set of "Security Rules" can help ensure a healthy virtual environment. Bellow are a set of recomendations to follow:
+* Only allow port 22 (ssh) and only the ssh protocal to be allowed to connect to VMs from remote hosts. 
+* If a machine or group of machine dont need access the the internet (i.e. database machine) ensure that the security group only allows internal network trafic to come from and to that machein. 
+* Open only the neccasary port for specific machines to access the internet.
+* If feasiable block all outgoing traffic (ensure that one does not block ssh if needed to connect from the outside) and then open only the ports that are needed. 
+
+A good reference point for security rules are linux iptable rules (http://netfilter.org/).
+
 ### Security Groups ###
