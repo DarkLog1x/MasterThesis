@@ -52,6 +52,23 @@ One of the easiest ways for an advisory to get access to a virtual machine in th
    * Ensure that the "Security Group" tab has the correct group assigned to the VM.
    * Ensure that the correct public key is selected in the "Key Pair" tab
 
-### Security Roles ###
+### Security Rules ###
+
+Security rules are a set of instructions that can be placed on to VMs that will limit that pariculer VMs abbiltiy to access external environments. They act very similer to a firewall with allowing or blocking diffrent types of connections to the individual VMs. To set up proper rules the following steps should be taken:
+
+1. Log into OpenStack and select the "Access & Security" tab on the left hand side. 
+
+2. You will now see a list of security groups that you are part of. Selcet the group that you would like to edit by clicking the "Manage Rules" button on the right hand side. 
+   ![Manage Rules]()
+   
+3. The new screen should look something like this:
+   ![Rules}()
+   
+   Lets break down what the diffrent components are:
+   * The "Direction" field describes if inbound or outbound trafic is affected by the rule
+   * "Ether Type" describes wiether the rule talks about IPv4 or IPv6 traffic
+   * "IP Protocal" describes what type of traffic is permited or blocked (i.e. http, pop3, etc.)
+   * "Port Range" what ports that rule applies to for that machine
+   * "Remote IP Prefix" describes what IP address the trafic should come from
 
 ### Security Groups ###
