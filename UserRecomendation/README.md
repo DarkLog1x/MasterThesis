@@ -62,7 +62,7 @@ Security rules are a set of instructions that can be placed on to VMs that will 
    ![Manage Rules](/UserRecomendation/pic/2017-02-15-114850_894x464_scrot.png)
    
 3. The new screen should look something like this:
-   ![Rules}(/UserRecomendation/pic/2017-02-15-114915_880x665_scrot.png)
+   ![Rules](/UserRecomendation/pic/2017-02-15-114915_880x665_scrot.png)
    
    Lets break down what the diffrent components are:
    * The "Direction" field describes if inbound or outbound trafic is affected by the rule
