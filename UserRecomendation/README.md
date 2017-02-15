@@ -46,7 +46,7 @@ One of the easiest ways for an advisory to get access to a virtual machine in th
 3. Now select the "Launch Instance" button on the upper right hand side of the screen. 
 
 4. A pop-up should apper that look similar to the following:
-   ![Instance Panel]()
+   ![Instance Panel](/UserRecomendation/pic/2017-02-14-103717_874x658_scrot.png)
    
 5. Fill out the necacasry setting. 
    * Ensure that the "Security Group" tab has the correct group assigned to the VM.
@@ -59,10 +59,10 @@ Security rules are a set of instructions that can be placed on to VMs that will 
 1. Log into OpenStack and select the "Access & Security" tab on the left hand side. 
 
 2. You will now see a list of security groups that you are part of. Selcet the group that you would like to edit by clicking the "Manage Rules" button on the right hand side. 
-   ![Manage Rules]()
+   ![Manage Rules](/UserRecomendation/pic/2017-02-15-114850_894x464_scrot.png)
    
 3. The new screen should look something like this:
-   ![Rules}()
+   ![Rules}(/UserRecomendation/pic/2017-02-15-114915_880x665_scrot.png)
    
    Lets break down what the diffrent components are:
    * The "Direction" field describes if inbound or outbound trafic is affected by the rule
