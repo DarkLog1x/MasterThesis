@@ -45,38 +45,38 @@ One of the easiest ways for an advisory to get access to a virtual machine in th
 
 3. Now select the "Launch Instance" button on the upper right hand side of the screen. 
 
-4. A pop-up should apper that look similar to the following:
-   ![Instance Panel]()
+4. A pop-up should appear that look similar to the following:
+   ![Instance Panel](/UserRecomendation/pic/2017-02-14-103717_874x658_scrot.png)
    
-5. Fill out the necacasry setting. 
+5. Fill out the necessary setting. 
    * Ensure that the "Security Group" tab has the correct group assigned to the VM.
    * Ensure that the correct public key is selected in the "Key Pair" tab
 
 ### Security Rules ###
 
-Security rules are a set of instructions that can be placed on to VMs that will limit that pariculer VMs abbiltiy to access external environments. They act very similer to a firewall with allowing or blocking diffrent types of connections to the individual VMs. To set up proper rules the following steps should be taken:
+Security rules are a set of instructions that can be placed on to VMs that will limit that particular VMs ability to access external environments. They act very similar to a firewall with allowing or blocking different types of connections to the individual VMs. To set up proper rules the following steps should be taken:
 
 1. Log into OpenStack and select the "Access & Security" tab on the left hand side. 
 
-2. You will now see a list of security groups that you are part of. Selcet the group that you would like to edit by clicking the "Manage Rules" button on the right hand side. 
-   ![Manage Rules]()
+2. You will now see a list of security groups that you are part of. Select the group that you would like to edit by clicking the "Manage Rules" button on the right hand side. 
+   ![Manage Rules](/UserRecomendation/pic/2017-02-15-114850_894x464_scrot.png)
    
 3. The new screen should look something like this:
-   ![Rules}()
+   ![Rules](/UserRecomendation/pic/2017-02-15-114915_880x665_scrot.png)
    
-   Lets break down what the diffrent components are:
-   * The "Direction" field describes if inbound or outbound trafic is affected by the rule
-   * "Ether Type" describes wiether the rule talks about IPv4 or IPv6 traffic
-   * "IP Protocal" describes what type of traffic is permited or blocked (i.e. http, pop3, etc.)
+   Lets break down what the different components are:
+   * The "Direction" field describes if inbound or outbound traffic is affected by the rule
+   * "Ether Type" describes wether the rule talks about IPv4 or IPv6 traffic
+   * "IP Protocol" describes what type of traffic is permitted or blocked (i.e. http, pop3, etc.)
    * "Port Range" what ports that rule applies to for that machine
-   * "Remote IP Prefix" describes what IP address the trafic should come from
+   * "Remote IP Prefix" describes what IP address the traffic should come from
 
-As with any computer system accessible to the internet great lengths should be taken to ensure that a machine can not be compromised. As cloud based solutions often see machines turning on and off frequently a strong set of "Security Rules" can help ensure a healthy virtual environment. Bellow are a set of recomendations to follow:
-* Only allow port 22 (ssh) and only the ssh protocal to be allowed to connect to VMs from remote hosts. 
-* If a machine or group of machine dont need access the the internet (i.e. database machine) ensure that the security group only allows internal network trafic to come from and to that machein. 
-* Open only the neccasary port for specific machines to access the internet.
-* If feasiable block all outgoing traffic (ensure that one does not block ssh if needed to connect from the outside) and then open only the ports that are needed. 
+As with any computer system accessible to the internet great lengths should be taken to ensure that a machine can not be compromised. As cloud based solutions often see machines turning on and off frequently a strong set of "Security Rules" can help ensure a healthy virtual environment. Bellow are a set of recommendations to follow:
+* Only allow port 22 (ssh) and only the ssh protocol to be allowed to connect to VMs from remote hosts. 
+* If a machine or group of machine dont need access the the internet (i.e. database machine) ensure that the security group only allows internal network traffic to come from and to that machine. 
+* Open only the necessary port for specific machines to access the internet.
+* If feasible block all outgoing traffic (ensure that one does not block ssh if needed to connect from the outside) and then open only the ports that are needed. 
 
-A good reference point for security rules are linux iptable rules (http://netfilter.org/).
+A good reference point for security rules are Linux iptable rules (http://netfilter.org/).
 
 ### Security Groups ###
