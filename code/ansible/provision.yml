@@ -12,6 +12,14 @@
         - git-core
         - gcc
 
+  vars_prompt:
+    - name: "source_file"
+      prompt: "Enter password"
+      private: yes
+
+  environment:
+    OS_PASSWORD: '{{source_file}}'
+
   tasks:
     - name: ping google
       action: ping
@@ -24,7 +32,18 @@
       become_method: sudo
       action: command pip install python-openstackclient
 
-    - name: copy file test
+    - name: copy file openrc
+      copy:
+        src: /home/groot/Documents/Uppsala/masterThesis/code/ssh_keys/openrc.sh
+        dest: /home/ubuntu/openrc.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: 0755
+
+    - name: Run openrc
+      shell: . /home/ubuntu/openrc.sh
+
+    - name: copy file main
       copy:
         src: /home/groot/Documents/Uppsala/masterThesis/code/python/main.py
         dest: /home/ubuntu/main.py
