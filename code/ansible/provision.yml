@@ -32,6 +32,11 @@
         group: ubuntu
         mode: 0755
 
+    - name: run python
+      command: python main.py
+      register: out
+    - debug: var=out.stdout_lines
+
 
   handlers:
     - name: ping again
