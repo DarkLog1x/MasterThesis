@@ -22,7 +22,8 @@ auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
 
 sess = session.Session(auth=auth)
 nova = client.Client('2.1', session=sess)
-nova.servers.list()
+print(nova.servers.list())
+
 
 # def main(argv):
 
