@@ -40,10 +40,26 @@ def main():
     ip_list = nova_client.floating_ips.list()
     print_values_ip(ip_list)
 
+    deviceList(neutron, nova_client)
+
     # This will print all the hosts
     # print("##############Hosts##################")
     # host_list = nova_client.hosts.list()
     # print_hosts(host_list)
+
+
+def deviceList(neutron, nova_client):
+    list = {}
+    server_list = nova_client.servers.list(detailed=True)
+    ip_list = nova_client.floating_ips.list()
+    for server in server_list:
+        list.setdefault(server.id, [])
+        list[server.id].append(server.name)
+    for ip in ip_list:
+        if(ip.instance_id != None):
+            list[ip.instance_id].append(ip.fixed_ip)
+            list[ip.instance_id].append(ip.ip)
+    print list
 
 
 def print_servers(server_list):
