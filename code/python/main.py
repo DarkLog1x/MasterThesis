@@ -7,32 +7,71 @@ import inspect
 from os import environ as env
 import subprocess
 
-from novaclient import client
+from novaclient import client as client_nova
 import keystoneclient.v3.client as ksclient
 from keystoneauth1 import loading
 from keystoneauth1 import session
-from neutronclient.v2_0 import client
-
-# loader = loading.get_plugin_loader('password')
-# auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
-# username=env['OS_USERNAME'],
-# password=env['OS_PASSWORD'],
-# project_name=env['OS_PROJECT_NAME'],
-# user_domain_name=env['OS_USER_DOMAIN_NAME'],
-# project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
-
-# sess = session.Session(auth=auth)
-# nova = client.Client('2.1', session=sess)
-# print(nova.servers.list())
+from neutronclient.v2_0 import client as client_neutron
 
 
 def main():
     auth = get_credentials()
     sess = session.Session(auth=auth)
-    neutron = client.Client(session=sess)
-    netw = neutron.list_networks()
+    neutron = client_neutron.Client(session=sess)
+    nova_client = client_nova.Client('2.1', session=sess)
 
+    # This will get and print the networks
+    print("######networks#######")
+    netw = neutron.list_networks()
     print_values(netw, 'networks')
+
+    # This will get and print the routes
+    print("############routers############")
+    routers_list = neutron.list_routers(retrieve_all=True)
+    print_values(routers_list, 'routers')
+
+    # This will get and print the servers
+    print("############servers############")
+    server_list = nova_client.servers.list(detailed=True)
+    print_servers(server_list)
+
+    # This will get the floating ips
+    print("################Floating IPS##############")
+    ip_list = nova_client.floating_ips.list()
+    print_values_ip(ip_list)
+
+    # This will print all the hosts
+    # print("##############Hosts##################")
+    # host_list = nova_client.hosts.list()
+    # print_hosts(host_list)
+
+
+def print_servers(server_list):
+    for servers in server_list:
+        print("-" * 35)
+        print("server_name : %s" % servers.name)
+        print("server_id : %s" % servers.id)
+        print("-" * 35)
+
+
+def print_hosts(host_list):
+    for host in host_list:
+        print("-" * 35)
+        print("host_name : %s" % host.host_name)
+        print("service : %s" % host.service)
+        print("zone : %s" % host.zone)
+        print("-" * 35)
+
+
+def print_values_ip(ip_list):
+    ip_dict_lisl = []
+    for ip in ip_list:
+        print("-" * 35)
+        print("fixed_ip : %s" % ip.fixed_ip)
+        print("id : %s" % ip.id)
+        print("instance_id : %s" % ip.instance_id)
+        print("ip : %s" % ip.ip)
+        print("pool : %s" % ip.pool)
 
 
 def get_credentials():
