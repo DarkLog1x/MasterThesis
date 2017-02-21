@@ -11,6 +11,7 @@
         - python-setuptools
         - git-core
         - gcc
+        - nmap
 
   vars_prompt:
     - name: "source_file"

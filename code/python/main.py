@@ -12,6 +12,7 @@ import keystoneclient.v3.client as ksclient
 from keystoneauth1 import loading
 from keystoneauth1 import session
 from neutronclient.v2_0 import client as client_neutron
+from subprocess import call
 
 
 def main():
@@ -21,31 +22,40 @@ def main():
     nova_client = client_nova.Client('2.1', session=sess)
 
     # This will get and print the networks
-    print("######networks#######")
-    netw = neutron.list_networks()
-    print_values(netw, 'networks')
+    # print("######networks#######")
+    # netw = neutron.list_networks()
+    # print_values(netw, 'networks')
 
     # This will get and print the routes
-    print("############routers############")
-    routers_list = neutron.list_routers(retrieve_all=True)
-    print_values(routers_list, 'routers')
+    # print("############routers############")
+    # routers_list = neutron.list_routers(retrieve_all=True)
+    # print_values(routers_list, 'routers')
 
     # This will get and print the servers
-    print("############servers############")
-    server_list = nova_client.servers.list(detailed=True)
-    print_servers(server_list)
+    # print("############servers############")
+    # server_list = nova_client.servers.list(detailed=True)
+    # print_servers(server_list)
 
     # This will get the floating ips
-    print("################Floating IPS##############")
-    ip_list = nova_client.floating_ips.list()
-    print_values_ip(ip_list)
+    # print("################Floating IPS##############")
+    # ip_list = nova_client.floating_ips.list()
+    # print_values_ip(ip_list)
 
-    deviceList(neutron, nova_client)
+    list = deviceList(neutron, nova_client)
+    nmapscan(list)
 
     # This will print all the hosts
     # print("##############Hosts##################")
     # host_list = nova_client.hosts.list()
     # print_hosts(host_list)
+
+
+def nmapscan(list):
+    for server in list:
+        try:
+            call(["nmap", "-Pn", list[server][2]])
+        except:
+            print "No IP for:" + server
 
 
 def deviceList(neutron, nova_client):
@@ -59,7 +69,7 @@ def deviceList(neutron, nova_client):
         if(ip.instance_id != None):
             list[ip.instance_id].append(ip.fixed_ip)
             list[ip.instance_id].append(ip.ip)
-    print list
+    return list
 
 
 def print_servers(server_list):
