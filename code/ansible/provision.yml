@@ -12,6 +12,10 @@
         - git-core
         - gcc
         - nmap
+        - ruby
+        - ruby-dev
+        - libsqlite3-dev
+        - make
 
   vars_prompt:
     - name: "source_file"
@@ -31,6 +35,11 @@
       action: command pip install python-openstackclient
       action: command pip install python-neutronclient
 
+    - name: install gem
+      become: yes
+      become_method: sudo
+      action: command gem install ssh_scan
+
     - name: copy file main
       copy:
         src: /home/groot/Documents/Uppsala/masterThesis/code/python/main.py
@@ -38,6 +47,15 @@
         owner: ubuntu
         group: ubuntu
         mode: 0755
+
+    - name: copy file module_nmap
+      copy:
+        src: /home/groot/Documents/Uppsala/masterThesis/code/python/module_nmap.py
+        dest: /home/ubuntu/module_nmap.py
+        owner: ubuntu
+        group: ubuntu
+        mode: 0755
+
 
 
 

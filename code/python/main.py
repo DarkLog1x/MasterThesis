@@ -13,6 +13,7 @@ from keystoneauth1 import loading
 from keystoneauth1 import session
 from neutronclient.v2_0 import client as client_neutron
 from subprocess import call
+import module_nmap
 
 
 def main():
@@ -21,6 +22,22 @@ def main():
     neutron = client_neutron.Client(session=sess)
     nova_client = client_nova.Client('2.1', session=sess)
 
+    list = deviceList(neutron, nova_client)
+#    module_nmap.nmapscan(list)
+    module_nmap.sshscan(list)
+### Need to Agrigate results ####
+    # nmapscan(list)
+
+
+# def nmapscan(list):
+    # for server in list:
+    # try:
+    # call(["nmap", "-Pn", list[server][2]])
+    # except:
+    # print "No IP for:" + server
+
+
+# def printVlaues():
     # This will get and print the networks
     # print("######networks#######")
     # netw = neutron.list_networks()
@@ -41,21 +58,10 @@ def main():
     # ip_list = nova_client.floating_ips.list()
     # print_values_ip(ip_list)
 
-    list = deviceList(neutron, nova_client)
-    nmapscan(list)
-
     # This will print all the hosts
     # print("##############Hosts##################")
     # host_list = nova_client.hosts.list()
     # print_hosts(host_list)
-
-
-def nmapscan(list):
-    for server in list:
-        try:
-            call(["nmap", "-Pn", list[server][2]])
-        except:
-            print "No IP for:" + server
 
 
 def deviceList(neutron, nova_client):
