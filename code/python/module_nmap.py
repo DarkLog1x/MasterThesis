@@ -1,11 +1,15 @@
-from subprocess import call
+import subprocess
 import socket
 
 
 def nmapscan(list):
     for server in list:
         try:
-            call(["nmap", "-Pn", list[server][2]])
+            p = subprocess.Popen(
+                ['nmap', '-Pn', list[server][2]], stdout=subprocess.PIPE)
+            # call(["ssh_scan", "-t", list[server][2]])
+            out, err = p.communicate()
+            print out
         except:
             print "No IP for:" + server
 
@@ -13,7 +17,10 @@ def nmapscan(list):
 def sshscan(list):
     for server in list:
         try:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            result = sock.connect_ex((list[server][2], 22))
+            p = subprocess.Popen(
+                ['ssh_scan', '-t', list[server][2]], stdout=subprocess.PIPE)
+            # call(["ssh_scan", "-t", list[server][2]])
+            out, err = p.communicate()
+            print out
         except:
             print "Could not check ssh (port 22)"
