@@ -1,5 +1,6 @@
 import subprocess
 import socket
+import json
 
 
 def nmapscan(list):
@@ -21,6 +22,7 @@ def sshscan(list):
                 ['ssh_scan', '-t', list[server][2]], stdout=subprocess.PIPE)
             # call(["ssh_scan", "-t", list[server][2]])
             out, err = p.communicate()
-            print out
-        except:
-            print "Could not check ssh (port 22)"
+            jout = json.loads(out)
+            print "IP: %s is using: %s" % (jout[0]['ip'], jout[0]['auth_methods'])
+        except Exception, e:
+            print "Could not check ssh (port 22): %s" % e
