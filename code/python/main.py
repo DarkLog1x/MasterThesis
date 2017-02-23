@@ -6,7 +6,6 @@ import sys
 import inspect
 from os import environ as env
 import subprocess
-import thread
 
 from novaclient import client as client_nova
 import keystoneclient.v3.client as ksclient
@@ -24,9 +23,8 @@ def main():
     nova_client = client_nova.Client('2.1', session=sess)
 
     list = deviceList(neutron, nova_client)
-    # thread.start_new_thread(module_nmap.nmapscan, (list,))
-#    module_nmap.nmapscan(list)
-    module_nmap.sshscan(list)
+    module_nmap.nmapscan(list)
+    # module_nmap.sshscan(list)
 ### Need to Agrigate results ####
     # nmapscan(list)
 
