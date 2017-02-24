@@ -2,6 +2,7 @@ import subprocess
 import socket
 import json
 import os
+import xml.etree.ElementTree
 
 
 def nmapscan(list):
@@ -16,11 +17,18 @@ def nmapscan(list):
     with open("tmp_nmap.txt", "a") as file:
         file.write(tmp)
     file.close()
-    p = subprocess.Popen(
-        ['sudo', 'nmap', '-PnsS', '-T', '5', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
-    out, err = p.communicate()
+    # p = subprocess.Popen(
+    # ['sudo', 'nmap', '-PnsS', '-T', '5', '-oX', 'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
+    # out, err = p.communicate()
+    e = xml.etree.ElementTree.parse('output.xml').getroot()
+    for host in e.findall('host'):
+        print host.find('address').get('addr')
+        # for address in host.findall('address'):
+        # print address.get('addr')
+        for port in host.find('ports').findall('port'):
+            print port.get('portid')
     os.remove("tmp_nmap.txt")
-    print out
+    # print out
 
 
 def sshscan(list):
