@@ -1,0 +1,17 @@
+Services
+service interface
+
+class novaclient.v2.services.Service(manager, info, loaded=False, resp=None)
+    Bases: novaclient.base.Resource
+
+    Populate and bind to a manager.
+
+    Parameters:
+    manager – BaseManager object
+    info – dictionary representing resource attributes
+    loaded – prevent lazy-loading if set to True
+    resp – Response or list of Response objects
+
+
+
+    Add this to look at what running in the machine

@@ -22,20 +22,47 @@ def main():
     neutron = client_neutron.Client(session=sess)
     nova_client = client_nova.Client('2.1', session=sess)
 
-    list = deviceList(neutron, nova_client)
-    module_nmap.nmapscan(list)
-    # module_nmap.sshscan(list)
+    ServerList = DeviceList(neutron, nova_client)
+    module_nmap.nmapscan(ServerList)
+    module_nmap.sshscan(ServerList, 2)
+    module_nmap.sshscan(ServerList, 1)
 ### Need to Agrigate results ####
-    # nmapscan(list)
+### Once aggrigated need to display them ###
+### scan internal ips also ###
+
+##
+# This will return a list of server name, internal ip, and floating ip.
+##
 
 
-# def nmapscan(list):
-    # for server in list:
-    # try:
-    # call(["nmap", "-Pn", list[server][2]])
-    # except:
-    # print "No IP for:" + server
+def DeviceList(neutron, nova_client):
+    list = {}
+    server_list = nova_client.servers.list(detailed=True)
+    ip_list = nova_client.floating_ips.list()
+    for server in server_list:
+        list.setdefault(server.id, [])
+        list[server.id].append(server.name)
+    for ip in ip_list:
+        if(ip.instance_id != None):
+            list[ip.instance_id].append(ip.fixed_ip)
+            list[ip.instance_id].append(ip.ip)
+    return list
 
+##
+# Loads the credinetials into the runtime
+##
+
+
+def get_credentials():
+    loader = loading.get_plugin_loader('password')
+    auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
+                                    username=env['OS_USERNAME'],
+                                    password=env['OS_PASSWORD'],
+                                    project_name=env['OS_PROJECT_NAME'],
+                                    user_domain_name=env[
+                                        'OS_USER_DOMAIN_NAME'],
+                                    project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
+    return auth
 
 # def printVlaues():
     # This will get and print the networks
@@ -64,20 +91,6 @@ def main():
     # print_hosts(host_list)
 
 
-def deviceList(neutron, nova_client):
-    list = {}
-    server_list = nova_client.servers.list(detailed=True)
-    ip_list = nova_client.floating_ips.list()
-    for server in server_list:
-        list.setdefault(server.id, [])
-        list[server.id].append(server.name)
-    for ip in ip_list:
-        if(ip.instance_id != None):
-            list[ip.instance_id].append(ip.fixed_ip)
-            list[ip.instance_id].append(ip.ip)
-    return list
-
-
 def print_servers(server_list):
     for servers in server_list:
         print("-" * 35)
@@ -104,18 +117,6 @@ def print_values_ip(ip_list):
         print("instance_id : %s" % ip.instance_id)
         print("ip : %s" % ip.ip)
         print("pool : %s" % ip.pool)
-
-
-def get_credentials():
-    loader = loading.get_plugin_loader('password')
-    auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
-                                    username=env['OS_USERNAME'],
-                                    password=env['OS_PASSWORD'],
-                                    project_name=env['OS_PROJECT_NAME'],
-                                    user_domain_name=env[
-                                        'OS_USER_DOMAIN_NAME'],
-                                    project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
-    return auth
 
 
 def print_values(val, type):
