@@ -15,21 +15,29 @@ from neutronclient.v2_0 import client as client_neutron
 from subprocess import call
 import module_nmap
 import module_sshscan
+import tinydb
 
 
 def main():
-    auth = get_credentials()
-    sess = session.Session(auth=auth)
-    neutron = client_neutron.Client(session=sess)
-    nova_client = client_nova.Client('2.1', session=sess)
+    # auth = get_credentials()
+    # sess = session.Session(auth=auth)
+    # neutron = client_neutron.Client(session=sess)
+    # nova_client = client_nova.Client('2.1', session=sess)
+    PrintList()
 
-    ServerList = DeviceList(neutron, nova_client)
-    module_nmap.nmapscan(ServerList)
-    module_sshscan.sshscan(ServerList, 2)
-    module_sshscan.sshscan(ServerList, 1)
+    # ServerList = DeviceList(neutron, nova_client)
+    # module_nmap.nmapscan(ServerList)
+    # module_sshscan.sshscan(ServerList, 2)
+    # module_sshscan.sshscan(ServerList, 1)
 ### Need to Agrigate results ####
 ### Once aggrigated need to display them ###
 ### scan internal ips also ###
+
+
+def PrintList():
+    db = tinydb.TinyDB('./db.json')
+    db.insert({'int': 1, 'char': 'a'})
+    db.insert({'int': 1, 'char': 'b'})
 
 ##
 # This will return a list of server name, internal ip, and floating ip.
