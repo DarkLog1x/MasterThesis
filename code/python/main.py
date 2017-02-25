@@ -14,6 +14,7 @@ from keystoneauth1 import session
 from neutronclient.v2_0 import client as client_neutron
 from subprocess import call
 import module_nmap
+import module_sshscan
 
 
 def main():
@@ -24,8 +25,8 @@ def main():
 
     ServerList = DeviceList(neutron, nova_client)
     module_nmap.nmapscan(ServerList)
-    module_nmap.sshscan(ServerList, 2)
-    module_nmap.sshscan(ServerList, 1)
+    module_sshscan.sshscan(ServerList, 2)
+    module_sshscan.sshscan(ServerList, 1)
 ### Need to Agrigate results ####
 ### Once aggrigated need to display them ###
 ### scan internal ips also ###

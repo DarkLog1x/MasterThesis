@@ -42,21 +42,13 @@
 
     - name: copy file main
       copy:
-        src: /home/groot/Documents/Uppsala/masterThesis/code/python/main.py
-        dest: /home/ubuntu/main.py
+        src: "{{ item }}"
+        dest: /home/ubuntu/
         owner: ubuntu
         group: ubuntu
         mode: 0755
-
-    - name: copy file module_nmap
-      copy:
-        src: /home/groot/Documents/Uppsala/masterThesis/code/python/module_nmap.py
-        dest: /home/ubuntu/module_nmap.py
-        owner: ubuntu
-        group: ubuntu
-        mode: 0755
-
-
+      with_fileglob:
+        - /home/groot/Documents/Uppsala/masterThesis/code/python/*
 
 
     - name: run python
