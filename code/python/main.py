@@ -23,7 +23,10 @@ def main():
     # sess = session.Session(auth=auth)
     # neutron = client_neutron.Client(session=sess)
     # nova_client = client_nova.Client('2.1', session=sess)
-    PrintList()
+    PrintList(111, 'ip', 7)
+    PrintList(112, 'ip', 7)
+    PrintList(111, 'ip', 8)
+    PrintList(111, 'port', 22)
 
     # ServerList = DeviceList(neutron, nova_client)
     # module_nmap.nmapscan(ServerList)
@@ -34,10 +37,13 @@ def main():
 ### scan internal ips also ###
 
 
-def PrintList():
+def PrintList(instanceID, type,  data):
     db = tinydb.TinyDB('./db.json')
-    db.insert({'int': 1, 'char': 'a'})
-    db.insert({'int': 1, 'char': 'b'})
+    instanceSearch = tinydb.Query()
+    if db.search(instanceSearch.id == instanceID):
+        db.update({type: data}, instanceSearch.id == instanceID)
+    else:
+        db.insert({'id': instanceID, type: data})
 
 ##
 # This will return a list of server name, internal ip, and floating ip.
