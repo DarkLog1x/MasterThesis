@@ -19,19 +19,19 @@ import database
 
 
 def main():
-    # auth = get_credentials()
-    # sess = session.Session(auth=auth)
-    # neutron = client_neutron.Client(session=sess)
-    # nova_client = client_nova.Client('2.1', session=sess)
-    database.PrintList(111, 'ip', 7)
-    database.PrintList(112, 'ip', 7)
-    database.PrintList(111, 'ip', 8)
-    database.PrintList(111, 'port_22', 'open')
+    auth = get_credentials()
+    sess = session.Session(auth=auth)
+    neutron = client_neutron.Client(session=sess)
+    nova_client = client_nova.Client('2.1', session=sess)
+    # database.PrintList(111, 'ip', 7)
+    # database.PrintList(112, 'ip', 7)
+    # database.PrintList(111, 'ip', 8)
+    # database.PrintList(111, 'port_22', 'open')
 
-    # ServerList = DeviceList(neutron, nova_client)
-    # module_nmap.nmapscan(ServerList)
-    # module_sshscan.sshscan(ServerList, 2)
-    # module_sshscan.sshscan(ServerList, 1)
+    ServerList = DeviceList(neutron, nova_client)
+    module_nmap.nmapscan(ServerList)
+    module_sshscan.sshscan(ServerList, 2)
+    module_sshscan.sshscan(ServerList, 1)
 ### Need to Agrigate results ####
 ### Once aggrigated need to display them ###
 ### scan internal ips also ###

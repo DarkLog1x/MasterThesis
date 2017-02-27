@@ -3,13 +3,16 @@ import socket
 import json
 import os
 import xml.etree.ElementTree
+import database
 
 
 def nmapscan(list):
     tmpOut = []
+    tmpserverList = []
     for server in list:
         try:
             tmpOut.append(list[server][2])
+            tmpserverList.append(server)
         except:
             # print "No IP for:" + server
             pass
@@ -22,9 +25,13 @@ def nmapscan(list):
     out, err = p.communicate()
     e = xml.etree.ElementTree.parse('output.xml').getroot()
     for host in e.findall('host'):
-        print host.find('address').get('addr')
+        # print host.find('address').get('addr')
+        tmpIndex = tmpOut.index(host.find('address').get('addr'))
         for port in host.find('ports').findall('port'):
-            print "--" + port.get('portid') + ": " + port.find('state').get('state')
+            database.PrintList(tmpserverList[tmpIndex], "port: %s" % (
+                port.get('portid')), "%s" % (port.find('state').get('state')))
+            # print "--" + port.get('portid') + ": " +
+            # port.find('state').get('state')
 
     os.remove("tmp_nmap.txt")
     os.remove("output.xml")
