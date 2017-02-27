@@ -22,22 +22,22 @@
 \newpage
 
 \section{Background}
-The cloud computing space has grown over the last several years. Business and Universities are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to an standardized computational model. One is able to pay for only the resources used, with more recurses added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution including Amazon, Google, Microsoft, and Digital Ocean.
+The cloud computing space has grown over the last several years. Business and Universities are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution including Amazon, Google, Microsoft, and Digital Ocean.
 
 \subsection{Cloud Models}
-In the cloud computing space several different computational models exist \cite{wikipedia}.
+In the cloud computing space several computational models exist \cite{wikipedia}.
 
 \begin{itemize}
     \item Software as a Service (SaaS) allows for the user to utilize applications (I.E. Email, games, etc.) without the need to set up / worry about the underlying infrastructure.
-    \item Platform as a Service (PaaS) give the user the ability to create applications (I.E. Web servers, databases, etc.) without the need to create the entire system from he ground up.
-    \item Infrastructure as a Service (IaaS) gives the users a basic virtual machine with the user needing to setup all nectary functionality.
+    \item Platform as a Service (PaaS) give the user the ability to create applications (I.E. Web servers, databases, etc.) without the need to create the entire system from the ground up.
+    \item Infrastructure as a Service (IaaS) gives the users a basic virtual machine with the user needing to set up all necessary functionality.
 \end{itemize}
 
 \subsection{Cloud Infrastructure}
-At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several different virtual environments to use the same hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
+At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several virtual environments to use the same hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However, NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
 
 \subsection{Cloud Roles}
-When cloud computing first started to take off, the main type of computing resource provided was IaaS in the public cloud \cite{sourcedigit}. This started to change in the recent years when two new types models for cloud computing emerged. Public and Hybrid clouds allowed for companies to utilize the power of the cloud while still having some or all of there recourses located in there own datacenters.
+When cloud computing first started to take off, the main type of computing resource provided was IaaS in the public cloud \cite{sourcedigit}. This started to change in the recent years when two new types models for cloud computing emerged. Public and Hybrid clouds allowed for companies to utilize the power of the cloud while still having some or all of there resources located in their own data centers.
 
 \subsection{Cloud Computing vs Standard Models}
 Cloud computing has some distinct differences from regular computing.
@@ -45,14 +45,14 @@ Cloud computing has some distinct differences from regular computing.
 \begin{itemize}
     \item Systems do not usually stay active for long. Users will provision and destroy systems with a high turnover.
     \item Users may spin up several machines at once.
-    \item There may not be a dedicated team used to ensure uptime / health of systems.
+    \item There may not be a dedicated team used to ensure up time / health of systems.
     \item Users will usually have full control of the systems.
 \end{itemize}
 
 Cloud computing also has a different threat model compared to a normal dedicated server \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. With normal server infrastructure the infrastructure and system are built once and then ran for extended periods of time. The systems themselves are not refreshed or rebuilt as happens in the cloud.
 
 \section{Related Work}
-In this work we will be looking at ways to protect VM clusters by ensuring proper configuration steps are setup and used with the addition of looking at ways to implement an IDS solution into the cloud environment. Before starting the work we looked into previous work done in this field. Cloud security had been a hot topic in recent times therefor several papers have been written \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. These particular papers focus on the different aspects and concerns that are present when running in a cloud environment. They are a nice starting point to look at how the threat landscape in the cloud differs from the slandered model. An important distinction of how information is treated differently in a centralized and cloud environments is talked about in "Assessing Cloud Computer Security Issues" \cite{zissis2012addressing}. The three staples of information security are confidentiality, integrity, and availability. In the cloud new difficulties come up for each of these classifications as data in the cloud is now accessible to more individuals.  The second set of articles looked at was about intrusion detection systems (IDS), more specifically how these can be used within the cloud \cite{SurveyOfIDS, patel2013intrusion}. These articles did not focus so much on implementation as they were focused more on the theory. An interesting comparison that shows the advantages and disadvantages for different IDS systems is table $2$ in \cite[SurveyOfIDS]. This is the basis for the types of IDS solutions that were chosen for this project. As this work was primely focused on OpenStack, one particular IDS conference talk was used as a starting point for this research \cite{videoPresentation}.
+In this work we will be looking at ways to protect VM clusters by ensuring proper configuration steps are setup and used with the addition of looking at ways to implement an IDS solution into the cloud environment. Before starting the work, we looked into previous work done in this field. Cloud security had been a hot topic in recent times therefor several papers have been written \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. These particular papers focus on the different aspects and concerns that are present when running in a cloud environment. They are a nice starting point to look at how the threat landscape in the cloud differs from the slandered model. An important distinction of how information is treated differently in a centralized and cloud environments is talked about in "Assessing Cloud Computer Security Issues" \cite{zissis2012addressing}. The three staples of information security are confidentiality, integrity, and availability. In the cloud new difficulties come up for each of these classifications as data in the cloud is now accessible to more individuals.  The second set of articles looked at was about intrusion detection systems (IDS), more specifically how these can be used within the cloud \cite{SurveyOfIDS, patel2013intrusion}. These articles did not focus so much on implementation as they were focused more on the theory. An interesting comparison that shows the advantages and disadvantages for different IDS systems is table $2$ in \cite[SurveyOfIDS]. This is the basis for the types of IDS solutions that were chosen for this project. As this work was primarily focused on OpenStack, one particular IDS conference talk was used as a starting point for this research \cite{videoPresentation}.
 
 %expand more on related work with writing some things in my own words and then refering back to the articals.
 %i have arcitected this in such a way beocuse i read this and that
@@ -76,7 +76,7 @@ Intrusion detection systems come in two main forms, host based and network based
 %For a cloud system where machines are provisioned and destroy setting up this type of system would be difficult. There for a network based IDS system was chosen.
 
 \section{User Recommendation}
-The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some of the security features in the OpenStack platform.
+The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some security features in the OpenStack platform.
 
 \section{Design Implementation}
 
