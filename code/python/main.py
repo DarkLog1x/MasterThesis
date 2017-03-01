@@ -19,23 +19,17 @@ import database
 
 
 def main():
-    auth = get_credentials()
-    sess = session.Session(auth=auth)
-    neutron = client_neutron.Client(session=sess)
-    nova_client = client_nova.Client('2.1', session=sess)
-    # database.PrintList(111, 'ip', 7)
-    # database.PrintList(112, 'ip', 7)
-    # database.PrintList(111, 'ip', 8)
-    # database.PrintList(111, 'port_22', 'open')
+    # auth = get_credentials()
+    # sess = session.Session(auth=auth)
+    # neutron = client_neutron.Client(session=sess)
+    # nova_client = client_nova.Client('2.1', session=sess)
 
-    ServerList = DeviceList(neutron, nova_client)
-    module_nmap.nmapscan(ServerList)
-    module_sshscan.sshscan(ServerList, 2)
-    module_sshscan.sshscan(ServerList, 1)
-### Need to Agrigate results ####
-### Once aggrigated need to display them ###
-### scan internal ips also ###
-
+    # ServerList = DeviceList(neutron, nova_client)
+    # module_nmap.nmapscan(ServerList)
+    # module_sshscan.sshscan(ServerList, 2)
+    # module_sshscan.sshscan(ServerList, 1)
+    commands = database.ProperConfig()
+    database.checkIfConfigIfFollowed(commands)
 
 ##
 # This will return a list of server name, internal ip, and floating ip.
@@ -71,31 +65,32 @@ def get_credentials():
                                     project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
     return auth
 
-# def printVlaues():
+
+def printVlaues():
     # This will get and print the networks
-    # print("######networks#######")
-    # netw = neutron.list_networks()
-    # print_values(netw, 'networks')
+    print("######networks#######")
+    netw = neutron.list_networks()
+    print_values(netw, 'networks')
 
     # This will get and print the routes
-    # print("############routers############")
-    # routers_list = neutron.list_routers(retrieve_all=True)
-    # print_values(routers_list, 'routers')
+    print("############routers############")
+    routers_list = neutron.list_routers(retrieve_all=True)
+    print_values(routers_list, 'routers')
 
     # This will get and print the servers
-    # print("############servers############")
-    # server_list = nova_client.servers.list(detailed=True)
-    # print_servers(server_list)
+    print("############servers############")
+    server_list = nova_client.servers.list(detailed=True)
+    print_servers(server_list)
 
     # This will get the floating ips
-    # print("################Floating IPS##############")
-    # ip_list = nova_client.floating_ips.list()
-    # print_values_ip(ip_list)
+    print("################Floating IPS##############")
+    ip_list = nova_client.floating_ips.list()
+    print_values_ip(ip_list)
 
     # This will print all the hosts
-    # print("##############Hosts##################")
-    # host_list = nova_client.hosts.list()
-    # print_hosts(host_list)
+    print("##############Hosts##################")
+    host_list = nova_client.hosts.list()
+    print_hosts(host_list)
 
 
 def print_servers(server_list):
