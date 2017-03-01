@@ -18,7 +18,7 @@ def PrintList(instanceID, type,  data):
 
 
 def ProperConfig():
-    f = open('config', 'r')
+    f = open('config', 'r').read().splitlines()
     commands = []
     for line in f:
         if line[0] is not '#':
@@ -26,11 +26,19 @@ def ProperConfig():
 
     return commands
 
+#>>> db = TinyDB(storage=MemoryStorage)
+
 
 def checkIfConfigIfFollowed(commands):
     db = tinydb.TinyDB('./db.json')
     key = tinydb.Query()
     for command in commands:
         values = command.split(" - ")
-        print values
-        db.search(tinydb.where('port: 22').field.exists())
+        # what = values[1].split("\n")
+        # print what[0]
+        # print values[1].strip()
+        tmp = db.search(tinydb.where(values[0]) != values[1].strip())
+        print values[0]
+        print values[1]
+        print tmp[0]
+        print len(tmp)
