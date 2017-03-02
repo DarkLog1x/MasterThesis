@@ -1,4 +1,5 @@
 import tinydb
+import os
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
@@ -32,13 +33,18 @@ def ProperConfig():
 def checkIfConfigIfFollowed(commands):
     db = tinydb.TinyDB('./db.json')
     key = tinydb.Query()
+    incorrectVMS = []
     for command in commands:
         values = command.split(" - ")
         # what = values[1].split("\n")
         # print what[0]
         # print values[1].strip()
+        # print os.environ['HOME']
+        #
         tmp = db.search(tinydb.where(values[0]) != values[1].strip())
-        print values[0]
-        print values[1]
-        print tmp[0]
-        print len(tmp)
+        for items in tmp:
+            incorrectVMS.append(items)
+    print "Tenent name:" + os.environ['OS_TENANT_NAME']
+    print "Tenent ID:" + os.environ['OS_PROJECT_NAME']
+    for b in incorrectVMS:
+        print b
