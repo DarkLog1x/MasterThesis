@@ -19,15 +19,15 @@ import database
 
 
 def main():
-    # auth = get_credentials()
-    # sess = session.Session(auth=auth)
-    # neutron = client_neutron.Client(session=sess)
-    # nova_client = client_nova.Client('2.1', session=sess)
+    auth = get_credentials()
+    sess = session.Session(auth=auth)
+    neutron = client_neutron.Client(session=sess)
+    nova_client = client_nova.Client('2.1', session=sess)
 
-    # ServerList = DeviceList(neutron, nova_client)
-    # module_nmap.nmapscan(ServerList)
-    # module_sshscan.sshscan(ServerList, 2)
-    # module_sshscan.sshscan(ServerList, 1)
+    ServerList = DeviceList(neutron, nova_client)
+    module_nmap.nmapscan(ServerList)
+    module_sshscan.sshscan(ServerList, 2)
+    module_sshscan.sshscan(ServerList, 1)
     commands = database.ProperConfig()
     database.checkIfConfigIfFollowed(commands)
 

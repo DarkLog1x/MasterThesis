@@ -21,7 +21,7 @@ def nmapscan(list):
         file.write(tmp)
     file.close()
     p = subprocess.Popen(
-        ['sudo', 'nmap', '-PnsS', '-T5', '-oX', 'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
+        ['sudo', 'nmap', '-A', '-T5', '-oX', 'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
     out, err = p.communicate()
     e = xml.etree.ElementTree.parse('output.xml').getroot()
     for host in e.findall('host'):
@@ -30,8 +30,13 @@ def nmapscan(list):
         for port in host.find('ports').findall('port'):
             database.PrintList(tmpserverList[tmpIndex], "port: %s" % (
                 port.get('portid')), "%s" % (port.find('state').get('state')))
+            if port.find('service').get("version") is not None and port.find('service').get('product') is not None:
+                database.PrintList(tmpserverList[tmpIndex], "service: %s on port: %s" % (
+                    port.find('service').get('product'), port.get('portid')), "%s" % (port.find('service').get('version')))
             # print "--" + port.get('portid') + ": " +
             # port.find('state').get('state')
-
+        osName = host.find('os').findall('osmatch')
+        database.PrintList(
+            tmpserverList[tmpIndex], "OS: ", "%s" % (osName[0].get('name')))
     os.remove("tmp_nmap.txt")
     os.remove("output.xml")
