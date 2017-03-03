@@ -34,20 +34,18 @@ def checkIfConfigIfFollowed(commands):
     db = tinydb.TinyDB('./db.json')
     key = tinydb.Query()
     incorrectVMS = []
+    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
+    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
     for command in commands:
         values = command.split(" - ")
-        # what = values[1].split("\n")
-        # print what[0]
-        # print values[1].strip()
         # print os.environ['HOME']
         #
         tmp = db.search(tinydb.where(values[0]) != values[1].strip())
         for items in tmp:
             it = "Server ID: " + \
                 items['id'] + " | " + \
-                values[0] + ": " + items[values[0]]
+                values[0] + ": " + items[values[0]] + \
+                " -- Should be = " + values[1]
             incorrectVMS.append(it)
-    print "Tenant name:" + os.environ['OS_TENANT_NAME']
-    print "Tenant ID:" + os.environ['OS_PROJECT_NAME']
     for b in incorrectVMS:
         print b

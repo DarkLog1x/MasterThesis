@@ -15,12 +15,17 @@ def sshscan(list, IPChoose):
             jout = json.loads(out)
             if IPChoose is 1:
                 database.PrintList(
-                    server, 'ip_internal', "%s : %s " % (jout[0]['ip'], jout[0]['auth_methods']))
+                    server, 'ip_internal', "%s" % (jout[0]['ip']))
+                database.PrintList(
+                    server, 'ip_internal_auth', "%s" % (jout[0]['auth_methods'][0]))
+
                 # database.PrintList(
                 # server, 'ip_internal_auth', jout[0]['auth_methods'])
             elif IPChoose is 2:
                 database.PrintList(
-                    server, 'ip_external', "%s : %s" % (jout[0]['ip'], jout[0]['auth_methods']))
+                    server, 'ip_external', "%s" % (jout[0]['ip']))
+                database.PrintList(
+                    server, 'ip_external_auth', "%s" % (jout[0]['auth_methods'][0]))
                 # database.PrintList(
                 # server, 'ip_external_auth', jout[0]['auth_methods'])
             # print "IP: %s is using: %s" % (jout[0]['ip'],
