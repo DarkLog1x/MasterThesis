@@ -20,8 +20,10 @@ def nmapscan(list):
     with open("tmp_nmap.txt", "a") as file:
         file.write(tmp)
     file.close()
-    p = subprocess.Popen(
-        ['sudo', 'nmap', '-A', '-p', '1-65535', '-T5', '-oX', 'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
+    p = subprocess.Popen(['sudo', 'nmap', '-A', '-T5', '-oX',
+                          'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
+    # ['sudo', 'nmap', '-A', '-p', '1-65535', '-T5', '-oX', 'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
+
     out, err = p.communicate()
     e = xml.etree.ElementTree.parse('output.xml').getroot()
     for host in e.findall('host'):

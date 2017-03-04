@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 import time
+import sched
 import os
 import sys
 import inspect
@@ -16,9 +17,12 @@ from subprocess import call
 import module_nmap
 import module_sshscan
 import database
+from twisted.internet import task
+from twisted.internet import reactor
 
 
 def main():
+    environmentVariables()
     auth = get_credentials()
     sess = session.Session(auth=auth)
     neutron = client_neutron.Client(session=sess)
@@ -29,8 +33,24 @@ def main():
     module_sshscan.sshscan(ServerList, 2)
     module_sshscan.sshscan(ServerList, 1)
     commands = database.ProperConfig()
-    database.checkIfConfigIfFollowed(commands)
+    incorrectVMS = database.checkIfConfigIfFollowed(commands)
+    database.SlackerConnect(incorrectVMS)
 
+
+def environmentVariables():
+    f = open('keys', 'r').read().splitlines()
+    os.environ["OS_PASSWORD"] = f[1]
+    os.environ["SLACK_KEY"] = f[0]
+    os.environ["OS_AUTH_URL"] = "https://smog.uppmax.uu.se:5000/v3"
+    os.environ["OS_TENANT_ID"] = "bfe0cca393a5473189c05f22a731bfd0"
+    os.environ["OS_TENANT_NAME"] = "c2015003"
+    os.environ["OS_PROJECT_NAME"] = "c2015003"
+    os.environ["OS_USERNAME"] = "aleko"
+    os.environ["OS_USER_DOMAIN_NAME"] = "Default"
+    os.environ["OS_PROJECT_DOMAIN_NAME"] = "Default"
+    os.environ["OS_IDENTITY_API_VERSION"] = "3"
+    os.environ["OS_AUTH_VERSION"] = "3"
+    os.environ["OS_REGION_NAME"] = "UPPMAX"
 ##
 # This will return a list of server name, internal ip, and floating ip.
 ##

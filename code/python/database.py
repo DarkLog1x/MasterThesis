@@ -1,5 +1,6 @@
 import tinydb
 import os
+from slacker import Slacker
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
@@ -47,5 +48,18 @@ def checkIfConfigIfFollowed(commands):
                 values[0] + ": " + items[values[0]] + \
                 " -- Should be = " + values[1]
             incorrectVMS.append(it)
-    for b in incorrectVMS:
-        print b
+    # for b in incorrectVMS:
+        # print b
+
+    return incorrectVMS
+
+
+def SlackerConnect(incorrectVMS):
+    f = os.environ['SLACK_KEY']
+    slack = Slacker(f)
+    try:
+        slack.channels.create('#OSIDS')
+    except:
+        pass
+    for message in incorrectVMS:
+        slack.chat.post_message('#OSIDS', message)
