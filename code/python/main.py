@@ -21,6 +21,9 @@ from twisted.internet import task
 from twisted.internet import reactor
 
 
+##
+# Mian function that will run the code. This is run via a cron job!
+##
 def main():
     environmentVariables()
     auth = get_credentials()
@@ -37,6 +40,11 @@ def main():
     database.SlackerConnect(incorrectVMS)
 
 
+##
+# This will set the needed environment varibables
+# This needs to be filled out to match the rc file form OpenStack
+##
+
 def environmentVariables():
     f = open('keys', 'r').read().splitlines()
     os.environ["OS_PASSWORD"] = f[1]
@@ -51,10 +59,11 @@ def environmentVariables():
     os.environ["OS_IDENTITY_API_VERSION"] = "3"
     os.environ["OS_AUTH_VERSION"] = "3"
     os.environ["OS_REGION_NAME"] = "UPPMAX"
+
+
 ##
 # This will return a list of server name, internal ip, and floating ip.
 ##
-
 
 def DeviceList(neutron, nova_client):
     list = {}
@@ -69,10 +78,10 @@ def DeviceList(neutron, nova_client):
             list[ip.instance_id].append(ip.ip)
     return list
 
+
 ##
 # Loads the credinetials into the runtime
 ##
-
 
 def get_credentials():
     loader = loading.get_plugin_loader('password')
@@ -85,6 +94,10 @@ def get_credentials():
                                     project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
     return auth
 
+
+##
+# Bellow are helper print functiosn that are used in viewing the OpenStack information
+##
 
 def printVlaues():
     # This will get and print the networks

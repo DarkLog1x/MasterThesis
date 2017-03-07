@@ -6,6 +6,12 @@ import xml.etree.ElementTree
 import database
 
 
+##
+# This modual will do all the work in running ssh_scan and extracting the needed data.
+# A list of IP addressed is feed into the function
+# Will call database.PrintList to add the found data into the list
+##
+
 def sshscan(list, IPChoose):
     for server in list:
         try:

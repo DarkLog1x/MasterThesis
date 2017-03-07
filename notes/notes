@@ -15,3 +15,24 @@ class novaclient.v2.services.Service(manager, info, loaded=False, resp=None)
 
 
     Add this to look at what running in the machine
+
+
+    ---------------------------------------------
+
+    In nmap look at the kernal / os that is running
+
+    --grafphine to collect logs
+
+    -- nampa full port scan
+
+    --how to tell the admins taht vms are not updated
+    i
+
+    ----lareg chalange security patches
+
+    --kvm libvirt to extract information
+    -- see if we can pivote machine to look at fake host
+
+    --User name / server id / project name
+
+

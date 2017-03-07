@@ -1,10 +1,11 @@
 import tinydb
 import os
 from slacker import Slacker
+
+
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
-
 
 def PrintList(instanceID, type,  data):
     db = tinydb.TinyDB('./db.json')
@@ -14,10 +15,10 @@ def PrintList(instanceID, type,  data):
     else:
         db.insert({'id': instanceID, type: data})
 
+
 ##
 # Will read the config file
 ##
-
 
 def ProperConfig():
     f = open('config', 'r').read().splitlines()
@@ -30,6 +31,10 @@ def ProperConfig():
 
 #>>> db = TinyDB(storage=MemoryStorage)
 
+
+##
+# This is the function that will be called to see if the confige provided is followed
+##
 
 def checkIfConfigIfFollowed(commands):
     db = tinydb.TinyDB('./db.json')
@@ -54,6 +59,10 @@ def checkIfConfigIfFollowed(commands):
     return incorrectVMS
 
 
+##
+# Connect to Slack and print output!
+##
+
 def SlackerConnect(incorrectVMS):
     f = os.environ['SLACK_KEY']
     slack = Slacker(f)
@@ -61,5 +70,7 @@ def SlackerConnect(incorrectVMS):
         slack.channels.create('#OSIDS')
     except:
         pass
+    slack.chat.post_message('#OSIDS', "##############################")
     for message in incorrectVMS:
         slack.chat.post_message('#OSIDS', message)
+    slack.chat.post_message('#OSIDS', "##############################")
