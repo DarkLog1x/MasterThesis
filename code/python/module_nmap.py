@@ -32,9 +32,12 @@ def nmapscan(list):
 
     out, err = p.communicate()
     e = xml.etree.ElementTree.parse('output.xml').getroot()
+    # extract all hosts from file
     for host in e.findall('host'):
         # print host.find('address').get('addr')
         tmpIndex = tmpOut.index(host.find('address').get('addr'))
+        # try to get the port out if no ports avaliable for the host fail
+        # siglently
         try:
             for port in host.find('ports').findall('port'):
                 database.PrintList(tmpserverList[tmpIndex], "port: %s" % (

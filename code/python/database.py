@@ -1,11 +1,12 @@
 import tinydb
 import os
 from slacker import Slacker
-
+from collections import Counter
 
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
+
 
 def PrintList(instanceID, type,  data):
     db = tinydb.TinyDB('./db.json')
@@ -29,8 +30,6 @@ def ProperConfig():
 
     return commands
 
-#>>> db = TinyDB(storage=MemoryStorage)
-
 
 ##
 # This is the function that will be called to see if the confige provided is followed
@@ -42,8 +41,10 @@ def checkIfConfigIfFollowed(commands):
     incorrectVMS = []
     incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
     incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
+    commandList = []
     for command in commands:
         values = command.split(" - ")
+        commandList.append(values[0])
         # print os.environ['HOME']
         #
         tmp = db.search(tinydb.where(values[0]) != values[1].strip())
@@ -55,6 +56,22 @@ def checkIfConfigIfFollowed(commands):
             incorrectVMS.append(it)
     # for b in incorrectVMS:
         # print b
+    contents = db.table('_default').all()
+
+    schema = Counter(frozenset(doc.keys()) for doc in contents)
+    keyList = []
+    for i in schema.iteritems():
+        for j in i[0]:
+            if j not in commandList and j not in ['id', 'ip_internal', 'ip_external']:
+                if j not in keyList:
+                    keyList.append(j)
+    for i in keyList:
+        tmp = db.search(tinydb.where(i) == 'open')
+        for items in tmp:
+            it = "Server ID: " + \
+                items['id'] + " | " + \
+                i + " has been found and is not in the config"
+            incorrectVMS.append(it)
 
     return incorrectVMS
 
