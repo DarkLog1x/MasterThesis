@@ -70,7 +70,7 @@ def checkIfConfigIfFollowed(commands):
         for items in tmp:
             it = "Server ID: " + \
                 items['id'] + " | " + \
-                i + " has been found and is not in the config"
+                i + " has been found " + items[i] + " and is not in the config"
             incorrectVMS.append(it)
 
     return incorrectVMS
