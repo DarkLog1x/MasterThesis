@@ -74,7 +74,8 @@ Nova is the platform that provides access to OpenStack compute resources. It is 
 \section{Security}
 The field of computer security is large and diverse \cite{ComputerSecurity}. The general focus of computer security is to ensure that computer systems follow the CIA model of confidentiality, integrity, and availability. "The design artifacts that describe how the security controls (security countermeasures) are positioned, and how they relate to the overall IT Architecture. These controls serve the purpose to maintain the system's quality attributes, among them confidentiality, integrity, availability, accountability and assurance." \cite{it_security_architecture} The disciplines that are focused on in this paper include: intrusion detection systems, network security, and system security.
 Intrusion detection systems come in two main forms, host based and network based. A host based system runs on the host and attempts to detect any security threats on the host machine. A network based IDS is connected on the network and inspects network traffic, trying to find threats by inspecting network traffic patterns. Both of these systems have advantages and disadvantages. With a host based system software must be installed and configured on each system. In a network IDS system the packets are monitored for unusual traffic patterns. There are disadvantages to this type of solution also, mainly network traffic can be encrypted and the overall volume of traffic encountered. Some examples of network based IDS tools are \href{https://www.snort.org/}{Snort}.
-A large portion of the problem for computer security comes from the networks that computers are attached to. The network allows other computers to communicate and attempt to access the particular machine. This is greatly increased if the computer is not placed behind a firewall/rougher and is directly accessible form the Internet.
+A large portion of the problem for computer security comes from the networks that computers are attached to. The network allows other computers to communicate and attempt to access the particular machine. This is greatly increased if the computer is not placed behind a firewall/rougher and is directly accessible form the Internet. If an Internet facing computer is not updated properly vulnerabilities can be used to run unintended programs.
+A unintended program running on a systems can be a concern due to several. These programs can be used to send email spam, steal credentials, or participate in larger network attacks.
 
 %For a cloud system where machines are provisioned and destroy setting up this type of system would be difficult. There for a network based IDS system was chosen.
 
@@ -82,6 +83,16 @@ A large portion of the problem for computer security comes from the networks tha
 The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some security features in the OpenStack platform.
 
 \section{Design Implementation}
+For the first part of the project a modular design was created to enable further types of scanning to be added. An important aspect when designing the watchdog system with as little privileges as possible to prevent any unnecessary security holes. The following is a diagram of an example cloud environment.
+\\
+\includegraphics[scale=.3]{./pic/flowchart.png}
+\\
+The "watchdog" is initiated in the cloud cluster. The once initiated the VM will connect to the OpneStack Control Plain and get the list of servers, IP's, and floating IP's. Once that information is retreated the different modules will be run. In this standard case the two modules created were for nmap and ssh\_scan. Nmap is a tool used to scan a local or external network nd view what machines are funning on it. Nmap will be able to scan the machines ports and tell which ones are open and what services are running on them. It will also try and guess heuristically the operating system that is being run on the machine. This tool is therefor used in this system to find machines that have open ports and to see what services are run on them. If a service or port is found to not follow the recommendation then the machines can be terminated. The ssh\_scan tool is used to ensure that only a public private key pair are used. It will scan port 22 and alert if any other form of authentication is used.
+These modules will gather the results from the network and collect them into a central repository. Once the data is gathered it is compared to the config file.  If a discrepancy is found between the expected results and the scanned machine is found an alert is sent to the administrator. For this project the administrator receives notification on a separate slack. This entire process is run every 20 min by a corn job located on the watchdog machine. This type of design allows for a flexible platform that can have each component further customized.
+
+
+%part 2 look if the router can be accesed to pull network stream
+% gather memory print / services / programs / work load
 
 
 \newpage
