@@ -32,6 +32,7 @@ def main():
     nova_client = client_nova.Client('2.1', session=sess)
 
     ServerList = DeviceList(neutron, nova_client)
+    database.MongoDBCreate(ServerList)
     module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)

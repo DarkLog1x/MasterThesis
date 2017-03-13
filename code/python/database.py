@@ -95,14 +95,27 @@ def SlackerConnect(incorrectVMS):
     slack.chat.post_message('#OSIDS', "##############################")
 
 
-def MongoDBConnection(instanceID, type,  data):
-    client = MongoClient()
-    db = client.database
-    key = {"ID": instanceID}
-    data = {type:
-            {data[0]: data[1]}}
-    db.update_one(key, data, {upsert: true})
+def MongoDBCreate(ServerList):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    vms = db.vms
+    for server in ServerList:
+        vms.insert_one({"ID": server})
 
+
+def MongoDBUpdate(instanceID, type,  data):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    key = {"ID": instanceID}
+    data = {"$set": {type:
+                     {data[0]: data[1]}}}
+    print key
+    print data
+    vms = db.vms
+    try:
+        post_id = vms.update_one(key, data, upsert=True)
+    except:
+        print "wtf"
 
 ###
 # Set a config flag for the admin to be able to choose what type of informatation is sent
