@@ -3,6 +3,16 @@
   remote_user: ubuntu
   gather_facts: no
   pre_tasks:
+    - name: add key
+      apt_key:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: 0C49F3730359A14518585931BC711F9BA15703C6
+
+    - name: add mongodb
+      apt_repository:
+        repo: deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse
+        state: present
+
     - name: Update and install python
       apt: pkg={{ item }} state=installed update-cache=yes
       with_items:
@@ -18,6 +28,7 @@
         - make
         - htop
         - nload
+        - mongodb-org
 
   tasks:
     - name: ping google
@@ -29,7 +40,7 @@
     - name: install openstack client and sqlalchemy
       become: yes
       become_method: sudo
-      action: command pip install python-openstackclient python-neutronclient tinydb slacker Twisted
+      action: command pip install python-openstackclient python-neutronclient tinydb slacker Twisted pymongo
     - name: install gem
       become: yes
       become_method: sudo
@@ -53,7 +64,10 @@
         group: ubuntu
         mode: 0644
 
-
+    - name: Mongod start
+      service:
+        name: mongod
+        state: started
 
     - name: Creates a crontab for OSIDS
       cron:

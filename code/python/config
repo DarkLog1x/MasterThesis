@@ -4,7 +4,7 @@
 * - open
 port: 443 - closed
 port: 5000 - closed
-port: 6000 - closed
+port: 6000 - closedV
 ip_external_auth - publickey
 ip_internal_auth - password
 #os version is a guess in nmap therefor this will mostly not work

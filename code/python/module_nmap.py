@@ -40,6 +40,8 @@ def nmapscan(list):
         # siglently
         try:
             for port in host.find('ports').findall('port'):
+                database.MongoDBConnection(tmpserverList[tmpIndex], "ports", (port.get(
+                    'portid'), port.find('state').get('state')))
                 database.PrintList(tmpserverList[tmpIndex], "port: %s" % (
                     port.get('portid')), "%s" % (port.find('state').get('state')))
                 if port.find('service').get("version") is not None and port.find('service').get('product') is not None:

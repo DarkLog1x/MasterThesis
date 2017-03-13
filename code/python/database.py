@@ -2,6 +2,8 @@ import tinydb
 import os
 from slacker import Slacker
 from collections import Counter
+import pymongo
+from pymongo import MongoClient
 
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
@@ -91,3 +93,36 @@ def SlackerConnect(incorrectVMS):
     for message in incorrectVMS:
         slack.chat.post_message('#OSIDS', message)
     slack.chat.post_message('#OSIDS', "##############################")
+
+
+def MongoDBConnection(instanceID, type,  data):
+    client = MongoClient()
+    db = client.database
+    key = {"ID": instanceID}
+    data = {type:
+            {data[0]: data[1]}}
+    db.update_one(key, data, {upsert: true})
+
+
+###
+# Set a config flag for the admin to be able to choose what type of informatation is sent
+# is it all of the information
+# or only the changes
+# make a slack channel for each project id
+#
+# #####
+# does slack go over ssl
+# Look at image name on opnestack server show (id of server) to ge the image of the vm  openstack image show (id of vm)
+#
+# ###
+# look at slack bot -- if they can compunicate back
+#
+# ###
+# openstack network list
+#
+# ###
+# MongoDB for database
+#
+# #####
+# Look at security groups
+#
