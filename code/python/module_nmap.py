@@ -40,13 +40,20 @@ def nmapscan(list):
         # siglently
         try:
             for port in host.find('ports').findall('port'):
+                print port
                 database.MongoDBUpdate(tmpserverList[tmpIndex], "ports", (port.get(
                     'portid'), port.find('state').get('state')))
-                database.PrintList(tmpserverList[tmpIndex], "port: %s" % (
-                    port.get('portid')), "%s" % (port.find('state').get('state')))
+                # database.PrintList(tmpserverList[tmpIndex], "ports", (port.get(
+                # 'portid'), port.find('state').get('state')))
+                # database.PrintList(tmpserverList[tmpIndex], "port: %s" % (
+                # port.get('portid')), "%s" %
+                # (port.find('state').get('state')))
                 if port.find('service').get("version") is not None and port.find('service').get('product') is not None:
-                    database.PrintList(tmpserverList[tmpIndex], "service: %s on port %s is version:" % (port.find(
-                        'service').get('product'), port.get('portid')), "%s" % (port.find('service').get('version')))
+                    # database.PrintList(tmpserverList[tmpIndex], "service: %s on port %s is version:" % (port.find(
+                        # 'service').get('product'), port.get('portid')), "%s" % (port.find('service').get('version')))
+                    database.MongoDBUpdate(tmpserverList[tmpIndex], "services", ("%s on port %s is version:" % (port.find(
+                        'service').get('product'), port.get('portid')), "%s" % (port.find('service').get('version'))))
+
             # print "--" + port.get('portid') + ": " +
             # port.find('state').get('state')
             osName = host.find('os').findall('osmatch')

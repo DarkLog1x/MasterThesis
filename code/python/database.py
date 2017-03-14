@@ -13,10 +13,12 @@ from pymongo import MongoClient
 def PrintList(instanceID, type,  data):
     db = tinydb.TinyDB('./db.json')
     instanceSearch = tinydb.Query()
+    key = {"ID": instanceID}
+    data = {type: {data[0]: data[1]}}
     if db.search(instanceSearch.id == instanceID):
-        db.update({type: data}, instanceSearch.id == instanceID)
+        db.update({type: [{data[0]:data[1]}]}, instanceSearch.id == instanceID)
     else:
-        db.insert({'id': instanceID, type: data})
+        db.insert(key, data)
 
 
 ##
@@ -100,15 +102,14 @@ def MongoDBCreate(ServerList):
     db = client.vm_database
     vms = db.vms
     for server in ServerList:
-        vms.insert_one({"ID": server})
+        vms.update_one({"ID": server}, {"$set": {"ID": server}}, upsert=True)
 
 
 def MongoDBUpdate(instanceID, type,  data):
     client = MongoClient('localhost', 27017)
     db = client.vm_database
     key = {"ID": instanceID}
-    data = {"$set": {type:
-                     {data[0]: data[1]}}}
+    data = {"$set": {type + "." + data[0]: data[1]}}
     print key
     print data
     vms = db.vms
