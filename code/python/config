@@ -1,14 +1,13 @@
 #This is a config file
 #It needs to be filled out similer to the output of the script that is run (a.k.a - NMAP, ssh_scan, etc)
 #* special case to print all other open port todo: this is a hack to get all open ports of machiens to print needs to be fixed
-* - open
-port: 443 - closed
-port: 5000 - closed
-port: 6000 - closedV
-ip_external_auth - publickey
-ip_internal_auth - password
+ports: 443 - closed
+ports: 5000 - closed
+ports: 6000 - closed
+IP: ip_external_auth - publickey
+IP: ip_internal_auth - password
 #os version is a guess in nmap therefor this will mostly not work
-OS - linux 4.4
+#OS - linux 4.4
 #for services one must fill out in the way that nmap should return them
 #service: (name of service) on port (port number) is version: - (this must be taken form an nmap scan)
-service: OpenSSH on port 22 is version: - 7.2p2 Ubuntu 4ubuntu2.1
+services: OpenSSH on port 22 is version: - 7.2p2 Ubuntu 4ubuntu2.1

@@ -33,10 +33,11 @@ def main():
 
     ServerList = DeviceList(neutron, nova_client)
     database.MongoDBCreate(ServerList)
-    module_nmap.nmapscan(ServerList)
+    # module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)
-    # commands = database.ProperConfig()
+    commands = database.ProperConfig()
+    database.ConfigCheck(commands)
     # incorrectVMS = database.checkIfConfigIfFollowed(commands)
     # database.SlackerConnect(incorrectVMS)
 

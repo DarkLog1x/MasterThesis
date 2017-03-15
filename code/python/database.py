@@ -4,7 +4,7 @@ from slacker import Slacker
 from collections import Counter
 import pymongo
 from pymongo import MongoClient
-
+import pprint
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
@@ -116,7 +116,57 @@ def MongoDBUpdate(instanceID, type,  data):
     try:
         post_id = vms.update_one(key, data, upsert=True)
     except:
-        print "wtf"
+        pass
+
+
+def ConfigCheck(commands):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    incorrectVMS = []
+    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
+    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
+    commandList = []
+    vms = db.vms
+    for command in commands:
+        values = command.split(" - ")
+        area = values[0].split(":")
+        commandList.append(values[0])
+        # print os.environ['HOME']
+        #
+        print area
+        print values
+        tmp = vms.find(
+            {area[0] + "." + area[1].strip(): {"$ne": values[1].strip()}})
+        for item in tmp:
+            it = "Server ID: " + item['ID'] + " | " + area[1] + ": " + \
+                item[area[0]][area[1].strip()] + " -- Should be = " + values[1]
+            incorrectVMS.append(it)
+            print it
+
+    # contents = db.table('_default').all()
+
+    # schema = Counter(frozenset(doc.keys()) for doc in contents)
+    # keyList = []
+    # for i in schema.iteritems():
+        # for j in i[0]:
+            # if j not in commandList and j not in ['id', 'ip_internal', 'ip_external']:
+            # if j not in keyList:
+            # keyList.append(j)
+    # for i in keyList:
+        # tmp = db.search(tinydb.where(i) == 'open')
+        # for items in tmp:
+            # it = "Server ID: " + \
+            # items['id'] + " | " + \
+            # i + " has been found " + items[i] + " and is not in the config"
+            # incorrectVMS.append(it)
+
+    # tmp = vms.find()
+
+    # print tmp
+    # for t in tmp:
+        # print t
+    return incorrectVMS
+
 
 ###
 # Set a config flag for the admin to be able to choose what type of informatation is sent
