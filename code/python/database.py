@@ -1,10 +1,9 @@
 import tinydb
 import os
-from slacker import Slacker
 from collections import Counter
 import pymongo
 from pymongo import MongoClient
-import pprint
+from slack import SlackerConnect
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
@@ -80,23 +79,6 @@ def checkIfConfigIfFollowed(commands):
     return incorrectVMS
 
 
-##
-# Connect to Slack and print output!
-##
-
-def SlackerConnect(incorrectVMS):
-    f = os.environ['SLACK_KEY']
-    slack = Slacker(f)
-    try:
-        slack.channels.create('#OSIDS')
-    except:
-        pass
-    slack.chat.post_message('#OSIDS', "##############################")
-    for message in incorrectVMS:
-        slack.chat.post_message('#OSIDS', message)
-    slack.chat.post_message('#OSIDS', "##############################")
-
-
 def MongoDBCreate(ServerList):
     client = MongoClient('localhost', 27017)
     db = client.vm_database
@@ -119,12 +101,10 @@ def MongoDBUpdate(instanceID, type,  data):
         pass
 
 
-def ConfigCheck(commands):
+def ConfigCheck(commands, serverID):
     client = MongoClient('localhost', 27017)
     db = client.vm_database
     incorrectVMS = []
-    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
-    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
     vms = db.vms
     for command in commands:
         values = command.split(" - ")
@@ -132,20 +112,18 @@ def ConfigCheck(commands):
         # print os.environ['HOME']
         #
         tmp = vms.find(
-            {area[0] + "." + area[1].strip(): {"$ne": values[1].strip()}})
+            {"$and": [{area[0] + "." + area[1].strip(): {"$ne": values[1].strip()}}, {"ID": serverID}]})
         for item in tmp:
             it = "Server ID: " + item['ID'] + " | " + area[1] + ": " + \
                 item[area[0]][area[1].strip()] + " -- Should be = " + values[1]
             incorrectVMS.append(it)
-    print incorrectVMS
+    return incorrectVMS
 
 
-def ConfigCheckInversePorts(commands):
+def ConfigCheckInversePorts(commands, serverID):
     client = MongoClient('localhost', 27017)
     db = client.vm_database
     incorrectVMS = []
-    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
-    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
     vms = db.vms
     portlist = []
 
@@ -154,7 +132,7 @@ def ConfigCheckInversePorts(commands):
         area = values[1].split(" - ")
         portlist.append(area)
 
-    contents = vms.find()
+    contents = vms.find({"ID": serverID})
     for item in contents:
         for port in item['ports']:
             tmp = [port, item['ports'][port]]
@@ -163,7 +141,21 @@ def ConfigCheckInversePorts(commands):
                     item['ID'] + " | " + port + " has been found " + \
                     item['ports'][port] + " and is not in the config"
                 incorrectVMS.append(it)
-    print incorrectVMS
+    return incorrectVMS
+
+
+def DatabaseCheckFull(serverlist):
+    commands = ProperConfig()
+    incorrectVMS = []
+    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
+    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
+    for vm in serverlist:
+        incorrectVMS.append("--Server With ID: " + vm)
+        incorrectVMS += ConfigCheck(commands, vm)
+        incorrectVMS += ConfigCheckInversePorts(commands, vm)
+    SlackerConnect(incorrectVMS)
+    # incorrectVMS = database.checkIfConfigIfFollowed(commands)
+    # database.SlackerConnect(incorrectVMS)
 
 
 ###

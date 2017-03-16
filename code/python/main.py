@@ -36,17 +36,13 @@ def main():
     # module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)
-    commands = database.ProperConfig()
-    database.ConfigCheck(commands)
-    database.ConfigCheckInversePorts(commands)
-    # incorrectVMS = database.checkIfConfigIfFollowed(commands)
-    # database.SlackerConnect(incorrectVMS)
-
+    database.DatabaseCheckFull(ServerList)
 
 ##
 # This will set the needed environment varibables
 # This needs to be filled out to match the rc file form OpenStack
 ##
+
 
 def environmentVariables():
     f = open('keys', 'r').read().splitlines()
