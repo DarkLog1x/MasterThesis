@@ -3,16 +3,7 @@ import sys
 import time
 import sched
 import os
-import sys
-import inspect
-from os import environ as env
-import subprocess
 
-from novaclient import client as client_nova
-import keystoneclient.v3.client as ksclient
-from keystoneauth1 import loading
-from keystoneauth1 import session
-from neutronclient.v2_0 import client as client_neutron
 from subprocess import call
 from slackclient import SlackClient
 import CheckDatabase
@@ -26,15 +17,7 @@ EXAMPLE_COMMAND = None
 
 
 def main():
-    environmentVariables()
-    auth = get_credentials()
-    sess = session.Session(auth=auth)
-    neutron = client_neutron.Client(session=sess)
-    nova_client = client_nova.Client('2.1', session=sess)
-
-    ServerList = DeviceList(neutron, nova_client)
-    incorrectVMS = CheckDatabase.DatabaseCheckFull(ServerList)
-
+    incorrectVMS = CheckDatabase.DatabaseCheckFull()
     f = os.environ['SLACK_KEY']
     BOT_NAME = 'isaas'
     bot_id = None
@@ -55,50 +38,30 @@ def main():
 
     # starterbot's ID as an environment variable
 
-    # constants
+    # constantsi
+    GroupName = incorrectVMS[0].split(": ")
     slackBot(slack_client, bot_id, incorrectVMS)
+    repeatBot([], incorrectVMS, slack_client, GroupName[1])
 
 
-def environmentVariables():
-    f = open('keys', 'r').read().splitlines()
-    os.environ["OS_PASSWORD"] = f[1]
-    os.environ["SLACK_KEY"] = f[0]
-    os.environ["OS_AUTH_URL"] = "https://smog.uppmax.uu.se:5000/v3"
-    os.environ["OS_TENANT_ID"] = "bfe0cca393a5473189c05f22a731bfd0"
-    os.environ["OS_TENANT_NAME"] = "c2015003"
-    os.environ["OS_PROJECT_NAME"] = "c2015003"
-    os.environ["OS_USERNAME"] = "aleko"
-    os.environ["OS_USER_DOMAIN_NAME"] = "Default"
-    os.environ["OS_PROJECT_DOMAIN_NAME"] = "Default"
-    os.environ["OS_IDENTITY_API_VERSION"] = "3"
-    os.environ["OS_AUTH_VERSION"] = "3"
-    os.environ["OS_REGION_NAME"] = "UPPMAX"
-
-
-def get_credentials():
-    loader = loading.get_plugin_loader('password')
-    auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
-                                    username=env['OS_USERNAME'],
-                                    password=env['OS_PASSWORD'],
-                                    project_name=env['OS_PROJECT_NAME'],
-                                    user_domain_name=env[
-                                        'OS_USER_DOMAIN_NAME'],
-                                    project_domain_name=env['OS_PROJECT_DOMAIN_NAME'])
-    return auth
-
-
-def DeviceList(neutron, nova_client):
-    list = {}
-    server_list = nova_client.servers.list(detailed=True)
-    ip_list = nova_client.floating_ips.list()
-    for server in server_list:
-        list.setdefault(server.id, [])
-        list[server.id].append(server.name)
-    for ip in ip_list:
-        if(ip.instance_id != None):
-            list[ip.instance_id].append(ip.fixed_ip)
-            list[ip.instance_id].append(ip.ip)
-    return list
+def repeatBot(incorrectVMS_old, incorrectVMS_new, slack_client, GroupName):
+    incorrectVMS = CheckDatabase.DatabaseCheckChanges(
+        incorrectVMS_old, incorrectVMS_new)
+    print incorrectVMS_old
+    print incorrectVMS_new
+    print incorrectVMS
+    if incorrectVMS:
+        print "Change"
+        for line in incorrectVMS:
+            slack_client.api_call(
+                "chat.postMessage", channel=GroupName, text=line, as_user=True)
+        incorrectVMS_old = incorrectVMS_new
+        incorrectVMS_new = CheckDatabase.DatabaseCheckFull()
+    else:
+        print "No Change"
+        incorrectVMS_new = CheckDatabase.DatabaseCheckFull()
+    threading.Timer(
+        20.0, repeatBot, [incorrectVMS_old, incorrectVMS_new, slack_client, GroupName]).start()
 
 
 def handle_command(slack_client, command, channel):
@@ -148,6 +111,10 @@ def SlackChennelThread(slack_client, bot_id):
         slack_client.rtm_read(), bot_id)
     if command and channel:
         handle_command(slack_client, command, channel)
+
+
+#####
+# Add Slacker to create the channel and join the bot to it
 
 
 if __name__ == "__main__":
