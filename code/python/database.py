@@ -1,9 +1,6 @@
-import tinydb
 import os
-from collections import Counter
 import pymongo
 from pymongo import MongoClient
-from slack import SlackerConnect
 ##
 # Will be called to add data to the db.json file. must send an ID followed by type of data and then by the data
 ##
@@ -20,63 +17,8 @@ def PrintList(instanceID, type,  data):
         db.insert(key, data)
 
 
-##
-# Will read the config file
-##
-
-def ProperConfig():
-    f = open('config', 'r').read().splitlines()
-    commands = []
-    for line in f:
-        if line[0] is not '#':
-            commands.append(line)
-
-    return commands
-
-
-##
-# This is the function that will be called to see if the confige provided is followed
-##
-
-def checkIfConfigIfFollowed(commands):
-    db = tinydb.TinyDB('./db.json')
-    key = tinydb.Query()
-    incorrectVMS = []
-    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
-    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
-    commandList = []
-    for command in commands:
-        values = command.split(" - ")
-        commandList.append(values[0])
-        # print os.environ['HOME']
-        #
-        tmp = db.search(tinydb.where(values[0]) != values[1].strip())
-        for items in tmp:
-            it = "Server ID: " + \
-                items['id'] + " | " + \
-                values[0] + ": " + items[values[0]] + \
-                " -- Should be = " + values[1]
-            incorrectVMS.append(it)
-    # for b in incorrectVMS:
-        # print b
-    contents = db.table('_default').all()
-
-    schema = Counter(frozenset(doc.keys()) for doc in contents)
-    keyList = []
-    for i in schema.iteritems():
-        for j in i[0]:
-            if j not in commandList and j not in ['id', 'ip_internal', 'ip_external']:
-                if j not in keyList:
-                    keyList.append(j)
-    for i in keyList:
-        tmp = db.search(tinydb.where(i) == 'open')
-        for items in tmp:
-            it = "Server ID: " + \
-                items['id'] + " | " + \
-                i + " has been found " + items[i] + " and is not in the config"
-            incorrectVMS.append(it)
-
-    return incorrectVMS
+# This is the function that will be called to see if the confige provided
+# is followed
 
 
 def MongoDBCreate(ServerList):
@@ -99,63 +41,6 @@ def MongoDBUpdate(instanceID, type,  data):
         post_id = vms.update_one(key, data, upsert=True)
     except:
         pass
-
-
-def ConfigCheck(commands, serverID):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
-    incorrectVMS = []
-    vms = db.vms
-    for command in commands:
-        values = command.split(" - ")
-        area = values[0].split(":")
-        # print os.environ['HOME']
-        #
-        tmp = vms.find(
-            {"$and": [{area[0] + "." + area[1].strip(): {"$ne": values[1].strip()}}, {"ID": serverID}]})
-        for item in tmp:
-            it = "Server ID: " + item['ID'] + " | " + area[1] + ": " + \
-                item[area[0]][area[1].strip()] + " -- Should be = " + values[1]
-            incorrectVMS.append(it)
-    return incorrectVMS
-
-
-def ConfigCheckInversePorts(commands, serverID):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
-    incorrectVMS = []
-    vms = db.vms
-    portlist = []
-
-    for command in commands:
-        values = command.split(": ")
-        area = values[1].split(" - ")
-        portlist.append(area)
-
-    contents = vms.find({"ID": serverID})
-    for item in contents:
-        for port in item['ports']:
-            tmp = [port, item['ports'][port]]
-            if tmp not in portlist:
-                it = "Server ID: " + \
-                    item['ID'] + " | " + port + " has been found " + \
-                    item['ports'][port] + " and is not in the config"
-                incorrectVMS.append(it)
-    return incorrectVMS
-
-
-def DatabaseCheckFull(serverlist):
-    commands = ProperConfig()
-    incorrectVMS = []
-    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
-    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
-    for vm in serverlist:
-        incorrectVMS.append("--Server With ID: " + vm)
-        incorrectVMS += ConfigCheck(commands, vm)
-        incorrectVMS += ConfigCheckInversePorts(commands, vm)
-    SlackerConnect(incorrectVMS)
-    # incorrectVMS = database.checkIfConfigIfFollowed(commands)
-    # database.SlackerConnect(incorrectVMS)
 
 
 ###

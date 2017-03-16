@@ -36,7 +36,6 @@ def main():
     # module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)
-    database.DatabaseCheckFull(ServerList)
 
 ##
 # This will set the needed environment varibables
