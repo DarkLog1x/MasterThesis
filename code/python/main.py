@@ -38,6 +38,7 @@ def main():
     # module_sshscan.sshscan(ServerList, 1)
     commands = database.ProperConfig()
     database.ConfigCheck(commands)
+    database.ConfigCheckInversePorts(commands)
     # incorrectVMS = database.checkIfConfigIfFollowed(commands)
     # database.SlackerConnect(incorrectVMS)
 
