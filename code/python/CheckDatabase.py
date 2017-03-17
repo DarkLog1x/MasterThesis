@@ -9,7 +9,7 @@ from neutronclient.v2_0 import client as client_neutron
 import inspect
 from os import environ as env
 import subprocess
-
+import json
 ##
 # Will read the config file
 ##
@@ -66,6 +66,47 @@ def ConfigCheckInversePorts(commands, serverID):
     return incorrectVMS
 
 
+def DatabaseCheckGetFullDatabase(ServerID):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    incorrectVMS = []
+    vms = db.vms
+
+    incorrectVMS = []
+    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
+    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
+
+    listoutput = vms.find({"ID": ServerID})
+    for item in listoutput:
+        keylist = item.keys()
+        for keylistitem in keylist:
+            tmpitem = item[keylistitem]
+            print tmpitem
+            print list(tmpitem)
+
+    print incorrectVMS
+    return incorrectVMS
+    # incorrectVMS = database.checkIfConfigIfFollowed(commands)
+    # database.SlackerConnect(incorrectVMS)
+
+
+def DatabaseCheckSpecific(ServerID):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    incorrectVMS = []
+    vms = db.vms
+
+    commands = ProperConfig()
+    incorrectVMS = []
+    incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
+    incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
+    incorrectVMS += ConfigCheck(commands, ServerID)
+    incorrectVMS += ConfigCheckInversePorts(commands, ServerID)
+    return incorrectVMS
+    # incorrectVMS = database.checkIfConfigIfFollowed(commands)
+    # database.SlackerConnect(incorrectVMS)
+
+
 def DatabaseCheckFull():
     environmentVariables()
     auth = get_credentials()
@@ -83,6 +124,7 @@ def DatabaseCheckFull():
         incorrectVMS.append("--Server With ID: " + vm)
         incorrectVMS += ConfigCheck(commands, vm)
         incorrectVMS += ConfigCheckInversePorts(commands, vm)
+    incorrectVMS.append("##############################")
     return incorrectVMS
     # incorrectVMS = database.checkIfConfigIfFollowed(commands)
     # database.SlackerConnect(incorrectVMS)

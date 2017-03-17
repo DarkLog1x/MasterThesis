@@ -43,6 +43,15 @@ def MongoDBUpdate(instanceID, type,  data):
         pass
 
 
+def MongoDBClean(ServerList):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    vms = db.vms
+    i = vms.find()
+    for vm in i:
+        if vm['ID']not in ServerList:
+            vms.remove({"ID": vm['ID']})
+
 ###
 # Set a config flag for the admin to be able to choose what type of informatation is sent
 # is it all of the information
@@ -64,4 +73,6 @@ def MongoDBUpdate(instanceID, type,  data):
 #
 # #####
 # Look at security groups
+#
+# if the server id is no more drop it formt he database
 #

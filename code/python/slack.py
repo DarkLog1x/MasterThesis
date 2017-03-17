@@ -41,24 +41,19 @@ def main():
     # constantsi
     GroupName = incorrectVMS[0].split(": ")
     slackBot(slack_client, bot_id, incorrectVMS)
-    repeatBot([], incorrectVMS, slack_client, GroupName[1])
+    # repeatBot([], incorrectVMS, slack_client, GroupName[1])
 
 
 def repeatBot(incorrectVMS_old, incorrectVMS_new, slack_client, GroupName):
     incorrectVMS = CheckDatabase.DatabaseCheckChanges(
         incorrectVMS_old, incorrectVMS_new)
-    print incorrectVMS_old
-    print incorrectVMS_new
-    print incorrectVMS
     if incorrectVMS:
-        print "Change"
         for line in incorrectVMS:
             slack_client.api_call(
                 "chat.postMessage", channel=GroupName, text=line, as_user=True)
         incorrectVMS_old = incorrectVMS_new
         incorrectVMS_new = CheckDatabase.DatabaseCheckFull()
     else:
-        print "No Change"
         incorrectVMS_new = CheckDatabase.DatabaseCheckFull()
     threading.Timer(
         20.0, repeatBot, [incorrectVMS_old, incorrectVMS_new, slack_client, GroupName]).start()
@@ -70,13 +65,21 @@ def handle_command(slack_client, command, channel):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    EXAMPLE_COMMAND = "do"
-    response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
-    if command.startswith(EXAMPLE_COMMAND):
-        response = "Sure...write some more code then I can do that!"
-    slack_client.api_call("chat.postMessage", channel=channel,
-                          text=response, as_user=True)
+    input = command.split(" ")
+    if input[0] == "server":
+        response = CheckDatabase.DatabaseCheckSpecific(input[1])
+        for line in response:
+            slack_client.api_call("chat.postMessage", channel=channel,
+                                  text=line, as_user=True)
+    elif input[0] == "database":
+        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
+        for line in response:
+            slack_client.api_call("chat.postMessage", channel=channel,
+                                  text=line, as_user=True)
+    else:
+        response = "Not sure what you mean. The following are excepted: \"server *ID*\", \"database *ID* \" "
+        slack_client.api_call("chat.postMessage", channel=channel,
+                              text=response, as_user=True)
 
 
 def parse_slack_output(slack_rtm_output, bot_id):
@@ -97,7 +100,6 @@ def parse_slack_output(slack_rtm_output, bot_id):
 
 
 def slackBot(slack_client, bot_id, incorrectVMS):
-    READ_WEBSOCKET_DELAY = 5
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
         SlackChennelThread(slack_client, bot_id)
@@ -107,11 +109,12 @@ def slackBot(slack_client, bot_id, incorrectVMS):
 
 def SlackChennelThread(slack_client, bot_id):
     threading.Timer(1.0, SlackChennelThread, [slack_client, bot_id]).start()
-    command, channel = parse_slack_output(
-        slack_client.rtm_read(), bot_id)
-    if command and channel:
-        handle_command(slack_client, command, channel)
-
+    try:
+        command, channel = parse_slack_output(slack_client.rtm_read(), bot_id)
+        if command and channel:
+            handle_command(slack_client, command, channel)
+    except:
+        pass
 
 #####
 # Add Slacker to create the channel and join the bot to it
