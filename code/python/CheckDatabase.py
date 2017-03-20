@@ -81,7 +81,7 @@ def DatabaseCheckGetFullDatabase(ServerID):
     bartmp = dumps(listoutput)
     print bartmp
     incorrectVMS.append(bartmp)
-
+    print json.dumps(bartmp[0], indent=4, sort_keys=True)
     print incorrectVMS
     return incorrectVMS
     # incorrectVMS = database.checkIfConfigIfFollowed(commands)
