@@ -79,10 +79,9 @@ def DatabaseCheckGetFullDatabase(ServerID):
 
     listoutput = vms.find({"ID": ServerID})
     bartmp = dumps(listoutput)
-    print bartmp
-    incorrectVMS.append(bartmp)
-    print json.dumps(bartmp[0], indent=4, sort_keys=True)
-    print incorrectVMS
+    dumpIn = json.loads(bartmp)
+    out = json.dumps(dumpIn, indent=4, sort_keys=True)
+    incorrectVMS.append(out)
     return incorrectVMS
     # incorrectVMS = database.checkIfConfigIfFollowed(commands)
     # database.SlackerConnect(incorrectVMS)
