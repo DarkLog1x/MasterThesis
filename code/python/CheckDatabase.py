@@ -67,6 +67,21 @@ def ConfigCheckInversePorts(commands, serverID):
     return incorrectVMS
 
 
+def FindSelected(key, value):
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    incorrectVMS = []
+    vms = db.vms
+
+    incorrectVMS = []
+    listoutput = vms.find({key: value})
+    tmp1 = dumps(listoutput)
+    tmp = json.loads(tmp1)
+    for i in tmp:
+        incorrectVMS.append(i["ID"] + " -- " + key + ": " + value)
+    return incorrectVMS
+
+
 def DatabaseCheckGetFullDatabase(ServerID):
     client = MongoClient('localhost', 27017)
     db = client.vm_database
@@ -83,8 +98,6 @@ def DatabaseCheckGetFullDatabase(ServerID):
     out = json.dumps(dumpIn, indent=4, sort_keys=True)
     incorrectVMS.append(out)
     return incorrectVMS
-    # incorrectVMS = database.checkIfConfigIfFollowed(commands)
-    # database.SlackerConnect(incorrectVMS)
 
 
 def DatabaseCheckSpecific(ServerID):
@@ -135,8 +148,9 @@ def DatabaseCheckChanges(incorrectVMS_old, incorrectVMS_new):
 
 def environmentVariables():
     f = open('keys', 'r').read().splitlines()
-    os.environ["OS_PASSWORD"] = f[1]
-    os.environ["SLACK_KEY"] = f[0]
+    os.environ["OS_PASSWORD"] = f[2]
+    os.environ["SLACK_KEY"] = f[1]
+    os.environ["SLACK_KEY_NOBOT"] = f[0]
     os.environ["OS_AUTH_URL"] = "https://smog.uppmax.uu.se:5000/v3"
     os.environ["OS_TENANT_ID"] = "bfe0cca393a5473189c05f22a731bfd0"
     os.environ["OS_TENANT_NAME"] = "c2015003"

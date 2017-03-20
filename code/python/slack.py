@@ -8,6 +8,7 @@ from subprocess import call
 from slackclient import SlackClient
 import CheckDatabase
 import threading
+from slacker import Slacker
 
 ##
 # Connect to Slack and print output!
@@ -19,27 +20,38 @@ EXAMPLE_COMMAND = None
 def main():
     incorrectVMS = CheckDatabase.DatabaseCheckFull()
     f = os.environ['SLACK_KEY']
+    b = os.environ['SLACK_KEY_NOBOT']
     BOT_NAME = 'isaas'
     bot_id = None
 
     slack_client = SlackClient(f)
 
     api_call = slack_client.api_call("users.list")
+    GroupName = incorrectVMS[0].split(": ")
+
     if api_call.get('ok'):
         # retrieve all users so we can find our bot
         users = api_call.get('members')
         for user in users:
             if 'name' in user and user.get('name') == BOT_NAME:
-                print("Bot ID for '" + user['name'] + "' is " + user.get('id'))
+                print(
+                    "Bot ID for '" + user['name'] + "' is " + user.get('id'))
                 bot_id = user.get('id')
 
     else:
         print("could not find bot user with the name " + BOT_NAME)
 
-    # starterbot's ID as an environment variable
+    slack = Slacker(b)
+    try:
+        slack.channels.create('#' + GroupName)
+    except:
+        pass
 
-    # constantsi
-    GroupName = incorrectVMS[0].split(": ")
+    try:
+        slack.channels.invite('#' + GroupName, bot_id)
+    except:
+        pass
+
     slackBot(slack_client, bot_id, incorrectVMS)
     # repeatBot([], incorrectVMS, slack_client, GroupName[1])
 
@@ -66,18 +78,23 @@ def handle_command(slack_client, command, channel):
         returns back what it needs for clarification.
     """
     input = command.split(" ")
-    if input[0] == "server":
+    if input[0] == "vm_problem":
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
         for line in response:
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=line, as_user=True)
-    elif input[0] == "database":
-        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
+    elif input[0] == "vm_database":
+        response = CheckDatabase.DatabaseCheckGetFullyDatabase(input[1])
+        for line in response:
+            slack_client.api_call("chat.postMessage", channel=channel,
+                                  text=line, as_user=True)
+    elif input[0] == 'vms_status':
+        response = CheckDatabase.FindSelected(input[1], input[2])
         for line in response:
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=line, as_user=True)
     else:
-        response = "Not sure what you mean. The following are excepted: \"server *ID*\", \"database *ID* \" "
+        response = "Not sure what you mean. The following are excepted: \"vm_problem *ID*\", \"vm_database *ID* \", \"vms_status\" "
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True)
 
