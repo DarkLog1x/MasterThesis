@@ -78,23 +78,23 @@ def handle_command(slack_client, command, channel):
         returns back what it needs for clarification.
     """
     input = command.split(" ")
-    if input[0] == "vm_problem":
+    if input[0] == "vmproblems":
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
         for line in response:
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=line, as_user=True)
-    elif input[0] == "vm_database":
-        response = CheckDatabase.DatabaseCheckGetFullyDatabase(input[1])
+    elif input[0] == "vmdatabase":
+        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
         for line in response:
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=line, as_user=True)
-    elif input[0] == 'vms_status':
+    elif input[0] == 'vmstatus':
         response = CheckDatabase.FindSelected(input[1], input[2])
         for line in response:
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=line, as_user=True)
     else:
-        response = "Not sure what you mean. The following are excepted: \"vm_problem *ID*\", \"vm_database *ID* \", \"vms_status\" "
+        response = "Not sure what you mean. The following are excepted: \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus\" "
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True)
 
