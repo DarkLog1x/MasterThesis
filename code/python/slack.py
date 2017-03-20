@@ -93,8 +93,13 @@ def handle_command(slack_client, command, channel):
         for line in response:
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=line, as_user=True)
+    elif input[0] == 'fullreport':
+        response = CheckDatabase.DatabaseCheckFull()
+        for line in response:
+            slack_client.api_call("chat.postMessage", channel=channel,
+                                  text=line, as_user=True)
     else:
-        response = "Not sure what you mean. The following are excepted: \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus\" "
+        response = "Not sure what you mean. The following are excepted: \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus\" , \"fullreport\" "
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True)
 
