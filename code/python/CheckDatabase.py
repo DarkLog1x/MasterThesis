@@ -10,6 +10,7 @@ import inspect
 from os import environ as env
 import subprocess
 import json
+from bson.json_util import dumps
 ##
 # Will read the config file
 ##
@@ -77,12 +78,9 @@ def DatabaseCheckGetFullDatabase(ServerID):
     incorrectVMS.append("Tenant ID: " + os.environ['OS_PROJECT_NAME'])
 
     listoutput = vms.find({"ID": ServerID})
-    for item in listoutput:
-        keylist = item.keys()
-        for keylistitem in keylist:
-            tmpitem = item[keylistitem]
-            print tmpitem
-            print list(tmpitem)
+    bartmp = dumps(listoutput)
+    print bartmp
+    incorrectVMS.append(bartmp)
 
     print incorrectVMS
     return incorrectVMS
