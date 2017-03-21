@@ -16,6 +16,7 @@ from neutronclient.v2_0 import client as client_neutron
 from subprocess import call
 import module_nmap
 import module_sshscan
+import module_openstack
 import database
 from twisted.internet import task
 from twisted.internet import reactor
@@ -37,6 +38,7 @@ def main():
     # module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)
+    module_openstack.OpenStackData(ServerList, nova_client)
 
 ##
 # This will set the needed environment varibables
@@ -46,8 +48,8 @@ def main():
 
 def environmentVariables():
     f = open('keys', 'r').read().splitlines()
-    os.environ["OS_PASSWORD"] = f[1]
-    os.environ["SLACK_KEY"] = f[0]
+    os.environ["OS_PASSWORD"] = f[2]
+    os.environ["SLACK_KEY"] = f[1]
     os.environ["OS_AUTH_URL"] = "https://smog.uppmax.uu.se:5000/v3"
     os.environ["OS_TENANT_ID"] = "bfe0cca393a5473189c05f22a731bfd0"
     os.environ["OS_TENANT_NAME"] = "c2015003"

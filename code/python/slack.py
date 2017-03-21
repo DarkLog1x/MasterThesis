@@ -9,6 +9,7 @@ from slackclient import SlackClient
 import CheckDatabase
 import threading
 from slacker import Slacker
+import OpenStack_query as OSq
 
 ##
 # Connect to Slack and print output!
@@ -52,7 +53,8 @@ def main():
     except:
         pass
 
-    slackBot(slack_client, bot_id, incorrectVMS)
+    # slackBot(slack_client, bot_id, incorrectVMS)
+    OSq.OpenStackQuery()
     # repeatBot([], incorrectVMS, slack_client, GroupName[1])
 
 

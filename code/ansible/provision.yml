@@ -76,6 +76,7 @@
         user: ubuntu
         job: "/usr/bin/python /home/ubuntu/main.py"
 
+
   handlers:
     - name: ping again
       action: ping
