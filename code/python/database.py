@@ -34,8 +34,6 @@ def MongoDBUpdate(instanceID, type,  data):
     db = client.vm_database
     key = {"ID": instanceID}
     data = {"$set": {type + "." + data[0]: data[1]}}
-    print key
-    print data
     vms = db.vms
     try:
         post_id = vms.update_one(key, data, upsert=True)

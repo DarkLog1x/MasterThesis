@@ -53,9 +53,9 @@ def main():
     except:
         pass
 
-    # slackBot(slack_client, bot_id, incorrectVMS)
-    OSq.OpenStackQuery()
-    # repeatBot([], incorrectVMS, slack_client, GroupName[1])
+    slackBot(slack_client, bot_id, incorrectVMS)
+    # OSq.OpenStackQuery()
+    repeatBot([], incorrectVMS, slack_client, GroupName[1])
 
 
 def repeatBot(incorrectVMS_old, incorrectVMS_new, slack_client, GroupName):
@@ -82,28 +82,25 @@ def handle_command(slack_client, command, channel):
     input = command.split(" ")
     if input[0] == "vmproblems":
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
-        for line in response:
-            slack_client.api_call("chat.postMessage", channel=channel,
-                                  text=line, as_user=True)
     elif input[0] == "vmdatabase":
         response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
-        for line in response:
-            slack_client.api_call("chat.postMessage", channel=channel,
-                                  text=line, as_user=True)
     elif input[0] == 'vmstatus':
         response = CheckDatabase.FindSelected(input[1], input[2])
-        for line in response:
-            slack_client.api_call("chat.postMessage", channel=channel,
-                                  text=line, as_user=True)
     elif input[0] == 'fullreport':
         response = CheckDatabase.DatabaseCheckFull()
-        for line in response:
-            slack_client.api_call("chat.postMessage", channel=channel,
-                                  text=line, as_user=True)
+    elif input[0] == 'openstackinfo':
+        if input[1] == 'serverlist':
+            response = OSq.OpenStackServerList()
+        else:
+            response = [
+                "Not a recognised OpenStack information command. Try \"serverlist\""]
     else:
-        response = "Not sure what you mean. The following are excepted: \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus\" , \"fullreport\" "
+        response = [
+            "Not sure what you mean. The following are excepted:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus\" , \"fullreport\" "]
+    for line in response:
         slack_client.api_call("chat.postMessage", channel=channel,
-                              text=response, as_user=True)
+                              text=line, as_user=True)
+        time.sleep(0.5)
 
 
 def parse_slack_output(slack_rtm_output, bot_id):

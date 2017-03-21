@@ -12,10 +12,9 @@ import database
 ##
 
 
-def OpenStackData(nova_client, glance):
+def OpenStackData(nova_client, glance, neutron):
     tmpserverList = []
     server_list = nova_client.servers.list(detailed=True)
-    print server_list
     for i in server_list:
         image = glance.images.get(i.image['id'])
         database.MongoDBUpdate(i.id, "OpenStack_info", ("user_id", i.user_id))

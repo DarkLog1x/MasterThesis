@@ -10,30 +10,18 @@ from os import environ as env
 ##
 
 
-def OpenStackQuery():
+def OpenStackServerList():
     auth = get_credentials()
     sess = session.Session(auth=auth)
     neutron = client_neutron.Client(session=sess)
     nova_client = client_nova.Client('2.1', session=sess)
 
     server_list = nova_client.servers.list(detailed=True)
-
-    print server_list
-    # ServerList = DeviceList(neutron, nova_client)
-
-
-def DeviceList(neutron, nova_client):
-    list = {}
-    server_list = nova_client.servers.list(detailed=True)
-    ip_list = nova_client.floating_ips.list()
-    for server in server_list:
-        list.setdefault(server.id, [])
-        list[server.id].append(server.name)
-    for ip in ip_list:
-        if(ip.instance_id != None):
-            list[ip.instance_id].append(ip.fixed_ip)
-            list[ip.instance_id].append(ip.ip)
-    return list
+    retlist = []
+    for i in server_list:
+        retlist.append(i.id)
+    print retlist
+    return retlist
 
 
 def get_credentials():
