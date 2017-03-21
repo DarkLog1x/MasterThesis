@@ -13,6 +13,7 @@ import keystoneclient.v3.client as ksclient
 from keystoneauth1 import loading
 from keystoneauth1 import session
 from neutronclient.v2_0 import client as client_neutron
+import glanceclient.v2.client as glclient
 from subprocess import call
 import module_nmap
 import module_sshscan
@@ -31,6 +32,7 @@ def main():
     sess = session.Session(auth=auth)
     neutron = client_neutron.Client(session=sess)
     nova_client = client_nova.Client('2.1', session=sess)
+    glance = glclient.Client('2.1', session=sess)
 
     ServerList = DeviceList(neutron, nova_client)
     database.MongoDBCreate(ServerList)
@@ -38,7 +40,7 @@ def main():
     # module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)
-    module_openstack.OpenStackData(nova_client)
+    module_openstack.OpenStackData(nova_client, glance)
 
 ##
 # This will set the needed environment varibables
