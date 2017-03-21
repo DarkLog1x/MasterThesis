@@ -38,7 +38,7 @@ def main():
     # module_nmap.nmapscan(ServerList)
     # module_sshscan.sshscan(ServerList, 2)
     # module_sshscan.sshscan(ServerList, 1)
-    module_openstack.OpenStackData(ServerList, nova_client)
+    module_openstack.OpenStackData(nova_client)
 
 ##
 # This will set the needed environment varibables
