@@ -96,7 +96,7 @@ def handle_command(slack_client, command, channel):
                 "Not a recognised OpenStack information command. Try \"serverlist\""]
     else:
         response = [
-            "Not sure what you mean. The following are excepted:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus\" , \"fullreport\" "]
+            "Not sure what you mean. The following are excepted:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
     for line in response:
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=line, as_user=True)

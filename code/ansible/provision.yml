@@ -101,4 +101,6 @@
       #command: python main.py
       #register: out
       #- debug: var=out.stdout_lines
+      #- name: Run slackBot
+      #command: ./slack.py
 
