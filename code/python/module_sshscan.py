@@ -22,30 +22,22 @@ def sshscan(list, IPChoose):
             if IPChoose is 1:
                 database.MongoDBUpdate(
                     server, "IP", ('ip_internal', '%s' % (jout[0]['ip'])))
-                database.MongoDBUpdate(
-                    server, "IP", ('ip_internal_auth', '%s' % (jout[0]['auth_methods'][0])))
-
-                # database.PrintList(
-                # server, 'ip_internal', "%s" % (jout[0]['ip']))
-                # database.PrintList(
-                # server, 'ip_internal_auth', "%s" %
-                # (jout[0]['auth_methods'][0]))
-
-                # database.PrintList(
-                # server, 'ip_internal_auth', jout[0]['auth_methods'])
+                if len(jout[0]['auth_methods']) is 1:
+                    database.MongoDBUpdate(
+                        server, "IP", ('ip_internal_auth', '%s' % (jout[0]['auth_methods'][0])))
+                else:
+                    database.MongoDBUpdate(
+                        server, "IP", ('ip_internal_auth', '%s' % (jout[0]['auth_methods'][0] + " " + jout[0]['auth_methods'][1])))
             elif IPChoose is 2:
                 database.MongoDBUpdate(
                     server, "IP", ('ip_external', '%s' % (jout[0]['ip'])))
-                database.MongoDBUpdate(
-                    server, "IP", ('ip_external_auth', '%s' % (jout[0]['auth_methods'][0])))
-                # database.PrintList(
-                # server, 'ip_external', "%s" % (jout[0]['ip']))
-                # database.PrintList(
-                # server, 'ip_external_auth', "%s" % (jout[0]['auth_methods'][0]))
-                # database.PrintList(
-                # server, 'ip_external_auth', jout[0]['auth_methods'])
-            # print "IP: %s is using: %s" % (jout[0]['ip'],
-            # jout[0]['auth_methods'])
+                if len(jout[0]['auth_methods']) is 1:
+                    database.MongoDBUpdate(
+                        server, "IP", ('ip_external_auth', '%s' % (jout[0]['auth_methods'][0])))
+                else:
+                    database.MongoDBUpdate(
+                        server, "IP", ('ip_external_auth', '%s' % (jout[0]['auth_methods'][0] + " " + jout[0]['auth_methods'][1])))
+
         except Exception, e:
             # print "Could not check ssh (port 22): %s" % e
             pass
