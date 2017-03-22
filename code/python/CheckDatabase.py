@@ -37,8 +37,14 @@ def ConfigCheck(commands, serverID):
         tmp = vms.find(
             {"$and": [{area[0] + "." + area[1].strip(): {"$ne": values[1].strip()}}, {"ID": serverID}]})
         for item in tmp:
-            it = "Server ID: " + item['ID'] + " | " + area[1] + ": " + \
-                item[area[0]][area[1].strip()] + " -- Should be = " + values[1]
+            try:
+                it = "Server ID: " + item['ID'] + " | " + area[1] + ": " + \
+                    item[area[0]][
+                        area[1].strip()] + " -- Should be = " + values[1]
+            except:
+                it = "Item: " + \
+                    values[
+                        0] + " is not present in the scanned database for: " + item['ID']
             incorrectVMS.append(it)
     return incorrectVMS
 

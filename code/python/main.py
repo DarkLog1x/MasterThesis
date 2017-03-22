@@ -37,9 +37,9 @@ def main():
     ServerList = DeviceList(neutron, nova_client)
     database.MongoDBCreate(ServerList)
     database.MongoDBClean(ServerList)
-    # module_nmap.nmapscan(ServerList)
-    # module_sshscan.sshscan(ServerList, 2)
-    # module_sshscan.sshscan(ServerList, 1)
+    module_nmap.nmapscan(ServerList)
+    module_sshscan.sshscan(ServerList, 2)
+    module_sshscan.sshscan(ServerList, 1)
     module_openstack.OpenStackData(nova_client, glance, neutron)
 
 ##
