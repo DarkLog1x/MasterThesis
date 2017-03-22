@@ -76,6 +76,9 @@
         user: ubuntu
         job: "/usr/bin/python /home/ubuntu/main.py"
 
+    - name: Run slackBot
+      command: ./slack.py
+
 
   handlers:
     - name: ping again
