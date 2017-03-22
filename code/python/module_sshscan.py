@@ -22,21 +22,19 @@ def sshscan(list, IPChoose):
             if IPChoose is 1:
                 database.MongoDBUpdate(
                     server, "IP", ('ip_internal', '%s' % (jout[0]['ip'])))
-                if len(jout[0]['auth_methods']) is 1:
-                    database.MongoDBUpdate(
-                        server, "IP", ('ip_internal_auth', '%s' % (jout[0]['auth_methods'][0])))
-                else:
-                    database.MongoDBUpdate(
-                        server, "IP", ('ip_internal_auth', '%s' % (jout[0]['auth_methods'][0] + " " + jout[0]['auth_methods'][1])))
+                str = ""
+                for i in jout[0]['auth_methods']:
+                    str += " " + i
+                database.MongoDBUpdate(
+                    server, "IP", ('ip_internal_auth', '%s' % (str.strip())))
             elif IPChoose is 2:
                 database.MongoDBUpdate(
                     server, "IP", ('ip_external', '%s' % (jout[0]['ip'])))
-                if len(jout[0]['auth_methods']) is 1:
-                    database.MongoDBUpdate(
-                        server, "IP", ('ip_external_auth', '%s' % (jout[0]['auth_methods'][0])))
-                else:
-                    database.MongoDBUpdate(
-                        server, "IP", ('ip_external_auth', '%s' % (jout[0]['auth_methods'][0] + " " + jout[0]['auth_methods'][1])))
+                str = ""
+                for i in jout[0]['auth_methods']:
+                    str += " " + i
+                database.MongoDBUpdate(
+                    server, "IP", ('ip_external_auth', '%s' % (str.strip())))
 
         except Exception, e:
             # print "Could not check ssh (port 22): %s" % e

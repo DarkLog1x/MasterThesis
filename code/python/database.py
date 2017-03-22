@@ -41,6 +41,13 @@ def MongoDBUpdate(instanceID, type,  data):
         pass
 
 
+def MongoDBDrop():
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    vms = db.vms
+    vms.drop()
+
+
 def MongoDBClean(ServerList):
     client = MongoClient('localhost', 27017)
     db = client.vm_database

@@ -35,8 +35,9 @@ def main():
     glance = glclient.Client('2.1', session=sess)
 
     ServerList = DeviceList(neutron, nova_client)
+    database.MongoDBDrop()
     database.MongoDBCreate(ServerList)
-    database.MongoDBClean(ServerList)
+    # database.MongoDBClean(ServerList)
     module_nmap.nmapscan(ServerList)
     module_sshscan.sshscan(ServerList, 2)
     module_sshscan.sshscan(ServerList, 1)

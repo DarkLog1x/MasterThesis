@@ -41,11 +41,9 @@ def ConfigCheck(commands, serverID):
                 it = "Server ID: " + item['ID'] + " | " + area[1] + ": " + \
                     item[area[0]][
                         area[1].strip()] + " -- Should be = " + values[1]
+                incorrectVMS.append(it)
             except:
-                it = "Item: " + \
-                    values[
-                        0] + " is not present in the scanned database for: " + item['ID']
-            incorrectVMS.append(it)
+                pass
     return incorrectVMS
 
 
@@ -63,13 +61,16 @@ def ConfigCheckInversePorts(commands, serverID):
 
     contents = vms.find({"ID": serverID})
     for item in contents:
-        for port in item['ports']:
-            tmp = [port, item['ports'][port]]
-            if tmp not in portlist:
-                it = "Server ID: " + \
-                    item['ID'] + " | " + port + " has been found " + \
-                    item['ports'][port] + " and is not in the config"
-                incorrectVMS.append(it)
+        try:
+            for port in item['ports']:
+                tmp = [port, item['ports'][port]]
+                if tmp not in portlist:
+                    it = "Server ID: " + \
+                        item['ID'] + " | " + port + " has been found " + \
+                        item['ports'][port] + " and is not in the config"
+                    incorrectVMS.append(it)
+        except:
+            pass
     return incorrectVMS
 
 
