@@ -76,14 +76,15 @@
         user: ubuntu
         job: "/usr/bin/python /home/ubuntu/main.py"
 
-    - name: Run slackBot
-      command: ./slack.py
-
 
   handlers:
     - name: ping again
       action: ping
 
+      #- name: Run slackBot
+      #shell: tmux new-session -d -s slack 'exec  ./slack.py'
+      #async: True
+      #poll: 0
 
 
 

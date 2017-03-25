@@ -91,9 +91,11 @@ def handle_command(slack_client, command, channel):
     elif input[0] == 'openstackinfo':
         if input[1] == 'serverlist':
             response = OSq.OpenStackServerList()
+        elif input[1] == 'routerlist':
+            response = OSq.OpenStackRouterList()
         else:
             response = [
-                "Not a recognised OpenStack information command. Try \"serverlist\""]
+                "Not a recognised OpenStack information command. Try \"serverlist\, \" routerlist\", \" networklist\", \"securitygroups\""]  # TODO
     else:
         response = [
             "Not sure what you mean. The following are excepted:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]

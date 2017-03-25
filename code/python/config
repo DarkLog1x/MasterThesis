@@ -13,3 +13,4 @@ IP: ip_internal_auth - publickey
 #for services one must fill out in the way that nmap should return them
 #service: (name of service) on port (port number) is version: - (this must be taken form an nmap scan)
 services: OpenSSH on port 22 is version: - 7.2p2 Ubuntu 4ubuntu2.1
+#should only be 22 and 5000

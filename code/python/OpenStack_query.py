@@ -20,8 +20,24 @@ def OpenStackServerList():
     retlist = []
     for i in server_list:
         retlist.append(i.id)
-    print retlist
     return retlist
+
+
+def OpenStackRouterList():
+    auth = get_credentials()
+    sess = session.Session(auth=auth)
+    neutron = client_neutron.Client(session=sess)
+    nova_client = client_nova.Client('2.1', session=sess)
+
+    routers_list = neutron.list_routers(retrieve_all=True)
+    retlist = []
+    retlist.append(routers_list)
+    return retlist
+    # server_list = nova_client.servers.list(detailed=True)
+    # retlist = []
+    # for i in server_list:
+    # retlist.append(i.id)
+    # return retlist
 
 
 def get_credentials():
