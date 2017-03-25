@@ -40,6 +40,30 @@ def OpenStackRouterList():
     # return retlist
 
 
+def OpenStackNetworkList():
+    auth = get_credentials()
+    sess = session.Session(auth=auth)
+    neutron = client_neutron.Client(session=sess)
+    nova_client = client_nova.Client('2.1', session=sess)
+
+    network_list = neutron.list_networks()
+    retlist = []
+    retlist.append(network_list)
+    return retlist
+
+
+def OpenStackSeucurityGroups():
+    auth = get_credentials()
+    sess = session.Session(auth=auth)
+    neutron = client_neutron.Client(session=sess)
+    nova_client = client_nova.Client('2.1', session=sess)
+
+    securitygroup_list = neutron.list_security_groups()
+    retlist = []
+    retlist.append(securitygroup_list)
+    return retlist
+
+
 def get_credentials():
     loader = loading.get_plugin_loader('password')
     auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],

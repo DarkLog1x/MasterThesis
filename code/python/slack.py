@@ -93,6 +93,10 @@ def handle_command(slack_client, command, channel):
             response = OSq.OpenStackServerList()
         elif input[1] == 'routerlist':
             response = OSq.OpenStackRouterList()
+        elif input[1] == 'networklist':
+            response = OSq.OpenStackNetworkList()
+        elif input[1] == 'securitygroups':
+            response = OSq.OpenStackSeucurityGroups()
         else:
             response = [
                 "Not a recognised OpenStack information command. Try \"serverlist\, \" routerlist\", \" networklist\", \"securitygroups\""]  # TODO
