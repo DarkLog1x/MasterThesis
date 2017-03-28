@@ -21,11 +21,13 @@ import module_openstack
 import database
 from twisted.internet import task
 from twisted.internet import reactor
-
+from environmentVariables import environmentVariables
 
 ##
 # Mian function that will run the code. This is run via a cron job!
 ##
+
+
 def main():
     environmentVariables()
     auth = get_credentials()
@@ -42,27 +44,6 @@ def main():
     module_sshscan.sshscan(ServerList, 2)
     module_sshscan.sshscan(ServerList, 1)
     module_openstack.OpenStackData(nova_client, glance, neutron)
-
-##
-# This will set the needed environment varibables
-# This needs to be filled out to match the rc file form OpenStack
-##
-
-
-def environmentVariables():
-    f = open('keys', 'r').read().splitlines()
-    os.environ["OS_PASSWORD"] = f[2]
-    os.environ["SLACK_KEY"] = f[1]
-    os.environ["OS_AUTH_URL"] = "https://smog.uppmax.uu.se:5000/v3"
-    os.environ["OS_TENANT_ID"] = "bfe0cca393a5473189c05f22a731bfd0"
-    os.environ["OS_TENANT_NAME"] = "c2015003"
-    os.environ["OS_PROJECT_NAME"] = "c2015003"
-    os.environ["OS_USERNAME"] = "aleko"
-    os.environ["OS_USER_DOMAIN_NAME"] = "Default"
-    os.environ["OS_PROJECT_DOMAIN_NAME"] = "Default"
-    os.environ["OS_IDENTITY_API_VERSION"] = "3"
-    os.environ["OS_AUTH_VERSION"] = "3"
-    os.environ["OS_REGION_NAME"] = "UPPMAX"
 
 
 ##

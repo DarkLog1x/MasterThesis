@@ -29,6 +29,7 @@
         - htop
         - nload
         - mongodb-org
+        - sqlite3
 
   tasks:
     - name: ping google
@@ -72,7 +73,7 @@
     - name: Creates a crontab for OSIDS
       cron:
         name: "run python"
-        minute: "*/20"
+        minute: "*/30"
         user: ubuntu
         job: "/usr/bin/python /home/ubuntu/main.py"
 

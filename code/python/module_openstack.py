@@ -16,13 +16,15 @@ def OpenStackData(nova_client, glance, neutron):
     tmpserverList = []
     server_list = nova_client.servers.list(detailed=True)
     for i in server_list:
-        image = glance.images.get(i.image['id'])
-        database.MongoDBUpdate(i.id, "OpenStack_info", ("user_id", i.user_id))
-        database.MongoDBUpdate(
-            i.id, "OpenStack_info", ("image_id", i.image['id']))
-        database.MongoDBUpdate(
-            i.id, "OpenStack_info", ("image_name", image['name']))
-        database.MongoDBUpdate(
-            i.id, "OpenStack_info", ("updated_at", image['updated_at']))
-        database.MongoDBUpdate(
-            i.id, "OpenStack_info", ("created_at", image['created_at']))
+        if i.image != "":
+            image = glance.images.get(i.image['id'])
+            database.MongoDBUpdate(
+                i.id, "OpenStack_info", ("user_id", i.user_id))
+            database.MongoDBUpdate(
+                i.id, "OpenStack_info", ("image_id", image['id']))
+            database.MongoDBUpdate(
+                i.id, "OpenStack_info", ("image_name", image['name']))
+            database.MongoDBUpdate(
+                i.id, "OpenStack_info", ("updated_at", image['updated_at']))
+            database.MongoDBUpdate(
+                i.id, "OpenStack_info", ("created_at", image['created_at']))

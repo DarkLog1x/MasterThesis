@@ -15,18 +15,21 @@ import database
 def nmapscan(list):
     tmpOut = []
     tmpserverList = []
+    try:
+        os.remove("tmp_nmap.txt")
+    except:
+        pass
     for server in list:
         try:
             tmpOut.append(list[server][2])
             tmpserverList.append(server)
         except:
-            # print "No IP for:" + server
             pass
     tmp = '\n'.join(map(str, tmpOut))
     with open("tmp_nmap.txt", "a") as file:
         file.write(tmp)
     file.close()
-    p = subprocess.Popen(['sudo', 'nmap', '-A', '-T5', '-oX',
+    p = subprocess.Popen(['sudo', 'nmap', '-A', '-Pn', '-T5', '-oX',
                           'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
     # ['sudo', 'nmap', '-A', '-p', '1-65535', '-T5', '-oX', 'output.xml', '-iL', 'tmp_nmap.txt'], stdout=subprocess.PIPE)
 

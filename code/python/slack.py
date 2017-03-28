@@ -43,19 +43,20 @@ def main():
         print("could not find bot user with the name " + BOT_NAME)
 
     slack = Slacker(b)
+    channelName = GroupName[1].replace(" ", "_")
     try:
-        slack.channels.create('#' + GroupName)
+        print slack.channels.create('#' + channelName)
     except:
         pass
 
     try:
-        slack.channels.invite('#' + GroupName, bot_id)
+        print slack.channels.invite('#' + channelName, bot_id)
     except:
         pass
 
     slackBot(slack_client, bot_id, incorrectVMS)
     # OSq.OpenStackQuery()
-    repeatBot([], incorrectVMS, slack_client, GroupName[1])
+    repeatBot([], incorrectVMS, slack_client, channelName)
 
 
 def repeatBot(incorrectVMS_old, incorrectVMS_new, slack_client, GroupName):
