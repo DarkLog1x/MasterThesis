@@ -54,7 +54,7 @@ def MongoDBClean(ServerList):
     vms = db.vms
     i = vms.find()
     for vm in i:
-        if vm['ID']not in ServerList:
+        if vm['ID'] not in ServerList:
             vms.remove({"ID": vm['ID']})
 
 ###

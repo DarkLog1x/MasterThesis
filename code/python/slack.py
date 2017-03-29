@@ -19,6 +19,7 @@ EXAMPLE_COMMAND = None
 
 
 def main():
+    become_daemon()
     incorrectVMS = CheckDatabase.DatabaseCheckFull()
     f = os.environ['SLACK_KEY']
     b = os.environ['SLACK_KEY_NOBOT']
@@ -59,6 +60,52 @@ def main():
     repeatBot([], incorrectVMS, slack_client, channelName)
 
 
+##
+# Go this from
+# https://stackoverflow.com/questions/1423345/can-i-run-a-python-script-as-a-service
+
+def become_daemon(our_home_dir='.', out_log='/dev/null', err_log='/dev/null', pidfile='/var/tmp/daemon.pid'):
+    """ Make the current process a daemon.  """
+
+    try:
+        # First fork
+        try:
+            if os.fork() > 0:
+                sys.exit(0)
+        except OSError, e:
+            sys.stderr.write('fork #1 failed" (%d) %s\n' %
+                             (e.errno, e.strerror))
+            sys.exit(1)
+
+        os.setsid()
+        os.chdir(our_home_dir)
+        os.umask(0)
+
+        # Second fork
+        try:
+            pid = os.fork()
+            if pid > 0:
+                # You must write the pid file here.  After the exit()
+                # the pid variable is gone.
+                fpid = open(pidfile, 'wb')
+                fpid.write(str(pid))
+                fpid.close()
+                sys.exit(0)
+        except OSError, e:
+            sys.stderr.write('fork #2 failed" (%d) %s\n' %
+                             (e.errno, e.strerror))
+            sys.exit(1)
+
+        si = open('/dev/null', 'r')
+        so = open(out_log, 'a+', 0)
+        se = open(err_log, 'a+', 0)
+        os.dup2(si.fileno(), sys.stdin.fileno())
+        os.dup2(so.fileno(), sys.stdout.fileno())
+        os.dup2(se.fileno(), sys.stderr.fileno())
+    except Exception, e:
+        sys.stderr.write(str(e))
+
+
 def repeatBot(incorrectVMS_old, incorrectVMS_new, slack_client, GroupName):
     incorrectVMS = CheckDatabase.DatabaseCheckChanges(
         incorrectVMS_old, incorrectVMS_new)
@@ -83,6 +130,9 @@ def handle_command(slack_client, command, channel):
     input = command.split(" ")
     if input[0] == "vmproblems":
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
+    elif input[0] == "help":
+        response = [
+            "The following are excepted:\"openstackinfo (\"serverlist\", routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
     elif input[0] == "vmdatabase":
         response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
     elif input[0] == 'vmstatus':
@@ -100,7 +150,7 @@ def handle_command(slack_client, command, channel):
             response = OSq.OpenStackSeucurityGroups()
         else:
             response = [
-                "Not a recognised OpenStack information command. Try \"serverlist\, \" routerlist\", \" networklist\", \"securitygroups\""]  # TODO
+                "Not a recognised OpenStack information command. Try \"serverlist\", routerlist\", \" networklist\", \"securitygroups\""]
     else:
         response = [
             "Not sure what you mean. The following are excepted:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
