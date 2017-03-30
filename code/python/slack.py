@@ -132,7 +132,7 @@ def handle_command(slack_client, command, channel):
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
     elif input[0] == "help":
         response = [
-            "The following are excepted:\"openstackinfo (\"serverlist\", routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
+            "The following are accepted:\"openstackinfo (\"serverlist\", routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
     elif input[0] == "vmdatabase":
         response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
     elif input[0] == 'vmstatus':
