@@ -16,6 +16,7 @@ import OpenStack_query as OSq
 ##
 AT_BOT = None
 EXAMPLE_COMMAND = None
+channelName = None
 
 
 def main():
@@ -44,6 +45,7 @@ def main():
         print("could not find bot user with the name " + BOT_NAME)
 
     slack = Slacker(b)
+    global channelName
     channelName = GroupName[1].replace(" ", "_")
     try:
         print slack.channels.create('#' + channelName)
@@ -128,25 +130,29 @@ def handle_command(slack_client, command, channel):
         returns back what it needs for clarification.
     """
     input = command.split(" ")
-    if input[0] == "vmproblems":
+    print input[0]
+    print channelName.lower()
+    if input[0] != channelName.lower():
+        return 0
+    if input[1] == "vmproblems":
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
-    elif input[0] == "help":
+    elif input[1] == "help":
         response = [
-            "The following are accepted:\"openstackinfo (\"serverlist\", routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
-    elif input[0] == "vmdatabase":
-        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
-    elif input[0] == 'vmstatus':
-        response = CheckDatabase.FindSelected(input[1], input[2])
-    elif input[0] == 'fullreport':
+            "The following are accepted:\"openstackinfo (\"serverlist\", \"routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" ", "Example: @isaas foo_bar fullreport"]
+    elif input[1] == "vmdatabase":
+        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[2])
+    elif input[1] == 'vmstatus':
+        response = CheckDatabase.FindSelected(input[2], input[3])
+    elif input[1] == 'fullreport':
         response = CheckDatabase.DatabaseCheckFull()
-    elif input[0] == 'openstackinfo':
-        if input[1] == 'serverlist':
+    elif input[1] == 'openstackinfo':
+        if input[2] == 'serverlist':
             response = OSq.OpenStackServerList()
-        elif input[1] == 'routerlist':
+        elif input[2] == 'routerlist':
             response = OSq.OpenStackRouterList()
-        elif input[1] == 'networklist':
+        elif input[2] == 'networklist':
             response = OSq.OpenStackNetworkList()
-        elif input[1] == 'securitygroups':
+        elif input[2] == 'securitygroups':
             response = OSq.OpenStackSeucurityGroups()
         else:
             response = [
