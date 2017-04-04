@@ -44,11 +44,12 @@ def main():
     module_sshscan.sshscan(ServerList, 2)
     module_sshscan.sshscan(ServerList, 1)
     module_openstack.OpenStackData(nova_client, glance, neutron)
-
+    database.MongoDBswitch()
 
 ##
 # This will return a list of server name, internal ip, and floating ip.
 ##
+
 
 def DeviceList(neutron, nova_client):
     list = {}

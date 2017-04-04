@@ -59,7 +59,7 @@ def main():
 
     slackBot(slack_client, bot_id, incorrectVMS)
     # OSq.OpenStackQuery()
-    repeatBot([], incorrectVMS, slack_client, channelName)
+    # repeatBot([], incorrectVMS, slack_client, channelName)
 
 
 ##
@@ -163,7 +163,7 @@ def handle_command(slack_client, command, channel):
     for line in response:
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=line, as_user=True)
-        time.sleep(0.5)
+        time.sleep(1.5)
 
 
 def parse_slack_output(slack_rtm_output, bot_id):

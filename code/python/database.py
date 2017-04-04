@@ -17,24 +17,25 @@ def PrintList(instanceID, type,  data):
         db.insert(key, data)
 
 
+def dbConnect():
+    client = MongoClient('localhost', 27017)
+    db = client.vm_database
+    return db.vms_tmp
+
 # This is the function that will be called to see if the confige provided
 # is followed
 
 
 def MongoDBCreate(ServerList):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
-    vms = db.vms
+    vms = dbConnect()
     for server in ServerList:
         vms.update_one({"ID": server}, {"$set": {"ID": server}}, upsert=True)
 
 
 def MongoDBUpdate(instanceID, type,  data):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
     key = {"ID": instanceID}
     data = {"$set": {type + "." + data[0]: data[1]}}
-    vms = db.vms
+    vms = dbConnect()
     try:
         post_id = vms.update_one(key, data, upsert=True)
     except:
@@ -42,16 +43,21 @@ def MongoDBUpdate(instanceID, type,  data):
 
 
 def MongoDBDrop():
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
-    vms = db.vms
+    vms = dbConnect()
     vms.drop()
 
 
-def MongoDBClean(ServerList):
+def MongoDBswitch():
     client = MongoClient('localhost', 27017)
     db = client.vm_database
-    vms = db.vms
+    db.vms.drop()
+    client.admin.command('copydb',
+                         fromdb='vms_tmp',
+                         todb='vms')
+
+
+def MongoDBClean(ServerList):
+    vms = dbConnect()
     i = vms.find()
     for vm in i:
         if vm['ID'] not in ServerList:

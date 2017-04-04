@@ -27,11 +27,15 @@ def ProperConfig():
     return commands
 
 
-def ConfigCheck(commands, serverID):
+def dbConnect():
     client = MongoClient('localhost', 27017)
     db = client.vm_database
+    return db.vms
+
+
+def ConfigCheck(commands, serverID):
     incorrectVMS = []
-    vms = db.vms
+    vms = dbConnect()
     for command in commands:
         values = command.split(" - ")
         area = values[0].split(":")
@@ -49,10 +53,8 @@ def ConfigCheck(commands, serverID):
 
 
 def ConfigCheckInversePorts(commands, serverID):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
     incorrectVMS = []
-    vms = db.vms
+    vms = dbConnect()
     portlist = []
 
     for command in commands:
@@ -76,10 +78,8 @@ def ConfigCheckInversePorts(commands, serverID):
 
 
 def FindSelected(key, value):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
     incorrectVMS = []
-    vms = db.vms
+    vms = dbConnect()
 
     incorrectVMS = []
     listoutput = vms.find({key: value})
@@ -91,10 +91,8 @@ def FindSelected(key, value):
 
 
 def DatabaseCheckGetFullDatabase(ServerID):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
     incorrectVMS = []
-    vms = db.vms
+    vms = dbConnect()
 
     incorrectVMS = []
     incorrectVMS.append("Tenant name: " + os.environ['OS_TENANT_NAME'])
@@ -109,10 +107,7 @@ def DatabaseCheckGetFullDatabase(ServerID):
 
 
 def DatabaseCheckSpecific(ServerID):
-    client = MongoClient('localhost', 27017)
-    db = client.vm_database
-    incorrectVMS = []
-    vms = db.vms
+    vms = dbConnect()
 
     commands = ProperConfig()
     incorrectVMS = []

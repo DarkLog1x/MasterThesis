@@ -5,6 +5,8 @@ from keystoneauth1 import loading
 from keystoneauth1 import session
 from neutronclient.v2_0 import client as client_neutron
 from os import environ as env
+import json
+from bson.json_util import dumps
 ##
 # Will read the config file
 ##
@@ -30,8 +32,11 @@ def OpenStackRouterList():
     nova_client = client_nova.Client('2.1', session=sess)
 
     routers_list = neutron.list_routers(retrieve_all=True)
+    bartmp = dumps(routers_list)
+    dumpIn = json.loads(bartmp)
+    out = json.dumps(dumpIn, indent=4, sort_keys=True)
     retlist = []
-    retlist.append(routers_list)
+    retlist.append(out)
     return retlist
     # server_list = nova_client.servers.list(detailed=True)
     # retlist = []
