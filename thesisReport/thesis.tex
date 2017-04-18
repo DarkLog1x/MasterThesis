@@ -42,7 +42,7 @@ At the most fundamental layer a cloud computer is a server running in a data-cen
 When cloud computing first started to take off, the main type of computing resource provided was IaaS in the public cloud \cite{sourcedigit}. This started to change in the recent years when two new types models for cloud computing emerged. Public and Hybrid clouds allowed for companies to utilize the power of the cloud while still having some or all of there resources located in their own data centers.
 
 \subsection{Cloud Computing vs Standard Models}
-Cloud computing has some distinct differences from regular computing. The systems are
+Cloud computing has some distinct differences from regular server computing. Regular server computing recourses are tuned to stay on line for long periods of time, with little downtime. Deployments occur overtime and require extensive prep work.  As with cloud computing the main focus is to run a service or provide a computational host. However with this model, services can be continually deployed, systems can be brought down and enabled with little to no downtime. A server can be automatically expanded to meet unusual load or shrunk to save costs.  Due to this difference systems in the cloud differ from typical.
 
 \begin{itemize}
     \item Systems do not usually stay active for long. Users will provision and destroy systems with a high turnover.
@@ -67,7 +67,7 @@ OpenStack is an open source platform for cloud computing \cite{wiki:OpenStack}. 
 
 Nova is the platform that provides access to OpenStack compute resources. It is the base platform that a user would interact with the set up, run, configure, and destroy machines. Neutron is the service that controls and configures all of the networking between machines and the external network. Swift is the platform that is used for object and blob storage.
 
-
+Neutron is the OpenStack layer that provides access to the networking components of the cloud system.
 %What relsea, functionalities
 %This projec thas a core interest in nova, etc.
 
@@ -79,7 +79,7 @@ Nova is the platform that provides access to OpenStack compute resources. It is 
 The field of computer security is large and diverse \cite{ComputerSecurity}. The general focus of computer security is to ensure that computer systems follow the CIA model of confidentiality, integrity, and availability. "The design artifacts that describe how the security controls (security countermeasures) are positioned, and how they relate to the overall IT Architecture. These controls serve the purpose to maintain the system's quality attributes, among them confidentiality, integrity, availability, accountability and assurance." \cite{it_security_architecture} The disciplines that are focused on in this paper include: intrusion detection systems, network security, and system security.
 Intrusion detection systems come in two main forms, host based and network based. A host based system runs on the host and attempts to detect any security threats on the host machine. A network based IDS is connected on the network and inspects network traffic, trying to find threats by inspecting network traffic patterns. Both of these systems have advantages and disadvantages. With a host based system software must be installed and configured on each system. In a network IDS system the packets are monitored for unusual traffic patterns. There are disadvantages to this type of solution also, mainly network traffic can be encrypted and the overall volume of traffic encountered. Some examples of network based IDS tools are \href{https://www.snort.org/}{Snort}.
 A large portion of the problem for computer security comes from the networks that computers are attached to. The network allows other computers to communicate and attempt to access the particular machine. This is greatly increased if the computer is not placed behind a firewall/rougher and is directly accessible form the Internet. If an Internet facing computer is not updated properly vulnerabilities can be used to run unintended programs.
-A unintended program running on a systems can be a concern due to several. These programs can be used to send email spam, steal credentials, or participate in larger network attacks.
+A unintended program running on a systems can be a concern. These programs can be used to send email spam, steal credentials, or participate in larger network attacks.
 
 %For a cloud system where machines are provisioned and destroy setting up this type of system would be difficult. There for a network based IDS system was chosen.
 
@@ -99,14 +99,30 @@ These modules will gather the results from the network and collect them into a c
 
 A key part of this project was to create a simplistic interface that would allow an administrator to view changes to the environment and query for more information. Some base goals were created: scalability, ease of use, and intuitiveness. As the system is designed to be deployed over several cloud groups we needed a messaging system that could handle such a task. Email was first considered however it was soon realized that email would not work well due to the frequency of data sent and then inability to interact with the service. The next consideration was Internet Relay Chat (IRC), however as IRC is relatively unused in the professional work environment and users would need to learn how to interact with the protocol that idea was abandoned. Therefor as a final solution it was decided to work to build the messaging solution using Slack. This matched all of our starting criteria and allowed for a clean and simple implementation. Slack is a messaging application that allows groups of users to interact with one another in channels or directly. Once of the really neat features of this is the ability to program bots for users to interact with. Therefor the decision was made to create a bot that would interact with a channel for each cluster of machines. The bot would update the channel with any new information that the scan found ensuring that a constant flow was preserved. Users are also able to query to bot directly and get more information about the environment. This allows seamless integration between getting information from the environment and being able to dive deeper and investigate a machine.
 
-
-
 \section{Architecture}
+For the monitoring solution an important architecture design was to ensure that the system was modular to enable it to be adapted to different cloud environments. This would allow individual monitoring tools or logging techniques to be used for configuring to specific infrastructures. As for the proof of concept project Nmap and ssh\_scan were implemented.
 
-tmp
+\subsection{Tools}
+
+\subsubsection{Nmap}
+Nmap is a network scanning solution that can be used to scan for open ports, running services, network topography, and others \href{https://nmap.org/}{https://nmap.org/}. Nmap allows for scanned data to be saved into an \.xml file that can then be filtered and input into the database.
+
+\subsubsection{ssh\_scan}
+Ssh\_scan is another tool used to gather information about remote ssh configurations. It is able to detect the type of authentication, ssh protocol used, and several others \href{https://github.com/mozilla/ssh\_scan}{https://github.com/mozilla/ssh\_scan}. The output is saved to a json file that is then read into the database.
+
+\subsubsection{Slack Bot}
+Slack bot is a small bot built on top of the Slack api to display information form the database and query data in real time. The bot will connect to a channel specifically created for each cloud cluster. There the bot will print relevant information from the database. Users are also able to query the database via the bot, this allows an administrator to quickly find a problem and find information about that machine with ease.
+
+%Highlight slack communication!!!!!!!!!!!!!!!!!!!
+
 
 %part 2 look if the router can be accesed to pull network stream
 % gather memory print / services / programs / work load
+%TODO:
+%More in report
+%Write README
+%Forensics thing
+% ensure that JSON is printed nicly and see if we can just dump the data base in a single message.
 
 
 \newpage
