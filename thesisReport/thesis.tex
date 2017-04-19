@@ -42,16 +42,21 @@ At the most fundamental layer a cloud computer is a server running in a data-cen
 When cloud computing first started to take off, the main type of computing resource provided was IaaS in the public cloud \cite{sourcedigit}. This started to change in the recent years when two new types models for cloud computing emerged. Public and Hybrid clouds allowed for companies to utilize the power of the cloud while still having some or all of there resources located in their own data centers.
 
 \subsection{Cloud Computing vs Standard Models}
-Cloud computing has some distinct differences from regular server computing. Regular server computing recourses are tuned to stay on line for long periods of time, with little downtime. Deployments occur overtime and require extensive prep work.  As with cloud computing the main focus is to run a service or provide a computational host. However with this model, services can be continually deployed, systems can be brought down and enabled with little to no downtime. A server can be automatically expanded to meet unusual load or shrunk to save costs.  Due to this difference systems in the cloud differ from typical.
+The cloud computing environment has been growing quickly the last several years \cite{Vaquero}. However its important to understand the similarities and differences that this new type of computing brings. At the core cloud computing is no different then older client server models. The data is still on hard drives, servers still use OS environments, and networks still connect the servers to the Internet. The main difference between the two models is that in the cloud you pay for what you use and hardware configurations/problems are not a concern. Some of the advantages that cloud computing posses is the fact that there is rapid scalability. It is possible to spin up 100 machines and scale your service according to needs.
+
+\subsection{Threats to the cloud}
+Cloud computing also has a different threat model compared to a normal dedicated server \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. As cloud servers are, as the name suggests, in the cloud they usually will receive a pubic IP address that allows anyone to directly talk to them. This attach surfaces allows for direct communication to the running system which exposes it to exploitation. The following list shows the attack vector's that a cloud computing systems has \cite{amini2015threat}.
 
 \begin{itemize}
-    \item Systems do not usually stay active for long. Users will provision and destroy systems with a high turnover.
-    \item Users may spin up several machines at once.
-    \item There may not be a dedicated team used to ensure up time / health of systems.
-    \item Users will usually have full control of the systems.
+    \item Data lose or leakage
+    \item Account or service hijacking
+    \item Insecure interface
+    \item Denial of service
+    \item Malicious insider
+    \item Data breaches
+    \item Abuse of cloud services
+    \item Insufficient due diligence
 \end{itemize}
-
-Cloud computing also has a different threat model compared to a normal dedicated server \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. With normal server infrastructure the infrastructure and system are built once and then ran for extended periods of time. The systems themselves are not refreshed or rebuilt as happens in the cloud.
 
 \section{Related Work}
 In this work we will be looking at ways to protect VM clusters by ensuring proper configuration steps are setup and used with the addition of looking at ways to implement an IDS solution into the cloud environment. Before starting the work, we looked into previous work done in this field. Cloud security had been a hot topic in recent times therefor several papers have been written \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. These particular papers focus on the different aspects and concerns that are present when running in a cloud environment. They are a nice starting point to look at how the threat landscape in the cloud differs from the slandered model. An important distinction of how information is treated differently in a centralized and cloud environments is talked about in "Assessing Cloud Computer Security Issues" \cite{zissis2012addressing}. The three staples of information security are confidentiality, integrity, and availability. In the cloud new difficulties come up for each of these classifications as data in the cloud is now accessible to more individuals.  The second set of articles looked at was about intrusion detection systems (IDS), more specifically how these can be used within the cloud \cite{SurveyOfIDS, patel2013intrusion}. These articles did not focus so much on implementation as they were focused more on the theory. An interesting comparison that shows the advantages and disadvantages for different IDS systems is table $2$ in \cite[SurveyOfIDS]. This is the basis for the types of IDS solutions that were chosen for this project. As this work was primarily focused on OpenStack, one particular IDS conference talk was used as a starting point for this research \cite{videoPresentation}.
