@@ -126,7 +126,7 @@ The system was designed and created in a testing environment. The environment wa
 \section{Results}
 Once the base system was running in our test  environment a decision to scale up was made. Our test environment was compatible however a real environment with more machines and users could not have been replicated. Luckily a class was taking place that used the cloud environment. Therefor a watchdog vm was spun up in the classes cloud cluster and started to monitor the vms that were created. Immediately vms started to appear in the Slack channel. After running for a while inconsistencies were started to be found. A small snippet of the Slack channel is shown bellow. In this section 5 machines are shown, 3 of them have inconsistencies that are not in the configuration file.
 
-Servers with the ids of 930ee1bb-e07a-461f-b09f-1e1a9c864a36 and 81933a08-9451-4d16-aca4-9fb6269b4e0d both have 3 ports that are open but should not be. The more concerning vm is f57b9369-4e15-4151-9b0b-7d405cbdb5e4. We see that this vm allows for access with password bases authentication.
+Servers with the ids of 930ee1bb-e07a-461f-b09f-1e1a9c864a36 and 81933a08-9451-4d16-aca4-9fb6269b4e0d both have 3 ports that are open but should not be. The more concerning vm is f57b9369-4e15-4151-9b0b-7d405cbdb5e4. We see that this vm allows for access with password bases authentication. The two machines (ad74be2b-e452-43df-b307-d8ad3bcd6cb7 and 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7) have been created and follow the configuration therefor only the server ID is shown.
 
 \begin{lstlisting}
     --Server With ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36
@@ -144,6 +144,19 @@ Servers with the ids of 930ee1bb-e07a-461f-b09f-1e1a9c864a36 and 81933a08-9451-4
     Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8031 has been found open and is not in the config
     --Server With ID: 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7
 \end{lstlisting}
+
+\section{Drawbacks}
+
+- Each cluster has one machine that is using recourses for monitoring that can be used else were.
+- Currently utilizing Slack as a communication platform, if that platform changes then need to update app.
+- Slack channel can get a bit messy if there is too much traffic in it.
+-
+
+\section{Future Work}
+- Add more tools to scan network
+- Add ability to email daily reports
+- Add more integration between the OpenStack platform and the tool.
+
 
 %part 2 look if the router can be accesed to pull network stream
 % gather memory print / services / programs / work load
