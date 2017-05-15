@@ -4,6 +4,9 @@
 \graphicspath{{./}}
 \usepackage{dirtytalk}
 \usepackage{listings}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{float}
 \lstset{basicstyle=\small\ttfamily,
     columns=flexible,
     breaklines=true
@@ -21,8 +24,11 @@
 \tableofcontents
 \newpage
 
+\section{Introduction}
+This thesis was written with the intention of looking at possible solutions in monitoring virtual machines in the OpenStack platform. As the University is rolling out a new cloud platform called the SNIC Science Cloud; students and professors will have the ability to create virtual machines. While testing the new cloud platform, it was noticed that machines were compromised due to poor user configuration. It was then decided that a system should be created that would allow for the administrators of the SNIC Science Cloud to monitor VM configurations\@.
+
 \section{Problem Description}
-tmp
+The security of VM in the SNIC Science Cloud posses a large problem. Many students and professors are starting to use the system and have root privileges on the VMs with very little security background. This has caused several problems, such as password login for SSH and remote docker ports exposed to the Internet. The only current solution was passive, having the networking team tell the administrators after a system was compromised.
 
 \section{Background}
 The cloud computing space has grown over the last several years. Business and Universities are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution including Amazon, Google, Microsoft, and Digital Ocean. These companies are providing a public cloud environment, that is to say that anyone can pay for computer resources. Other companies such as RackSpace, IBM, and VMware are providing private / hybrid cloud resources.
@@ -39,7 +45,14 @@ In the cloud computing space several computational models exist \cite{wikipedia}
 \end{itemize}
 
 \subsection{Cloud Infrastructure}
-At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several virtual environments to use the same hardware. A hypervisor is a layer of code that sits between the computer components (bare metal) and the guest OS\@. The hypervisor then translates instructions from the guest system onto the hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However, NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
+At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several virtual environments to use the same hardware. A hypervisor is a layer of code that sits between the computer components (bare metal) and the guest OS\@. There are two types of hypervisores that are present in systems they are named bare bone and hosted hypervisores. Figure~\ref{fig:Hypervisors} shows these two in example formate. These two hypervisors are very different in the way that they are created.  A bare bones hypervisor acts like a small operating system which only manages the vms while allowing most of the vms to access hardware directly. A hosted hypervisor relies on an existing operating system to function. Although a hosted hypervisor can also directly allow vms to communicate with the hardware without going through the OS\@. OpenStack uses the hosted hypervisor solution, having the administrators install the OpenStack platform on top of an existing operating system.   The hypervisor then translates instructions from the guest system onto the hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However, NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
+
+\begin{figure}[H]
+    \caption{Different types of Hypervisors}
+    \centering
+    \includegraphics[scale=.8]{./pic/Hyperviseur.png}
+    \label{fig:Hypervisors}
+\end{figure}
 
 \subsection{Cloud Roles}
 When cloud computing first started to take off, the main type of computing resource provided was IaaS in the public cloud \cite{sourcedigit}. This started to change in the recent years when two new types models for cloud computing emerged. Public and Hybrid clouds allowed for companies to utilize the power of the cloud while still having some or all of there resources located in their own data centers.
@@ -99,9 +112,11 @@ The first stage of this project involved setting up user recommendations for con
 
 \section{Design Implementation}
 For the first part of the project a modular design was created to enable further types of scanning to be added. An important aspect when designing the watchdog system with as little privileges as possible to prevent any unnecessary security holes. The following is a diagram of an example cloud environment.
-\\
-\includegraphics[scale=.3]{./pic/flowchart.png}
-\\
+
+\begin{figure}[H]
+    \includegraphics[scale=.3]{./pic/flowchart.png}
+\end{figure}
+
 The "watchdog" is initiated in the cloud cluster. The once initiated the VM will connect to the OpneStack Control Plain and get the list of servers, IP's, and floating IP's. Once that information is retreated the different modules will be run. In this standard case the two modules created were for nmap and ssh\_scan. Nmap is a tool used to scan a local or external network nd view what machines are funning on it. Nmap will be able to scan the machines ports and tell which ones are open and what services are running on them. It will also try and guess heuristically the operating system that is being run on the machine. This tool is therefor used in this system to find machines that have open ports and to see what services are run on them. If a service or port is found to not follow the recommendation then the machines can be terminated. The ssh\_scan tool is used to ensure that only a public private key pair are used. It will scan port 22 and alert if any other form of authentication is used.
 These modules will gather the results from the network and collect them into a central repository. Once the data is gathered it is compared to the config file.  If a discrepancy is found between the expected results and the scanned machine is found an alert is sent to the administrator. For this project the administrator receives notification on a separate slack. This entire process is run every 20 min by a corn job located on the watchdog machine. This type of design allows for a flexible platform that can have each component further customized.
 
