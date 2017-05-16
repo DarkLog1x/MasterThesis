@@ -1,0 +1,40 @@
+Grep the pid of qemu
+PID=`ps -eo pid,cmd | grep  "[q]emu.*-name test" | awk '{print $1}'``
+
+# Create mount point and mount guest
+mkdir -p /tmp/guestmount/$PID
+sshfs -o allow_other,direct_io GuestMachine:/ /tmp/guestmount/$PID
+
+# Begin recording
+perf kvm --host --guest --guestmount=/tmp/guestmount record -a -o perf.data
+
+# Ctrl-C interrupts recording. Run report:
+perf kvm --host --guest --guestmount=/tmp/guestmount report -i perf.data
+
+# Unmount sshfs to the guest once finished:
+#
+fusermount -u /tmp/guestmount
+
+
+Gets perf stats about kvm
+sudosperf kvm --guest stat live
+
+
+set sudo nano /etc/collectd/collectd.conf
+FQDNLookup false
+
+
+sudo nano /etc/hosts
+127.0.0.1 cloud-scan3 localhost
+
+
+
+This is a good referenace
+http://www.linux-kvm.org/page/Perf_events
+sudo ./perf stat -e 'kvm:*' -a sleep 1h
+
+
+
+Got It working on my local machine
+dump 3 test_dump
+
