@@ -37,4 +37,15 @@ sudo ./perf stat -e 'kvm:*' -a sleep 1h
 
 Got It working on my local machine
 dump 3 test_dump
+dommemstat 3
+domdisplay 3
+cpu-stats 3
 
+save domain state-file
+--- is used to view status domjobinfo
+
+screenshot domain
+
+snapshot-create domain filepath --disk-only
+
+destroy domain
