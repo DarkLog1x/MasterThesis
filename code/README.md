@@ -2,6 +2,11 @@
 
 ## Prerequisites
 
+**API Keys**
+
+* Obtain a Slack API key from `Slack API [text link](https://api.slack.com/custom-integrations/legacy-tokens)`
+* Create a bot in Slack `Slack Bot [text link](https://api.slack.com/bot-users)`
+
 **Local Computer**
 
 * Have access to a Unix box {This setup assumes one is using a flavor of Linux}
@@ -18,7 +23,7 @@
 ## Steps
 
 1. Start the virtual machine up and ensure that it has network access. This machine should be started in the same cluster as the other machines.
-2. On the local computer run `git clone [text link](https://github.com/DarkLog1x/MasterThesis)` (!!!IMPORTANT!!! Currently Working Branch is **dev** one must `git cheackout dev` untill master is updated).
+2. On the local computer run `git clone [text link](https://github.com/DarkLog1x/MasterThesis)`.
 3. Once cloned, move into the code directory `cd code`.
 4. In this directory create a new folder called ssh_keys `mkdir ssh_keys`. This folder will hold all the ssh and api keys for this project, ensure that these are kept safe.
 5. Enter into the ssh_keys directory `cd ssh_keys`. Move the key for the virtual machine into the directory.
