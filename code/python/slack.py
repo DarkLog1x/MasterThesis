@@ -20,6 +20,8 @@ channelName = None
 
 
 def main():
+    # This will force the system to run in a none daemon state and print
+    # output to console
     become_daemon()
     incorrectVMS = CheckDatabase.DatabaseCheckFull()
     f = os.environ['SLACK_KEY']

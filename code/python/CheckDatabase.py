@@ -165,6 +165,7 @@ def DeviceList(neutron, nova_client):
     list = {}
     server_list = nova_client.servers.list(detailed=True)
     ip_list = nova_client.floating_ips.list()
+
     for server in server_list:
         list.setdefault(server.id, [])
         list[server.id].append(server.name)
