@@ -152,6 +152,10 @@ The main portion of the entire program is the database. As the system is designe
 
 Apart from the database the other modules are started from the main python program. To do this the system will first connect to the OpenStack backend via credentials provided in a configuration file. This will pull down all of the VM IDs. This is then feed to each scanning model. These modules intern can query the backend for any additional information that they need. To illustrate this the Nmap modules will use the provided IDs to obtain the internal and external IP address for each machine. This will then feed the query to the Nmap program. The Nmap model will then obtain the data and parse out the needed information, such as open ports. Once the data from the model is as wanted it will be sent to the database to be added for each VM.
 
+To add a new model the main function must be edited so that it will call the new model. The output from the new model must follow a set standardized of (ID: \"ID number\", data) this is then sent via the main function to the database model to be interested into the database.
+
+The Slack bot uses the slack API to communicate with the Slack web interface.
+
 \begin{figure}[ht]
     \includegraphics[scale=.7]{./pic/Arcitecture.png}
     \caption{Intrusion detection system architecture, the main component is the "Main Function" and the database. All information is feed through the main function allowing fetures to easly be interchanged and expanded.}
