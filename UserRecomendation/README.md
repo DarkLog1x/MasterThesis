@@ -80,4 +80,3 @@ As with any computer system accessible to the internet great lengths should be t
 
 A good reference point for security rules are Linux iptable rules (http://netfilter.org/).
 
-### Security Groups ###
