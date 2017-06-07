@@ -191,7 +191,7 @@ A user recommendation was written to help users properly connect to initialized 
 \subsection{Intrusion Detection System Results}
 Once the base system was running in our test  environment a decision to scale up was made. Our test environment was compatible however a real environment with more machines and users could not have been replicated. Luckily a class was taking place that used the cloud environment. Therefor a watchdog vm was spun up in the classes cloud cluster and started to monitor the vms that were created. Immediately vms started to appear in the Slack channel. After running for a while inconsistencies were started to be found. A small snippet of the Slack channel is shown bellow. In this section 5 machines are shown, 3 of them have inconsistencies that are not in the configuration file.
 
-Servers with the ids of 930ee1bb-e07a-461f-b09f-1e1a9c864a36 and 81933a08-9451-4d16-aca4-9fb6269b4e0d both have 3 ports that are open but should not be. The more concerning vm is f57b9369-4e15-4151-9b0b-7d405cbdb5e4. We see that this vm allows for access with password bases authentication. The two machines (ad74be2b-e452-43df-b307-d8ad3bcd6cb7 and 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7) have been created and follow the configuration therefor only the server ID is shown.
+Servers with the ids of $930ee1bb-e07a-461f-b09f-1e1a9c864a36$ and $81933a08-9451-4d16-aca4-9fb6269b4e0d$ both have 3 ports that are open but should not be. The more concerning vm is $f57b9369-4e15-4151-9b0b-7d405cbdb5e4$. We see that this vm allows for access with password bases authentication. The two machines ($ad74be2b-e452-43df-b307-d8ad3bcd6cb7$ and $6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7$) have been created and follow the configuration therefor only the server ID is shown.
 
 \begin{lstlisting}
     --Server With ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36
@@ -209,6 +209,44 @@ Servers with the ids of 930ee1bb-e07a-461f-b09f-1e1a9c864a36 and 81933a08-9451-4
     Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8031 has been found open and is not in the config
     --Server With ID: 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7
 \end{lstlisting}
+
+Once a potential problem was found the bot can be queried to get a full report of the virtual machine in question.
+
+\begin{lstlisting}
+    Tenant name: SNIC 2017/13-8
+
+    Tenant ID: SNIC 2017/13-8
+
+    [
+    {
+        "ID": "f57b9369-4e15-4151-9b0b-7d405cbdb5e4",
+        "IP": {
+            "ip_external": "130.239.81.28",
+            "ip_external_auth": "publickey password keyboard-interactive",
+            "ip_internal": "192.168.1.9",
+            "ip_internal_auth": "publickey password keyboard-interactive"
+        },
+        "OpenStack_info": {
+            "created_at": "2017-03-16T08:09:08Z",
+            "image_id": "e4752852-c053-4fee-b198-6d990d914e3a",
+            "image_name": "CoreOS - latest",
+            "updated_at": "2017-03-16T08:09:25Z",
+            "user_id": "d152c3dbd72c44af95ac4e6e48ccb0ec"
+        },
+        "_id": {
+            "$oid": "58db779eb39aa86565e2f1f3"
+        },
+        "ports": {
+            "22": "open"
+        },
+        "services": {
+            "OpenSSH on port 22 is version": "7.4"
+        }
+    }
+    ]
+\end{lstlisting}
+
+The administrate then gets a full view of the machine sin question and can then decide what the best possible next action is.
 
 \subsection{Hypervisor Information Gathering Results}
 tmp

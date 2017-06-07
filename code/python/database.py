@@ -62,28 +62,3 @@ def MongoDBClean(ServerList):
     for vm in i:
         if vm['ID'] not in ServerList:
             vms.remove({"ID": vm['ID']})
-
-###
-# Set a config flag for the admin to be able to choose what type of informatation is sent
-# is it all of the information
-# or only the changes
-# make a slack channel for each project id
-#
-# #####
-# does slack go over ssl
-# Look at image name on opnestack server show (id of server) to ge the image of the vm  openstack image show (id of vm)
-#
-# ###
-# look at slack bot -- if they can compunicate back
-#
-# ###
-# openstack network list
-#
-# ###
-# MongoDB for database
-#
-# #####
-# Look at security groups
-#
-# if the server id is no more drop it formt he database
-#
