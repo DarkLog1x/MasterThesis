@@ -159,11 +159,17 @@ def handle_command(slack_client, command, channel):
                 "Not a recognised OpenStack information command. Try \"serverlist\", routerlist\", \" networklist\", \"securitygroups\""]
     else:
         response = [
-            "Not sure what you mean. The following are excepted:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
+            "Not sure what you mean. The following are expected:\"openstackinfo\" \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" "]
+
+    # slack_client.api_call(
+        # "chat.postMessage", channel=channel, text=response, as_user=True)
+    output = ""
     for line in response:
-        slack_client.api_call("chat.postMessage", channel=channel,
-                              text=line, as_user=True)
-        time.sleep(1.5)
+        output = output + line + "\n"
+
+    slack_client.api_call("chat.postMessage", channel=channel,
+                          text=output, as_user=True)
+    # time.sleep(1.5)
 
 
 def parse_slack_output(slack_rtm_output, bot_id):
