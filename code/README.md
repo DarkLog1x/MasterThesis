@@ -41,3 +41,6 @@ host1 ansible_ssh_host=[IP ADDRESS OF VM] ansible_ssh_private_key_file=[POINT TH
 12. Here we first need to edit the config file. This is up to you how the system works, therefor look inside the file and see some example work.
 13. Next we need to edit the environmentVariables.py file. These fields are taken from your .rc file that you downloaded from OpenStack.
 15. Now go back to the ansible directory `cd ../andible` and run the start.sh script `./start.sh`. Everything should run smoothly if not file a but report!
+
+## Information
+To change the version number for OpenStack and Nova client one must edit the ancible configuration file located in the `code/ansible/provision.yml`
