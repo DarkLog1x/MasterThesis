@@ -134,27 +134,25 @@ def handle_command(slack_client, command, channel):
     input = command.split(" ")
     print input[0]
     print channelName.lower()
-    if input[0] != channelName.lower():
-        return 0
-    if input[1] == "vmproblems":
+    if input[0] == "vmproblems":
         response = CheckDatabase.DatabaseCheckSpecific(input[1])
-    elif input[1] == "help":
+    elif input[0] == "help":
         response = [
-            "The following are accepted:\"openstackinfo (\"serverlist\", \"routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" ", "Example: @isaas foo_bar fullreport"]
-    elif input[1] == "vmdatabase":
+            "The following are accepted:\"openstackinfo (\"serverlist\", \"routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" ", "Example: @isaas fullreport"]
+    elif input[0] == "vmdatabase":
         response = CheckDatabase.DatabaseCheckGetFullDatabase(input[2])
-    elif input[1] == 'vmstatus':
+    elif input[0] == 'vmstatus':
         response = CheckDatabase.FindSelected(input[2], input[3])
-    elif input[1] == 'fullreport':
+    elif input[0] == 'fullreport':
         response = CheckDatabase.DatabaseCheckFull()
-    elif input[1] == 'openstackinfo':
-        if input[2] == 'serverlist':
+    elif input[0] == 'openstackinfo':
+        if input[1] == 'serverlist':
             response = OSq.OpenStackServerList()
-        elif input[2] == 'routerlist':
+        elif input[1] == 'routerlist':
             response = OSq.OpenStackRouterList()
-        elif input[2] == 'networklist':
+        elif input[1] == 'networklist':
             response = OSq.OpenStackNetworkList()
-        elif input[2] == 'securitygroups':
+        elif input[1] == 'securitygroups':
             response = OSq.OpenStackSeucurityGroups()
         else:
             response = [

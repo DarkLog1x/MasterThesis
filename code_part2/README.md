@@ -4,6 +4,8 @@
 
 Ensure that you have proper knowledge and authorization to proceed on any system.
 
+Good links to look at are [here](https://help.ubuntu.com/community/KVM/Installation) and [here](https://help.ubuntu.com/community/KVM/CreateGuests).
+
 **System**
 * Ensure that the system has OpenStack installed
 * The installed hypervisor is kvm

@@ -29,7 +29,7 @@
 This thesis was written with the intention of looking at possible solutions in monitoring virtual machines in the OpenStack platform. As the University is rolling out a new cloud platform called the SNIC Science Cloud; students and professors will have the ability to create virtual machines. While testing the new cloud platform, it was noticed that machines were compromised due to poor user configuration. It was then decided that a system should be created that would allow for the administrators of the SNIC Science Cloud to monitor VM configurations\@.
 
 \section{Problem Description}
-The security of VM in the SNIC Science Cloud posses a large problem. Many students and professors are starting to use the system and have root privileges on the VMs with very little security background. This has caused several problems, such as password login for SSH and remote docker ports exposed to the Internet. The only current solution was passive, having the networking team tell the administrators after a system was compromised.
+The security of VM in the SNIC Science Cloud posses a large problem. Many students and professors are starting to use the system and have root privileges on the VMs with very little security background. This has caused several problems, such as password login for SSH and remote docker ports exposed to the Internet. These types of security vulnerabilities would allow an attacker to gain full control of the virtual machines. The only current solution was passive, having the networking team tell the administrators after a system was compromised.
 
 \section{Background}
 The cloud computing space has grown over the last several years. Business and Universities are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution, some examples are Amazon\cite{amazonaws2017}, Google\cite{GoogleCloudCompute2017}, Microsoft\cite{Azure2017}, and Digital Ocean\cite{DigitalOcian2017}. These companies are providing a public cloud environment, that is to say that anyone can pay for computer resources. A user needs to sign up, provided a credit card, and then start setting up and launching whatever configuration of system they would like.
@@ -44,7 +44,7 @@ The provider will then dedicate the specified hardware and allow the user to log
 Many companies that would like to move over to a cloud based model but do not want to migrate there private recourses into public domain. Other companies such as RackSpace, IBM, and VMware are providing private / hybrid cloud resources. This approach has the part or the entire system built on site at the client. This allows the client to have most of the benefits of the cloud but also keep the system within there network.
 
 \subsection{Open Source vs Closed Source}
-An open source project is a type of coding project that has the source code to the project freely available for any one to download, modify, and run.
+An open source project is a type of coding project that has the source code to the project freely available for any one to download, modify, and run. A closed source coding projects is typically found in corporations. The code is not really available and only the end product is distributed to consumers.
 
 \subsection{Cloud Models}
 As mentioned above the cloud space consists of three types of clouds: public, hybrid, and private. The public cloud enables anyone to connect to the host and set up a machine. The host machines that run the cloud environment are located in public data centers throughout the world. The virtual machines are created then run and can be connected to the Internet.  The private cloud consist of the host being located in a private hosting environment. The virtual machines that are created are collocated on the internal network. The hybrid environment merges the two, with having some of the machines collocated in private data centers and others located on public data centers. Each of these models have benefits and drawbacks and have to evaluated for each individual project. The these cloud models all share a smiler set of tools employed to provide the necessary computational recourses to users.
@@ -147,7 +147,6 @@ These modules will gather the results from the network and collect them into a c
 
 A key part of this project was to create a simplistic interface that would allow an administrator to view changes to the environment and query for more information. Some base goals were created: scalability, ease of use, and intuitiveness. As the system is designed to be deployed over several cloud groups we needed a messaging system that could handle such a task. Email was first considered however it was soon realized that email would not work well due to the frequency of data sent and then inability to interact with the service. The next consideration was Internet Relay Chat (IRC), however as IRC is relatively unused in the professional work environment and users would need to learn how to interact with the protocol that idea was abandoned. Therefor as a final solution it was decided to work to build the messaging solution using Slack. This matched all of our starting criteria and allowed for a clean and simple implementation. Slack is a messaging application that allows groups of users to interact with one another in channels or directly. Once of the really neat features of this is the ability to program bots for users to interact with. Therefor the decision was made to create a bot that would interact with a channel for each cluster of machines. The bot would update the channel with any new information that the scan found ensuring that a constant flow was preserved. Users are also able to query to bot directly and get more information about the environment. This allows seamless integration between getting information from the environment and being able to dive deeper and investigate a machine.
 
-
 \section{Architecture}
 For the monitoring solution an important architecture design was to ensure that the system was modular to enable it to be adapted to different cloud environments. This would allow individual monitoring tools or logging techniques to be used for configuring to specific infrastructures. As for the proof of concept project Nmap and ssh\_scan were implemented.
 
@@ -177,8 +176,6 @@ Ssh\_scan is another tool used to gather information about remote ssh configurat
 
 \subsubsection{Slack Bot}
 Slack bot is a small bot built on top of the Slack api to display information form the database and query data in real time. The bot will connect to a channel specifically created for each cloud cluster. There the bot will print relevant information from the database. One of the advantages that Slack provides is the ability to communicate between the users and the bots. Users are also able to query the database via the bot, this allows an administrator to quickly find a problem and find information about that machine with ease.
-
-%Highlight slack communication!!!!!!!!!!!!!!!!!!!
 
 \section{Tests}
 The system was designed and created in a testing environment. The environment was hosted in an OpenStack cloud environment with several test vms initiated. The watchdog vm was then spun up and the code was deployed. The code was then edited and redeployed via Ansible. New features were able to be tested on a live deployment ensuring that when deployed to other clusters they would function as needed. To ensure that the code functioned with little bugs, tests were run by spinning up new vms and changing there configurations.
@@ -246,11 +243,10 @@ Once a potential problem was found the bot can be queried to get a full report o
     ]
 \end{lstlisting}
 
-The administrate then gets a full view of the machine sin question and can then decide what the best possible next action is.
+The administrate then gets a full view of the machine in question and can then decide what the best possible next action is. As mentioned before the type of data that is present is not fixed therefor each module would add its own collected data for each specific VM. Therefor only the relevant data for the machine is displayed. This type of information condensed information was not present before this system wad developed. Administrators would need to run several programs to gather the data and then would need to synthesis it by hand.
 
 \subsection{Hypervisor Information Gathering Results}
-tmp
-
+For the information gathering we focused on getting the memory dump, disk data, and system information.
 
 \section{Discussion}
 Thought the project an attempt was made to ensure that the project was well designed and created. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame. The current implementation utilizes a individual VM for every cluster. This adds up recourses quickly, if a cloud system had 100 clusters then there would be 100 VMs that would only be used for monitoring. It would be beneficial if it was possible to have a smaller number of VMs used to scan multiple clusters. However the current system is unable to perform this type of task. Currently Slack is used as a medium to communicate between the administrators and the scanning mechanism. This has provided a really interesting tool allowing or bidirectional communication and quick information retrieval. However the reliance on Slack may be jeopardized if Slack decides to change api's, limit bots, or goes out of business. Luckily the system was designed in such a way to allow any communication medium to be added to the system. Therefor if Slack does not continue to meet the standards that an organization needs another tool can be used to replace Slack with ease. An alternative that can be looked into is called HipChat.  An issue that was ran into later during the creation of the project was that the Slack channel would get cluttered if a lot of different devices were not following the configuration file. One way to sort out the higher risk targets would be to add symbol's. These symbol's would be able to indicate the severity level / risk that each output would pose. Some ideas to fix this were thought of but were not implemented due to time constraints.
@@ -264,11 +260,11 @@ tmp
 %part 2 look if the router can be accesed to pull network stream
 % gather memory print / services / programs / work load
 %TODO:
-%More in report
-%Write README
-%Forensics thing
-% ensure that JSON is printed nicly and see if we can just dump the data base in a single message.
-
+%write teh concluson
+% write the abstract
+% describe the forencics work
+% the arcitecture of the forensices
+% in resultes give more detail about the results obtained
 
 \newpage
 \bibliographystyle{plain}
