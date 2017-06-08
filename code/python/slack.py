@@ -26,7 +26,7 @@ def main():
     incorrectVMS = CheckDatabase.DatabaseCheckFull()
     f = os.environ['SLACK_KEY']
     b = os.environ['SLACK_KEY_NOBOT']
-    BOT_NAME = 'isaas'
+    BOT_NAME = os.environ['BOT_NAME']
     bot_id = None
 
     slack_client = SlackClient(f)

@@ -29,7 +29,7 @@
 5. Enter into the ssh_keys directory `cd ssh_keys`. Move the key for the virtual machine into the directory.
 6. Download the OpenStack rc file into the `ssh_keys` directory.
 7. Create a file called 'keys' in the ssh_keys directory `touch keys`.
-8. Edit the file and insert your slack api key, the slack bot api key, and your OpenStack user password. {Order matters and each item should be on its own line}
+8. Edit the file and insert your slack api key, the slack bot api key, your OpenStack user password, and the name of the bot. {Order matters and each item should be on its own line}
 9. Now go back and enter into the ansible directory `../ansible`.
 10. Edit the hosts file to fit your ansible needs, it will look like this:
 ```

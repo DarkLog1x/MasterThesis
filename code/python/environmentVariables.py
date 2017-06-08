@@ -8,6 +8,7 @@ import os
 
 def environmentVariables():
     f = open('keys', 'r').read().splitlines()
+    os.environ["BOT_NAME"] = f[3]
     os.environ["OS_PASSWORD"] = f[2]
     os.environ["SLACK_KEY"] = f[1]
     os.environ["SLACK_KEY_NOBOT"] = f[0]
