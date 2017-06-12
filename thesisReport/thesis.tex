@@ -13,9 +13,16 @@
     breaklines=true
 }
 
+\title{%
+    GROOT: Infrastructure Security as a Service (ISaaS)\\
+    \large Implementing Security Rules, Safeguards, and IDS tools for Private Cloud Infrastructures}
 
-\title{Implementing Security Rules, Safeguards, and IDS tools for Private Cloud Infrastructures}
-\author{Author: Aleksander Okonski -- aleksander.oko@gmail.com \\ Supervisor: Salman Toor \\ Review: Bjorn Victor }
+\author{Author \\
+    Aleksander Okonski \\
+    aleksander.okonski.1656@student.uu.se \\
+    \\
+    Supervisor: Salman Toor \\
+    Review: Bjorn Victor }
 \date{}
 
 
@@ -26,13 +33,13 @@
 \newpage
 
 \section{Introduction}
-This thesis was written with the intention of looking at possible solutions in monitoring virtual machines in the OpenStack platform. As the University is rolling out a new cloud platform called the SNIC Science Cloud; students and professors will have the ability to create virtual machines. While testing the new cloud platform, it was noticed that machines were compromised due to poor user configuration. It was then decided that a system should be created that would allow for the administrators of the SNIC Science Cloud to monitor VM configurations\@.
+The work done in this thesis was done with the intention of facilitating security information in private cloud infrastructure when an organization does not have the resources to deploy sophisticated security solutions. Open source cloud solutions, such as OpenStack, are becoming sought after solutions that allow anyone to create there own private cloud. These implementations lack a clear cut solution to security monitoring. This could lead to weaknesses being exploited in the private cloud allowing unauthorized users access to recourses. To alleviate the threat a three step solution was created. The first was to create a basic outline so that new users could understand the basic steps to securing communicate with created virtual machines (VMs). The second was to create an active monitoring solution for OpenStack. The solution was to be versatile for any type of environment and for administrators to be able to obtain viable information with ease. Lastly a script was created to take a image of a VM once it was found to be compromised. The project is to designed to approach the security of private clouds actively instead of passively. The administrators should be able to detect vulnerabilities early before they are exploited.
 
 \section{Problem Description}
-The security of VM in the SNIC Science Cloud posses a large problem. Many students and professors are starting to use the system and have root privileges on the VMs with very little security background. This has caused several problems, such as password login for SSH and remote docker ports exposed to the Internet. These types of security vulnerabilities would allow an attacker to gain full control of the virtual machines. The only current solution was passive, having the networking team tell the administrators after a system was compromised.
+Servers exposed to the Internet face a myriad of cyber attacks daily(https://www.bleepingcomputer.com/news/security/honeypot-server-gets-infected-with-wannacry-ransomware-6-times-in-90-minutes/). For private clouds this is ongoing problem as meny of the users may not know of proper security protocals and leave ports such as SSH open. These types of security vulnerabilities would allow an attacker to gain full control of the virtual machines. To protect the public cloud, such as OpenStack, the mechanisms are thin. The administrators could attempt to monitor network traffic or install specific software on each VM. These solutions are either difficult to set up and maintain or only passively work. Network scanning does not prevent threats but try to catch ongoing attacks (https://www.giac.org/paper/gsec/235/limitations-network-intrusion-detection/100739). This may lead to vulnerabilities present in systems that the administrators do not know about. Its also impractical having to deploy a security solution to every VM that is started on the system. Users may not turn these systems on or may require different OS version that are not compatible with a security system. The cloud is one method of allowing users to set up and deploy computers with ease, adding additional factors may discourage users. Therefor the solution is to create an active system that can monitor other VMs for potential vulnerabilities.
 
 \section{Background}
-The cloud computing space has grown over the last several years. Business and Universities are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution, some examples are Amazon\cite{amazonaws2017}, Google\cite{GoogleCloudCompute2017}, Microsoft\cite{Azure2017}, and Digital Ocean\cite{DigitalOcian2017}. These companies are providing a public cloud environment, that is to say that anyone can pay for computer resources. A user needs to sign up, provided a credit card, and then start setting up and launching whatever configuration of system they would like.
+The cloud computing space has grown over the last several years. Business and academia are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution, some examples are Amazon\cite{amazonaws2017}, Google\cite{GoogleCloudCompute2017}, Microsoft\cite{Azure2017}, and Digital Ocean\cite{DigitalOcian2017}. These companies are providing a public cloud environment, that is to say that anyone can pay for computer resources. A user needs to sign up, provided a credit card, and then start setting up and launching whatever configuration of system they would like.
 
 \begin{wrapfigure}{L}{0.5\textwidth}
     \includegraphics[scale=.2]{./pic/2017-05-24-114324_946x962_scrot.png}
