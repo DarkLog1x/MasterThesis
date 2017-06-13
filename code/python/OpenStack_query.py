@@ -52,9 +52,16 @@ def OpenStackNetworkList():
     nova_client = client_nova.Client('2.1', session=sess)
 
     network_list = neutron.list_networks()
+    bartmp = dumps(network_list)
+    dumpIn = json.loads(bartmp)
+    out = json.dumps(dumpIn, indent=4, sort_keys=True)
     retlist = []
-    retlist.append(network_list)
+    retlist.append(out)
     return retlist
+
+    # retlist = []
+    # retlist.append(network_list)
+    # return retlist
 
 
 def OpenStackSeucurityGroups():
@@ -64,9 +71,16 @@ def OpenStackSeucurityGroups():
     nova_client = client_nova.Client('2.1', session=sess)
 
     securitygroup_list = neutron.list_security_groups()
+    bartmp = dumps(securitygroup_list)
+    dumpIn = json.loads(bartmp)
+    out = json.dumps(dumpIn, indent=4, sort_keys=True)
     retlist = []
-    retlist.append(securitygroup_list)
+    retlist.append(out)
     return retlist
+
+    # retlist = []
+    # retlist.append(securitygroup_list)
+    # return retlist
 
 
 def get_credentials():
