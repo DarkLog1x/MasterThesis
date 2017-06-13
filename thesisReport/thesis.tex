@@ -7,7 +7,9 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{pdfpages}
 \usepackage{float}
+\usepackage{mdframed}
 \lstset{basicstyle=\small\ttfamily,
     columns=flexible,
     breaklines=true
@@ -145,33 +147,33 @@ System security aims to protect running systems from malicious code execution. A
 User level security how reliant on how well users understand threats and access risks \cite{stanton2005analysis}. As users are the main proprietor of systems they hold the keys to ensuring that a system is safe from malicious adversaries. It however is problematic as many users don't understand system security and are not interested in learning it. The users then perform actions that compromise system security such as using weak passwords, opening ports to the Internet, and running unknown programs.
 
 \section{User Recommendation}
-The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some security features in the OpenStack platform. This involved taking the two main problems that the SNIC team faced: poorly secured SSH access and open ports. For starters the recommendation describes shat SSH is and how to use proper key pair authentication. The guild then goes onto describing ports and how to configure good security rules in OpenStack to prevent exposed ports.
+The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some security features in the OpenStack platform. This involved taking the two main problems that the SNIC team faced: poorly secured SSH access and open ports. For starters the recommendation describes shat SSH is and how to use proper key pair authentication. The guild then goes onto describing ports and how to configure good security rules in OpenStack to prevent exposed ports. The full readme can be found in the appendix.
 
 \section{Design Implementation}
 A key part of this project was to create a simplistic interface that would allow an administrator to view changes to the environment and query for more information. Some base goals were created: scalability, ease of use, and intuitiveness. As the system is designed to be deployed over several cloud groups we needed a messaging system that could handle such a task. Email was first considered however it was soon realized that email would not work well due to the frequency of data sent and then inability to interact with the service. The next consideration was Internet Relay Chat (IRC), however as IRC is relatively unused in the professional work environment and users would need to learn how to interact with the protocol that idea was abandoned. Therefor as a final solution it was decided to work to build the messaging solution using Slack. This matched all of our starting criteria and allowed for a clean and simple implementation. Slack is a messaging application that allows groups of users to interact with one another in channels or directly. Once of the really neat features of this is the ability to program bots for users to interact with. Therefor the decision was made to create a bot that would interact with a channel for each cluster of machines. The bot would update the channel with any new information that the scan found ensuring that a constant flow was preserved. Users are also able to query to bot directly and get more information about the environment. This allows seamless integration between getting information from the environment and being able to dive deeper and investigate a machine.
 
-For the first part of the project a modular design was created to enable further types of scanning to be added. An important aspect when designing the watchdog system with as little privileges as possible to prevent any unnecessary security holes. The following is a diagram of an example cloud environment.
+For the first part of the project a modular design was created to enable further types of scanning to be added. An important aspect when designing the "watchdog" system with as little privileges as possible to prevent any unnecessary security holes. The watchdog is a phrase that was used throughout the project to describe the machine that performed all of the scanning. The following is a diagram of an example cloud environment.
 
 \begin{figure}[H]
     \includegraphics[scale=.3]{./pic/flowchart.png}
 \end{figure}
 
-The "watchdog" is initiated in the cloud cluster. The once initiated the VM will connect to the OpneStack Control Plain and get the list of servers, IP's, and floating IP's. Once that information is retreated the different modules will be run. In this standard case the two modules created were for nmap and ssh\_scan. Nmap is a tool used to scan a local or external network nd view what machines are funning on it. Nmap will be able to scan the machines ports and tell which ones are open and what services are running on them. It will also try and guess heuristically the operating system that is being run on the machine. This tool is therefor used in this system to find machines that have open ports and to see what services are run on them. If a service or port is found to not follow the recommendation then the machines can be terminated. The ssh\_scan tool is used to ensure that only a public private key pair are used. It will scan port 22 and alert if any other form of authentication is used.
+The "watchdog" is initiated in the cloud cluster. The once initiated the VM will connect to the OpneStack Control Plain and get the list of servers, IP's, and floating IP's. Once that information is retreated the different modules will be run. In this standard case the two modules created were for nmap and ssh\_scan. Nmap is a tool used to scan a local or external network nd view what machines are funning on it. Nmap will be able to scan the machines ports and tell which ones are open and what services are running on them. It will also try and guess heuristically the operating system that is being run on the machine. This tool is therefor used in this system to find machines that have open ports and to see what services are run on them. If a service or port is found to not follow the recommendation then the VM can be terminated. The ssh\_scan tool is used to ensure that only a public private key pair are used. It will scan port 22 and alert if any other form of authentication is used.
 These modules will gather the results from the network and collect them into a central repository. Once the data is gathered it is compared to the config file.  If a discrepancy is found between the expected results and the scanned machine is found an alert is sent to the administrator. For this project the administrator receives notification on a separate slack. This entire process is run every 20 min by a corn job located on the watchdog machine. This type of design allows for a flexible platform that can have each component further customized.
 
 \section{Architecture}
-For the monitoring solution an important architecture design was to ensure that the system was modular to enable it to be adapted to different cloud environments. This would allow individual monitoring tools or logging techniques to be used for configuring to specific infrastructures. As for the proof of concept project Nmap and ssh\_scan were implemented.
+For the monitoring resource an important architecture design was to ensure that the system was modular.  This enabled the system to be adapted to different cloud environments. Users would be able to create individual monitoring tools or logging techniques to be used for configuring to specific infrastructures. As for the proof of concept project Nmap and ssh\_scan were implemented.
 
 The main portion of the entire program is the database. As the system is designed in a modular manner all the data is stored and retrieved from the database. The database is a MongoDB instance that has one collection that hold all the data from different scans. The only data that is needed inside of the database is the server ID\@. This is the key to which all other data about a particular machine is added to. When data is stored the ID of the VM is passed along with the data. When a user requests data they must also provides the ID for the data they would like.
 
 Apart from the database the other modules are started from the main python program. To do this the system will first connect to the OpenStack backend via credentials provided in a configuration file. This will pull down all of the VM IDs. This is then feed to each scanning model. These modules intern can query the backend for any additional information that they need. To illustrate this the Nmap modules will use the provided IDs to obtain the internal and external IP address for each machine. This will then feed the query to the Nmap program. The Nmap model will then obtain the data and parse out the needed information, such as open ports. Once the data from the model is as wanted it will be sent to the database to be added for each VM.
 
-To add a new model the main function must be edited so that it will call the new model. The output from the new model must follow a set standardized of (ID: \"ID number\", data) this is then sent via the main function to the database model to be interested into the database.
+To add a new model the main function must be edited so that it will call the new model. The output from the new model must follow a set standardized of $(ID: "ID number", data)$ this is then sent via the main function to the database model to be interested into the database.
 
 The Slack bot uses the slack API to communicate with the Slack web interface.
 
 \begin{figure}[ht]
-    \includegraphics[scale=.7]{./pic/Arcitecture.png}
+    \includegraphics[scale=.5]{./pic/Arcitecture.png}
     \caption{Intrusion detection system architecture, the main component is the "Main Function" and the database. All information is feed through the main function allowing fetures to easly be interchanged and expanded.}
 \end{figure}
 
@@ -189,8 +191,59 @@ Ssh\_scan is another tool used to gather information about remote ssh configurat
 \subsubsection{Slack Bot}
 Slack bot is a small bot built on top of the Slack api to display information form the database and query data in real time. The bot will connect to a channel specifically created for each cloud cluster. There the bot will print relevant information from the database. One of the advantages that Slack provides is the ability to communicate between the users and the bots. Users are also able to query the database via the bot, this allows an administrator to quickly find a problem and find information about that machine with ease.
 
+\subsubsection{ansible}
+Ansible is a tool designed to automate system deployment. The tool has a scripting language that describes steps for systems to be configured.
+
+\begin{lstlisting}
+---
+- hosts: all
+  remote_user: ubuntu
+  gather_facts: no
+  pre_tasks:
+    - name: Update and install python
+      with_items:
+        - python
+        - python-dev
+        - python-setuptools
+        - git-core
+        - gcc
+        - nmap
+        - ruby
+        - ruby-dev
+        - libsqlite3-dev
+        - make
+        - htop
+        - nload
+        - mongodb-org
+        - sqlite3
+
+\end{lstlisting}
+
+In the above example for all hosts in a separate host file the system will login as "ubuntu" and install the list of programs using $apt-get$. The default connection ot each host is done via SSH where the user points the ansible program to their private key.  This tool is used to deploy complex environments with little hassle.  As this project was also designed to be easily deployed ansible was chosen. There are several other tools such as Puppet or Chef. However prior knowledge and usability determined the software chose. 
+
+\subsubsection{git}
+An important tool used throughout this project was git. Git is a version control system that keeps track of all changes to files. In addition it allows for uploading of these changes to websites like GitHub and Bitbucket. This creates a viewable time line of all changes to the code base as well as provides a backup in the cloud in case of a system failure. 
+
+\section{System Interaction}
+One of the important aspects of the system that was create was intractability. We wanted to present the administrator with a tool that would allow them to gain all the information that they wanted about a system. We wanted the user to be able to intact with a bot, and have the bot respond with the relevant information that the user wanted. The system should be fluid and informative, without the user having to switch between different programs to find relevant information. To communicate with the bot, the user simply calls the bot using the $@$ sign and then the command. 
+
+The picture bellow show the help command. 
+\begin{figure}[ht]
+    \includegraphics[scale=.5]{./pic/2017-06-13-184017_652x280_scrot.png}
+\end{figure}
+
+The picture below shows how a full report for a project can be generated.
+\begin{figure}[ht]
+    \includegraphics[scale=.5]{./pic/2017-06-13-183745_677x229_scrot.png}
+\end{figure}
+
+The picture below shows how to call another bot and retrieve a projects router information.
+\begin{figure}[ht]
+    \includegraphics[scale=.5]{./pic/2017-06-13-183710_855x179_scrot.png}
+\end{figure}
+
 \section{Tests}
-The system was designed and created in a testing environment. The environment was hosted in an OpenStack cloud environment with several test vms initiated. The watchdog vm was then spun up and the code was deployed. The code was then edited and redeployed via Ansible. New features were able to be tested on a live deployment ensuring that when deployed to other clusters they would function as needed. To ensure that the code functioned with little bugs, tests were run by spinning up new vms and changing there configurations.
+The system was designed and created in a testing environment. The environment was hosted in an OpenStack cloud environment with several test vms initiated. The $watchdog vm$ was then spun up and the code was deployed. The code was then edited and redeployed via Ansible. New features were able to be tested on a live deployment ensuring that when deployed to other clusters they would function as needed. To ensure that the code functioned with little bugs, tests were run by spinning up new vms and changing there configurations.
 
 \section{Results}
 
@@ -202,6 +255,7 @@ Once the base system was running in our test  environment a decision to scale up
 
 Servers with the ids of $930ee1bb-e07a-461f-b09f-1e1a9c864a36$ and $81933a08-9451-4d16-aca4-9fb6269b4e0d$ both have 3 ports that are open but should not be. The more concerning vm is $f57b9369-4e15-4151-9b0b-7d405cbdb5e4$. We see that this vm allows for access with password bases authentication. The two machines ($ad74be2b-e452-43df-b307-d8ad3bcd6cb7$ and $6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7$) have been created and follow the configuration therefor only the server ID is shown.
 
+\begin{mdframed}
 \begin{lstlisting}
     --Server With ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36
     Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8088 has been found open and is not in the config
@@ -218,9 +272,11 @@ Servers with the ids of $930ee1bb-e07a-461f-b09f-1e1a9c864a36$ and $81933a08-945
     Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8031 has been found open and is not in the config
     --Server With ID: 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7
 \end{lstlisting}
+\end{mdframed}
 
-Once a potential problem was found the bot can be queried to get a full report of the virtual machine in question.
+Once a potential problem was found the \emph[bot] can be queried to get a full report of the virtual machine in question.
 
+\begin{mdframed}
 \begin{lstlisting}
     Tenant name: SNIC 2017/13-8
 
@@ -254,20 +310,25 @@ Once a potential problem was found the bot can be queried to get a full report o
     }
     ]
 \end{lstlisting}
+\end{mdframed}
 
 The administrate then gets a full view of the machine in question and can then decide what the best possible next action is. As mentioned before the type of data that is present is not fixed therefor each module would add its own collected data for each specific VM. Therefor only the relevant data for the machine is displayed. This type of information condensed information was not present before this system wad developed. Administrators would need to run several programs to gather the data and then would need to synthesis it by hand.
 
 \subsection{Hypervisor Information Gathering Results}
-For the information gathering we focused on getting the memory dump, disk data, and system information.
+Once a compromised machine has been found a copy of the memory, disk, and system information is made. This is to help if the administrators would like to further understand what happened. To do this a script was written that uses the $virsh$ tool to connect to the kvm. Once connected the script pull relevant data and stores them into temporary files. 
 
 \section{Discussion}
-Thought the project an attempt was made to ensure that the project was well designed and created. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame. The current implementation utilizes a individual VM for every cluster. This adds up recourses quickly, if a cloud system had 100 clusters then there would be 100 VMs that would only be used for monitoring. It would be beneficial if it was possible to have a smaller number of VMs used to scan multiple clusters. However the current system is unable to perform this type of task. Currently Slack is used as a medium to communicate between the administrators and the scanning mechanism. This has provided a really interesting tool allowing or bidirectional communication and quick information retrieval. However the reliance on Slack may be jeopardized if Slack decides to change api's, limit bots, or goes out of business. Luckily the system was designed in such a way to allow any communication medium to be added to the system. Therefor if Slack does not continue to meet the standards that an organization needs another tool can be used to replace Slack with ease. An alternative that can be looked into is called HipChat.  An issue that was ran into later during the creation of the project was that the Slack channel would get cluttered if a lot of different devices were not following the configuration file. One way to sort out the higher risk targets would be to add symbol's. These symbol's would be able to indicate the severity level / risk that each output would pose. Some ideas to fix this were thought of but were not implemented due to time constraints.
+Throughout the project an attempt was made to ensure that the project was well designed and created. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame. The current implementation utilizes a individual VM for every cluster. This adds up recourses quickly, if a cloud system had 100 clusters then there would be 100 VMs that would only be used for monitoring. It would be beneficial if it was possible to have a smaller number of VMs used to scan multiple clusters. However the current system is unable to perform this type of task. Currently Slack is used as a medium to communicate between the administrators and the scanning mechanism. This has provided a really interesting tool allowing or bidirectional communication and quick information retrieval. However the reliance on Slack may be jeopardized if Slack decides to change api's, limit bots, or goes out of business. Luckily the system was designed in such a way to allow any communication medium to be added to the system. Therefor if Slack does not continue to meet the standards that an organization needs another tool can be used to replace Slack with ease. An alternative that can be looked into is called HipChat.  An issue that was ran into later during the creation of the project was that the Slack channel would get cluttered if a lot of different devices were not following the configuration file. One way to sort out the higher risk targets would be to add symbol's. These symbol's would be able to indicate the severity level / risk that each output would pose. Some ideas to fix this were thought of but were not implemented due to time constraints.
 
 \section{Future Work}
 The project has a large potential. As the code written now is only a prototype there is more work that can be added to expand the tools usefulness. As the code is created with modularity in mind, a user can easily add new scans into the project. If a user wanted, for example, to ensure that a website is correctly configured they could add the nikto /cite{NiktoScan} vulnerability scanner. The scan can then be run and the data would be added to the database. Another future work that could be expanded on is allowing for different methods of interacting with the system. Currently Slack is used, however administrator's might want email reports or an irc channel instead of Slack. Luckily this can easily be integrated and several systems can be used asynchronously. This allows for administrators to custom configure this system to their desired needs and specifications.
 
 \section{Conclusion}
-tmp
+This project is designed to prototype a system that is able to actively scan private clouds for potential vulnerabilities. Administrators are able to see results and query an automated system for further information with ease. A lot was learned about the threat landscape of cloud systems and how a modular system can be designed. It is the hope of the author that this system can be used by other people to ensure that any private cloud environment is secure.  
+
+\section{Appendix}
+
+\includepdf[pages=-]{README.pdf}
 
 %part 2 look if the router can be accesed to pull network stream
 % gather memory print / services / programs / work load
