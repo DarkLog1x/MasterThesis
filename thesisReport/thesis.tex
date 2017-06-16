@@ -19,10 +19,12 @@
     GROOT: Infrastructure Security as a Service (ISaaS)\\
     \large Implementing Security Rules, Safeguards, and IDS tools for Private Cloud Infrastructures}
 
+
 \author{Author \\
     Aleksander Okonski \\
     aleksander.okonski.1656@student.uu.se \\
     aleksander.oko@gmail.com \\
+    \vspace{2cm}
     \\
     Supervisor: Salman Toor \\
     Review: Bjorn Victor }
@@ -36,26 +38,24 @@
 \newpage
 
 \section{Introduction}
-The last several years cloud computing has steadily grown \ref{fig:CloudTrendGoogle} and with it has its exposer to the cyber security epidemic \cite[kellerman2010cyber]. 
+The last several years cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a business.  With it has its exposer so has the cyber security epidemic \cite[kellerman2010cyber]. Cloud systems are now a major target for cyber criminals.  
 
-\begin{wrapfigure}{lht}{0.6\textwidth}
-    \includegraphics[scale=.2]{./pic/2017-06-14-130823_923x615_scrot.png}
-    \caption{Cloud computing trend from Google}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=.3]{./pic/2017-06-14-130823_923x615_scrot.png}
+    \caption{Cloud computing trend from Google Trends. Shows the interest in cloud computing between the years of 2004 to 2017. \cite{GoogleTrendsCloud}}
     \label{fig:CloudTrendGoogle}
-\end{wrapfigure}
-It is almost on a weekly bases that news of another security breach has effected a company. As cloud computing is becoming more and more popular, corporations are switching over to this new model. This switch bring about new challenges, especial in the security spacei involving cloud systems. The large majority of these cloud computing systems are provided as public clouds, these are further described below. However another sector of cloud computing called private clouds has recently been gaining popularity \ref{fig:PrivCloudTrendGoogle}. As private clouds don't have the backing of large corporations dedicated to ensuring a secure environment vulnerabilities can become present. 
+\end{figure}
+It is almost on a weekly bases that news of another security breach has effected a company. As cloud computing is becoming more and more popular, corporations are switching over to this new model. This switch brings about new challenges, especial in the security space involving cloud systems. The large majority of these cloud computing systems are provided as public clouds, these are further described below. However another sector of cloud computing called private clouds has recently been gaining popularity \ref{fig:PrivCloudTrendGoogle}. As private clouds don't have the backing of large corporations dedicated to ensuring a secure environment vulnerabilities can become present. 
 
-
-\begin{wrapfigure}{lht}{0.6\textwidth}
-    \includegraphics[scale=.2]{./pic/2017-06-14-135222_914x619_scrot.png}
-    \caption{Private cloud computing trend from Google}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[scale=.3]{./pic/2017-06-14-135222_914x619_scrot.png}
+    \caption{Private cloud computing trend from Google Trends. Shows the interest in private cloud computing between the years of 2004 to 2017. \cite{GoogleTrendsPriv}}
     \label{fig:PrivCloudTrendGoogle}
-\end{wrapfigure}
+\end{figure}
 
-The work done in this thesis was done with the intention of facilitating security information in private cloud infrastructure when an organization does not have the resources to deploy sophisticated security solutions. Open source cloud solutions, such as OpenStack, are becoming sought after solutions that allow anyone to create there own private cloud. These implementations lack a clear cut solution to security monitoring. This could lead to weaknesses being exploited in the private cloud allowing unauthorized users access to recourses. To alleviate the threat a three step solution was created. The first was to create a basic outline so that new users could understand the basic steps to securing communicate with created virtual machines (VMs). The second was to create an active monitoring solution for OpenStack. The solution was to be versatile for any type of environment and for administrators to be able to obtain viable information with ease. Lastly a script was created to take a image of a VM once it was found to be compromised. The project is to designed to approach the security of private clouds actively instead of passively. The administrators should be able to detect vulnerabilities early before they are exploited. The project produces a prototype solution that is able to identify vulnerabilities and report to administrators. These results were able to be used by administrators to prevent the vulnerability to be exploited.  
-
-\section{Problem Description}
-Servers exposed to the Internet face a myriad of cyber attacks daily\cite{cimpanu_2017}. For private clouds this is ongoing problem as many of the users may not know of proper security protocols and leave ports such as SSH open. These types of security vulnerabilities would allow an attacker to gain full control of the virtual machines. To protect the public cloud, such as OpenStack, the mechanisms are thin. The administrators could attempt to monitor network traffic or install specific software on each VM. These solutions are either difficult to set up and maintain or only passively work. Network scanning does not prevent threats but try to catch ongoing attacks \cite{global}. This may lead to vulnerabilities present in systems that the administrators do not know about. Its also impractical having to deploy a security solution to every VM that is started on the system. Users may not turn these systems on or may require different OS version that are not compatible with a security system. The cloud is one method of allowing users to set up and deploy computers with ease, adding additional factors may discourage users. Therefor the purpose of this project was to create an active system that can monitor other VMs for potential vulnerabilities. Users and administrators do not want to have systems taken over by malicious users that then perform actions like sending spam or stealing information. The created solution is able to identify vulnerabilities in VM configurations and alert the administrator's before the vulnerability is exploited. 
+The work done in this thesis was done with the intention of facilitating security information in private cloud infrastructure when an organization does not have the resources to deploy sophisticated security solutions. Open source cloud solutions, such as OpenStack \cite{Openstack}, are becoming sought after solutions that allow anyone to create there own private cloud. These implementations lack a clear cut solution to security monitoring. This could lead to weaknesses being exploited in the private cloud allowing unauthorized users access to recourses. To alleviate the threat a three step solution was created. The first was to create a basic outline so that new users could understand the basic steps to securely communicate with created virtual machines (VMs). The second was to create an active monitoring solution within multi tenant environments. The solution was to be versatile for any type of environment and for administrators to be able to obtain viable information with ease. Lastly a system forensics tool was created to get the systems information before termination of the infected resource. The project is to designed to approach the security of private clouds actively instead of passively. The administrators should be able to detect vulnerabilities early before they are exploited. The project produces a prototype solution that is able to identify vulnerabilities and report to administrators. These results were able to be used by administrators to prevent the vulnerability to be exploited.  
 
 \section{Background}
 The cloud computing space has grown over the last several years. Business and academia are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spine up/destroy several machines with little overhead. Several companies are fronting the cloud revolution, some examples are Amazon\cite{amazonaws2017}, Google\cite{GoogleCloudCompute2017}, Microsoft\cite{Azure2017}, and Digital Ocean\cite{DigitalOcian2017}. These companies are providing a public cloud environment, that is to say that anyone can pay for computer resources. A user needs to sign up, provided a credit card, and then start setting up and launching whatever configuration of system they would like.
@@ -67,7 +67,10 @@ The cloud computing space has grown over the last several years. Business and ac
 
 The provider will then dedicate the specified hardware and allow the user to login that virtual machine and run whatever tasks the user would like to do. These public entities typically have teams dedicated to security and infrastructure monitoring. These teams have created proprietary solutions to ensure that the cloud environment \cite{SecAmazon} stay secure. As these security systems are a selling point for companies they are kept proprietary. 
 
-Many companies that would like to move over to a cloud based model but do not want to migrate there private recourses into public domain. Other companies such as RackSpace, IBM, and VMware are providing private / hybrid cloud resources. This approach has the part or the entire system built on site at the client. This allows the client to have most of the benefits of the cloud but also keep the system within there network. These clients typically don't have the recourses to create or manage a cloud security system. 
+A private cloud is a different type of model where the cloud infrastructure is physically set inside a companies domain. Many companies that would like to move over to a cloud based model but do not want to migrate there private recourses into public domain. Other companies such as RackSpace, IBM, and VMware are providing private / hybrid cloud resources. This approach has the part or the entire system built on site at the client. This allows the client to have most of the benefits of the cloud but also keep the system within there network. These clients typically don't have the recourses to create or manage a cloud security system. 
+
+\section{Problem Description}
+Security of computer systems is a large field. There are many different areas in the computer field and each one produces individual security challenges. For this project we focused on cloud infrastructure. Computer infrastructure exposed to the Internet face a large number of cyber attacks daily\cite{cimpanu_2017}. For private clouds this is ongoing problem as many of the users may not know of proper security protocols and leave ports such as SSH open. These types of security vulnerabilities would allow an attacker to gain full control of the virtual machines. To protect the public cloud, such as OpenStack, the mechanisms are thin. The administrators could attempt to monitor network traffic or install specific software on each VM. These solutions are either difficult to set up and maintain or only passively work. Network scanning does not prevent threats but try to catch ongoing attacks \cite{global}. This may lead to vulnerabilities present in systems that the administrators do not know about. Its also impractical having to deploy a security solution to every VM that is started on the system. Users may not turn these systems on or may require different OS version that are not compatible with a security system. The cloud is one method of allowing users to set up and deploy computers with ease, adding additional factors may discourage users. Therefor the purpose of this project was to create an active system that can monitor other VMs for potential vulnerabilities. Users and administrators do not want to have systems taken over by malicious users that then perform actions like sending spam or stealing information. The created solution is able to identify vulnerabilities in VM configurations and alert the administrator's before the vulnerability is exploited. 
 
 \subsection{Open Source vs Closed Source}
 An open source project is a type of project that has the source code to the project freely available for any one to download, modify, and run. This allows a community of enthusiast's to support and expand the project. Theses projects can be very popular and can expand to a very large scale, some examples of popular projects are Linux \cite{Linux}, atom \cite{atom}, and FreeBSD \cite{freebsd}. Users contribute time in writing code, filling out documentation, or filing bugs this slowly expands the project. Goals for projects are laid out by the community, if a user does not agree with a decision they are allowed to fork a project and take it in a direction that they choose.  Typical projects are founded through donations or through the time of users.  A closed source coding projects is typically found in corporations. The code is not typically available and only the end product is distributed to consumers. The project goals are outlined to fit into a release time line. Full time workers then will work on the project to meet these deadlines. There typically is funding available for these types of projects with the end product monetized for profit.
@@ -94,13 +97,13 @@ In the cloud computing space several computational models exist \cite{wikipedia}
 
 \end{itemize}
 
-\subsection{Vitalization}
-At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then contains and runs another operating system. These hypervisores are the backbone of cloud computing allowing several virtual environments to use the same hardware. A hypervisor is a layer of code that sits between the computer components (bare metal) and the guest OS\@. There are two types of hypervisores that are present in systems they are named bare bone and hosted hypervisores. Figure~\ref{fig:Hypervisors} shows these two in example formate. These two hypervisors are very different in the way that they are created.  A bare bones hypervisor acts like a small operating system which only manages the vms while allowing most of the vms to access hardware directly. A hosted hypervisor relies on an existing operating system to function. Although a hosted hypervisor can also directly allow vms to communicate with the hardware without going through the OS\@. OpenStack uses the hosted hypervisor solution, having the administrators install the OpenStack platform on top of an existing operating system.   The hypervisor then translates instructions from the guest system onto the hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However, NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
+\subsection{Virtualization}
+At the most fundamental layer a cloud computer is a server running in a data-center that has a hypervisor which then allocates recourses on demand. These hypervisores are the backbone of cloud computing allowing several virtual environments to use the same hardware. A hypervisor is a layer of code that sits between the computer components (bare metal) and the guest OS\@. There are two types of hypervisores that are present in systems they are named bare bone and hosted hypervisores. Figure~\ref{fig:Hypervisors} shows these two in example formate. These two hypervisors are very different in the way that they are created.  A bare bones hypervisor acts like a small operating system which only manages the vms while allowing most of the vms to access hardware directly. A hosted hypervisor relies on an existing operating system to function. Although a hosted hypervisor can also directly allow vms to communicate with the hardware without going through the OS\@. OpenStack uses the hosted hypervisor solution, having the administrators install the OpenStack platform on top of an existing operating system.   The hypervisor then translates instructions from the guest system onto the hardware. There are several different hypervisors to choose from (Xen, Oracle VirtualBox, Oracle VM, KVM, VMware ESX/ESXi, or Hyper-V) with each having similar outcomes through different approach to the problem. To control the users and virtual machines many cloud providers (Amazon, Google, etc.) have created proprietary solutions. However, NASA and RackSpace Hosting \cite{wikipedia1} have created an open source version called OpenStack.
 
 \begin{figure}[H]
-    \caption{Different types of Hypervisors}
     \centering
     \includegraphics[scale=.8]{./pic/Hyperviseur.png}
+    \caption{Different types of Hypervisors}
     \label{fig:Hypervisors}
 \end{figure}
 
@@ -110,7 +113,7 @@ When cloud computing first started to take off, the main type of computing resou
 \subsection{Cloud Computing vs Standard Models}
 The cloud computing environment has been growing quickly the last several years \cite{Vaquero}. However its important to understand the similarities and differences that this new type of computing brings. At the core cloud computing is no different then older client server models. The data is still on hard drives, servers still use OS environments, and networks still connect the servers to the Internet. The main difference between the two models is that in the cloud you pay for what you use and hardware configurations/problems are not a concern. Some of the advantages that cloud computing posses is the fact that there is rapid scalability. It is possible to spin up 100 machines and scale your service according to needs. There is also a level of abstraction between physical hardware and the systems. This provides a buffer, allowing for there to be problems with configurations, management, and physical hardware with little effect on the cloud hosted systems.
 
-\subsection{Threats to the cloud}
+\subsection{Threats to the Cloud}
 Cloud computing also has a different threat model compared to a normal dedicated server \cite{zissis2012addressing, mishra2013cloud, krutz2010cloud}. As cloud servers are, as the name suggests, in the cloud they usually will receive a pubic IP address that allows anyone to directly talk to them. This attach surfaces allows for direct communication to the running system which exposes it to exploitation. The following list shows the potential attack vector's that a cloud computing systems has \cite{amini2015threat}.
 
 \begin{itemize}
@@ -139,6 +142,15 @@ OpenStack is an open source platform for cloud computing \cite{wiki:OpenStack}. 
 Nova is the platform that provides access to OpenStack compute resources. It is the base platform that a user would interact with the set up, run, configure, and destroy machines. Neutron is the service that controls and configures all of the networking between machines and the external network. Swift is the platform that is used for object and blob storage.
 
 Neutron is the OpenStack service that provides access to the networking components of the cloud system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=.6]{./pic/openstack-sm.png}
+    \label{fig:Hypervisors}
+    \caption{OpenStack Cloud System}
+\end{figure}
+
+
 %What relsea, functionalities
 %This projec thas a core interest in nova, etc.
 
@@ -362,9 +374,6 @@ The project has a large potential. As the code written now is only a prototype t
 \section{Conclusion}
 This project is designed to prototype a system that is able to actively scan private clouds for potential vulnerabilities. Administrators are able to see results and query an automated system for further information with ease. A lot was learned about the threat landscape of cloud systems and how a modular system can be designed. It is the hope of the author that this system can be used by other people to ensure that any private cloud environment is secure.  
 
-\section{Appendix}
-
-\includepdf[pages=-]{README.pdf}
 
 %part 2 look if the router can be accesed to pull network stream
 % gather memory print / services / programs / work load
@@ -378,4 +387,8 @@ This project is designed to prototype a system that is able to actively scan pri
 \newpage
 \bibliographystyle{plain}
 \bibliography{thesis.bib}
+\newpage
+\appendix
+\section{}
+\includepdf[pages=-, scale=0.7]{README.pdf}
 \end{document}
