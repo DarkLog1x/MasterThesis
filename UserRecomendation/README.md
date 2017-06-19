@@ -1,6 +1,17 @@
 User recommendations to secure virtual machines in OpenStack
 ============================================================
 
+User Recommendation
+-------------------
+
+* ssh is the mechanism in which one should connect to cloud systems. It is a set of tools and protocols set to help ensure a secure connection between ones computer and server. 
+* A proper ssh key pair should be used. The key should be at least 2048 bits long and should have a password on it. This will ensure that even if the key is compromised no one would be able to use the key to get into any systems. One should never use user name and password authentication over ssh. There are a lot of bots on the Internet that attempt to break into systems that have week user name and password combinations in ssh. 
+* Once a key pair is created and the key is uploaded the private key should be securely held on the users computer. 
+* On the OpenStack side, users should use correct security groups for their machines. A security group is a way to define what ports a VM can access or be accessed by. This helps prevent unwanted exposure to ports on the machines. 
+* One should be aware of what services are run on each VM. These services may have open ports that enlarge the attack surface of the VM. These should either be turned off or the port should be blocked or filtered using the local firewall on the computer. 
+* Users of VMs should have a security mindset. This will greatly lower any potential vulnerabilities and is one of the best wes to prevent system compromise. 
+
+
 Securing access to the Virtual Machine
 --------------------------------------
 
