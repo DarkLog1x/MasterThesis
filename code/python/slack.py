@@ -49,6 +49,7 @@ def main():
     slack = Slacker(b)
     global channelName
     channelName = GroupName[1].replace(" ", "_")
+    channelName = channelName.replace("/", "_")
     try:
         print slack.channels.create('#' + channelName)
     except:
@@ -61,7 +62,7 @@ def main():
 
     slackBot(slack_client, bot_id, incorrectVMS)
     # OSq.OpenStackQuery()
-    # repeatBot([], incorrectVMS, slack_client, channelName)
+    repeatBot([], incorrectVMS, slack_client, channelName)
 
 
 ##
