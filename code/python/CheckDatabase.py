@@ -30,7 +30,7 @@ def ProperConfig():
 def dbConnect():
     client = MongoClient('localhost', 27017)
     db = client.vm_database
-    return db.vms
+    return db.vms_tmp
 
 
 def ConfigCheck(commands, serverID):

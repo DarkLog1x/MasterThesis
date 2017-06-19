@@ -140,9 +140,9 @@ def handle_command(slack_client, command, channel):
         response = [
             "The following are accepted:\"openstackinfo (\"serverlist\", \"routerlist\", \" networklist\", \"securitygroups\")\", \"vmproblems *ID*\", \"vmdatabase *ID* \", \"vmstatus *key* *value*\" , \"fullreport\" ", "Example: @isaas fullreport"]
     elif input[0] == "vmdatabase":
-        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[2])
+        response = CheckDatabase.DatabaseCheckGetFullDatabase(input[1])
     elif input[0] == 'vmstatus':
-        response = CheckDatabase.FindSelected(input[2], input[3])
+        response = CheckDatabase.FindSelected(input[1], input[2])
     elif input[0] == 'fullreport':
         response = CheckDatabase.DatabaseCheckFull()
     elif input[0] == 'openstackinfo':

@@ -3,5 +3,5 @@
 #host2 ansible_ssh_host=130.239.81.63 ansible_ssh_private_key_file=/home/groot/Documents/Uppsala/masterThesis/code/ssh_keys/hostKeys ansible_user=ubuntu ansible_python_interpreter=/usr/bin/python3
 #host3 ansible_ssh_host=130.239.81.72 ansible_ssh_private_key_file=/home/groot/Documents/Uppsala/masterThesis/code/ssh_keys/hostKeys ansible_user=ubuntu ansible_python_interpreter=/usr/bin/python3
 #host3 ansible_ssh_host=130.239.81.87 ansible_ssh_private_key_file=/home/groot/Documents/Uppsala/masterThesis/code/ssh_keys/hostKeys ansible_user=ubuntu ansible_python_interpreter=/usr/bin/python3
-host3 ansible_ssh_host=130.239.81.8 ansible_ssh_private_key_file=/home/groot/Documents/Uppsala/masterThesis/code/ssh_keys/hostKeys ansible_user=ubuntu ansible_python_interpreter=/usr/bin/python3
+host3 ansible_ssh_host=130.239.81.168 ansible_ssh_private_key_file=/home/groot/Documents/Uppsala/masterThesis/code/ssh_keys/hostKeys ansible_user=ubuntu ansible_python_interpreter=/usr/bin/python3
 
