@@ -4,6 +4,7 @@
 \graphicspath{{./}}
 \usepackage{wrapfig}
 \usepackage{dirtytalk}
+\usepackage[table,xcdraw]{xcolor}
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{url}
@@ -148,6 +149,9 @@ One of the main aspects of OpenStack is a tool called Heat \cite{HeatOS}. Heat i
     \caption{OpenStack Cloud System}
 \end{figure}
 
+\section{SNIC Science Cloud}
+At Uppsala University there is an OpenStack deployment. This is allows professors and students to utilize cloud recourses for projects and courses.  The Swedish National Infrastructure for Computing (SNIC) is a collaboration project via several institutions to provide large scale cloud recourses computation recourses to academia. 
+
 %What relsea, functionalities
 %This projec thas a core interest in nova, etc.
 
@@ -172,8 +176,26 @@ System security aims to protect running systems from malicious code execution. A
 \subsection{User Level Security}
 User level security how reliant on how well users understand threats and access risks \cite{stanton2005analysis}. As users are the main proprietor of systems they hold the keys to ensuring that a system is safe from malicious adversaries. It however is problematic as many users don't understand system security and are not interested in learning it. The users then perform actions that compromise system security such as using weak passwords, opening ports to the Internet, and running unknown programs.
 
+\subsection{Cloud Security Risks}
+Cloud security poses several risk that are different from 
+- account takeover
+- ssh eaknesses
+- no teams
+- users
+
+
 \section{User Recommendation}
-The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some security features in the OpenStack platform. This involved taking the two main problems that the SNIC team faced: poorly secured SSH access and open ports. For starters the recommendation describes shat SSH is and how to use proper key pair authentication. The guild then goes onto describing ports and how to configure good security rules in OpenStack to prevent exposed ports. The full readme can be found in the appendix.
+The first stage of this project involved setting up user recommendations for configuring a secure VM and understanding some security features in the OpenStack platform. This involved taking the two main problems that the SNIC team faced: poorly secured SSH access and open ports. For starters the recommendation describes shat SSH is and how to use proper key pair authentication. The guild then goes onto describing ports and how to configure good security rules in OpenStack to prevent exposed ports. Below is a shortened list while the full readme can be found in the appendix. 
+
+\begin{itemize}
+    \item ssh is the mechanism in which one should connect to cloud systems. It is a set of tools and protocols set to help ensure a secure connection between ones computer and server. 
+    \item A proper ssh key pair should be used. The key should be at least 2048 bits long and should have a password on it. This will ensure that even if the key is compromised no one would be able to use the key to get into any systems. One should never use user name and password authentication over ssh. There are a lot of bots on the Internet that attempt to break into systems that have week user name and password combinations in ssh. 
+    \item Once a key pair is created and the key is uploaded the private key should be securely held on the users computer. 
+    \item On the OpenStack side, users should use correct security groups for their machines. A security group is a way to define what ports a VM can access or be accessed by. This helps prevent unwanted exposure to ports on the machines. 
+    \item One should be aware of what services are run on each VM. These services may have open ports that enlarge the attack surface of the VM. These should either be turned off or the port should be blocked or filtered using the local firewall on the computer. 
+    \item Users of VMs should have a security mindset. This will greatly lower any potential vulnerabilities and is one of the best wes to prevent system compromise. 
+
+\end{itemize}
 
 \section{Design Implementation}
 A key part of this project was to create a simplistic interface that would allow an administrator to view changes to the environment and query for more information. Some base goals were created: scalability, ease of use, and intuitiveness. As the system is designed to be deployed over several cloud groups we needed a messaging system that could handle such a task. Email was first considered however it was soon realized that email would not work well due to the frequency of data sent and then inability to interact with the service. The next consideration was Internet Relay Chat (IRC), however as IRC is relatively unused in the professional work environment and users would need to learn how to interact with the protocol that idea was abandoned. Therefor as a final solution it was decided to work to build the messaging solution using Slack. This matched all of our starting criteria and allowed for a clean and simple implementation. Slack is a messaging application that allows groups of users to interact with one another in channels or directly. Once of the really neat features of this is the ability to program bots for users to interact with. Therefor the decision was made to create a bot that would interact with a channel for each cluster of machines. The bot would update the channel with any new information that the scan found ensuring that a constant flow was preserved. Users are also able to query to bot directly and get more information about the environment. This allows seamless integration between getting information from the environment and being able to dive deeper and investigate a machine.
@@ -181,7 +203,8 @@ A key part of this project was to create a simplistic interface that would allow
 For the first part of the project a modular design was created to enable further types of scanning to be added. An important aspect when designing the "watchdog" system with as little privileges as possible to prevent any unnecessary security holes. The watchdog is a phrase that was used throughout the project to describe the machine that performed all of the scanning. The following is a diagram of an example cloud environment.
 
 \begin{figure}[H]
-    \includegraphics[scale=.3]{./pic/flowchart.png}
+    \centering
+    \includegraphics[scale=.4]{./pic/Picture1.png}
 \end{figure}
 
 The "watchdog" is initiated in the cloud cluster. The once initiated the VM will connect to the OpneStack Control Plain and get the list of servers, IP's, and floating IP's. Once that information is retreated the different modules will be run. In this standard case the two modules created were for nmap and ssh\_scan. Nmap is a tool used to scan a local or external network nd view what machines are funning on it. Nmap will be able to scan the machines ports and tell which ones are open and what services are running on them. It will also try and guess heuristically the operating system that is being run on the machine. This tool is therefor used in this system to find machines that have open ports and to see what services are run on them. If a service or port is found to not follow the recommendation then the VM can be terminated. The ssh\_scan tool is used to ensure that only a public private key pair are used. It will scan port 22 and alert if any other form of authentication is used.
@@ -208,16 +231,16 @@ The Slack bot uses the slack API to communicate with the Slack web interface.
 \subsection{Tools}
 For this project there were several external tools that were used. These tools were picked to perform specific tasks like collect ssh configuration data.
 
-\subsubsection{Nmap}
-Nmap is a network scanning solution that can be used to scan for open ports, running services, network topography, and others \href{https://nmap.org/}{https://nmap.org/}. Nmap allows for scanned data to be saved into an \.xml file that can then be filtered and input into the database.
+\subsubsection{Nmap - Network Scanning Tool}
+Nmap is a network scanning solution that can be used to scan for open ports, running services, network topography, and others \footnote{\href{https://nmap.org/}{https://nmap.org/}}. Nmap allows for scanned data to be saved into an \.xml file that can then be filtered and input into the database.
 
-\subsubsection{ssh\_scan}
-Ssh\_scan is another tool used to gather information about remote ssh configurations. It is able to detect the type of authentication, ssh protocol used, and several others \href{https://github.com/mozilla/ssh\_scan}{https://github.com/mozilla/ssh\_scan}. The output is saved to a json file that is then read into the database.
+\subsubsection{ssh\_scan - SSH Security Auditing Tool}
+Ssh\_scan is another tool used to gather information about remote ssh configurations. It is able to detect the type of authentication, ssh protocol used, and several others \footnote{\href{https://github.com/mozilla/ssh\_scan}{https://github.com/mozilla/ssh\_scan}}. The output is saved to a json file that is then read into the database.
 
 \subsubsection{Slack Bot}
 Slack bot is a small bot built on top of the Slack api to display information form the database and query data in real time. The bot will connect to a channel specifically created for each cloud cluster. There the bot will print relevant information from the database. One of the advantages that Slack provides is the ability to communicate between the users and the bots. Users are also able to query the database via the bot, this allows an administrator to quickly find a problem and find information about that machine with ease.
 
-\subsubsection{ansible}
+\subsubsection{Ansible - Sever Orchestration Tool}
 Ansible is a tool designed to automate system deployment. The tool has a scripting language that describes steps for systems to be configured.
 \begin{mdframed}
 \begin{lstlisting}
@@ -248,25 +271,31 @@ Ansible is a tool designed to automate system deployment. The tool has a scripti
 
 In the above example for all hosts in a separate host file the system will login as "ubuntu" and install the list of programs using $apt-get$. The default connection ot each host is done via SSH where the user points the ansible program to their private key.  This tool is used to deploy complex environments with little hassle.  As this project was also designed to be easily deployed ansible was chosen. There are several other tools such as Puppet or Chef. However prior knowledge and usability determined the software chose. 
 
-\subsubsection{git}
-An important tool used throughout this project was git. Git is a version control system that keeps track of all changes to files. In addition it allows for uploading of these changes to websites like GitHub and Bitbucket. This creates a viewable time line of all changes to the code base as well as provides a backup in the cloud in case of a system failure. 
+\subsubsection{Git - Source Control}
+An important tool used throughout this project was git. Git is a version control system that keeps track of all changes to files. In addition it allows for uploading of these changes to websites like GitHub\footnote{\href{https://www.github.com}{https://www.github.com}} and Bitbucket \footnote{\href{https://www.bitbucket.org}{https://www.bitbucket.org}}. This creates a viewable time line of all changes to the code base as well as provides a backup in the cloud in case of a system failure. 
 
 \section{System Interaction}
 One of the important aspects of the system that was create was intractability. We wanted to present the administrator with a tool that would allow them to gain all the information that they wanted about a system. We wanted the user to be able to intact with a bot, and have the bot respond with the relevant information that the user wanted. The system should be fluid and informative, without the user having to switch between different programs to find relevant information. To communicate with the bot, the user simply calls the bot using the $@$ sign and then the command. 
 
 The picture bellow show the help command. 
-\begin{figure}[ht]
-    \includegraphics[scale=.5]{./pic/2017-06-13-184017_652x280_scrot.png}
+\begin{figure}[H]
+    \begin{mdframed}
+    \includegraphics[scale=.5]{./pic/2017-06-26-113851_606x161_scrot.png}
+    \end{mdframed}
 \end{figure}
 
 The picture below shows how a full report for a project can be generated.
-\begin{figure}[ht]
-    \includegraphics[scale=.5]{./pic/2017-06-13-183745_677x229_scrot.png}
+\begin{figure}[H]
+    \begin{mdframed}
+    \includegraphics[scale=.5]{./pic/2017-06-26-113829_608x740_scrot.png}
+    \end{mdframed}
 \end{figure}
 
 The picture below shows how to call another bot and retrieve a projects router information.
-\begin{figure}[ht]
-    \includegraphics[scale=.5]{./pic/2017-06-13-183710_855x179_scrot.png}
+\begin{figure}[H]
+    \begin{mdframed}
+    \includegraphics[scale=.5]{./pic/2017-06-26-113808_563x789_scrot.png}
+    \end{mdframed}
 \end{figure}
 
 \section{Tests}
@@ -275,7 +304,7 @@ The system was designed and created in a testing environment. The environment wa
 \section{Results}
 
 \subsection{User Recommendation}
-A user recommendation was written to help users properly connect to initialized VMs. The recommendation focuses on how to connect to the VMs using a proper ssh key. The guild first walks thought how to set up a ssh key pair on a users local machine. This ensures that a user creates a proper strong key pair. The user is then instructed on how to add the public key to the OpenStack interface. Along with the ssh connection other simple recommendations are provided to the user. These are to help a user understand the different security implications no mater what they use the VM for. Some examples of what the recommendations looks at are, open ports and security rules. The user recommendation can be found at the following \href{link}{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}
+A user recommendation was written to help users properly connect to initialized VMs. The recommendation focuses on how to connect to the VMs using a proper ssh key. The guild first walks thought how to set up a ssh key pair on a users local machine. This ensures that a user creates a proper strong key pair. The user is then instructed on how to add the public key to the OpenStack interface. Along with the ssh connection other simple recommendations are provided to the user. These are to help a user understand the different security implications no mater what they use the VM for. Some examples of what the recommendations looks at are, open ports and security rules. The user recommendation can be found at the following url \footnote{\href{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}}
 
 \subsection{Intrusion Detection System Results}
 The administrators first create a configuration file for the cloud system. This configuration file is set for the system to know what type of system configuration the servers should have. Below is a typical configuration:
@@ -298,24 +327,41 @@ The file is read in line by line. All lines that start with a \# are comments an
 
 Once the base system was running in our test environment a decision to scale up was made. Our test environment was compatible however a real environment with more machines and users could not have been replicated. Luckily a class was taking place that used the cloud environment. Therefor a watchdog vm was spun up in the classes cloud cluster and started to monitor the vms that were created. Immediately vms started to appear in the Slack channel. After running for a while inconsistencies were started to be found. A small snippet of the Slack channel is shown bellow. In this section 5 machines are shown, 3 of them have inconsistencies that are not in the configuration file.
 
-Servers with the ids of $930ee1bb-e07a-461f-b09f-1e1a9c864a36$ and $81933a08-9451-4d16-aca4-9fb6269b4e0d$ both have 3 ports that are open but should not be. The more concerning vm is $f57b9369-4e15-4151-9b0b-7d405cbdb5e4$. We see that this vm allows for access with password bases authentication. The two machines ($ad74be2b-e452-43df-b307-d8ad3bcd6cb7$ and $6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7$) have been created and follow the configuration therefor only the server ID is shown.
+The following table describes how the output of the Slack bot will look like. 
+
+\begin{table}[H]
+\centering
+\caption{Slack Ouput Breakdown}
+\label{Slack Ouput Breakdown}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{2cm}|p{6cm}|p{8cm}|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+Line Number & VM ID & Description \\ \hline
+1.            &  930ee1bb-e07a-461f-b09f-1e1a9c864a36     & There are 3 open ports (lines 2-4) that should be closed.  \\ \hline
+5.            &  f57b9369-4e15-4151-9b0b-7d405cbdb5e4     & The VM allows for user authentication via a username and password.            \\ \hline
+10.            &  81933a08-9451-4d16-aca4-9fb6269b4e0d     & There are 3 open ports (lines 2-4) that should be closed.            \\ \hline
+9. and 14. &  ad74be2b-e452-43df-b307-d8ad3bcd6cb7 and  6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7    & The VMs are running and follow the configuration.             \\ \hline
+\end{tabular}
+}
+\end{table}
 
 \begin{mdframed}
 \begin{lstlisting}
-    --Server With ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36
-    Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8088 has been found open and is not in the config
-    Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8042 has been found open and is not in the config
-    Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8031 has been found open and is not in the config
-    --Server With ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4
-    Server ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4 |  ip_external_auth: publickey password keyboard-interactive -- Should be = publickey
-    Server ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4 |  ip_internal_auth: publickey password keyboard-interactive -- Should be = publickey
-    Server ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4 |  OpenSSH on port 22 is version: 7.4 -- Should be = 7.2p2 Ubuntu 4ubuntu2.1
-    --Server With ID: ad74be2b-e452-43df-b307-d8ad3bcd6cb7
-    --Server With ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d
-    Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8088 has been found open and is not in the config
-    Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8042 has been found open and is not in the config
-    Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8031 has been found open and is not in the config
-    --Server With ID: 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7
+ 1.   --Server With ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36
+ 2.   Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8088 has been found open and is not in the config
+ 3.   Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8042 has been found open and is not in the config
+ 4.   Server ID: 930ee1bb-e07a-461f-b09f-1e1a9c864a36 | 8031 has been found open and is not in the config
+ 5.   --Server With ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4
+ 6.   Server ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4 |  ip_external_auth: publickey password keyboard-interactive -- Should be = publickey
+ 7.   Server ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4 |  ip_internal_auth: publickey password keyboard-interactive -- Should be = publickey
+ 8.   Server ID: f57b9369-4e15-4151-9b0b-7d405cbdb5e4 |  OpenSSH on port 22 is version: 7.4 -- Should be = 7.2p2 Ubuntu 4ubuntu2.1
+ 9.   --Server With ID: ad74be2b-e452-43df-b307-d8ad3bcd6cb7
+ 10.   --Server With ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d
+ 11.   Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8088 has been found open and is not in the config
+ 12.   Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8042 has been found open and is not in the config
+ 13.   Server ID: 81933a08-9451-4d16-aca4-9fb6269b4e0d | 8031 has been found open and is not in the config
+ 14.   --Server With ID: 6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7
 \end{lstlisting}
 \end{mdframed}
 
