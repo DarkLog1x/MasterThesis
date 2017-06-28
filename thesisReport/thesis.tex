@@ -39,7 +39,7 @@
 \newpage
 
 \section{Introduction}
-The last several years cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a business.  With it has its exposer so has the cyber security epidemic \cite[kellerman2010cyber]. Cloud systems are now a major target for cyber criminals.  
+The last several years cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a business.  With it has its exposer to the cyber security epidemic \cite{kellerman}; cloud systems are now a major target for cyber criminals. 
 
 \begin{figure}[ht]
     \centering
@@ -47,7 +47,8 @@ The last several years cloud computing has steadily grown (Figure \ref{fig:Cloud
     \caption{Cloud computing trend from Google Trends. Shows the interest in cloud computing between the years of 2004 to 2017. \cite{GoogleTrendsCloud}}
     \label{fig:CloudTrendGoogle}
 \end{figure}
-It is almost on a weekly bases that news of another security breach has effected a company. As cloud computing is becoming more and more popular, corporations are switching over to this new model. This switch brings about new challenges, especial in the security space involving cloud systems. The large majority of these cloud computing systems are provided as public clouds, these are further described below. However another sector of cloud computing called private clouds has recently been gaining popularity \ref{fig:PrivCloudTrendGoogle}. As private clouds don't have the backing of large corporations dedicated to ensuring a secure environment vulnerabilities can become present. 
+
+It is almost on a weekly bases that news of another security breach has effected a company. As cloud computing is becoming more and more popular, corporations are switching over to this new model. This transition brings about new challenges, especial in the security space involving cloud systems. The large majority of these cloud computing systems are provided as public clouds like Amazon AWS \cite{amazonAWS} or Microsoft Azure \cite{Azure2017}. However another sector of cloud computing called private clouds has recently been gaining popularity \ref{fig:PrivCloudTrendGoogle}. As private clouds don't have the backing of large corporations dedicated to ensuring a secure environment vulnerabilities can become present. 
 
 \begin{figure}[ht]
     \centering
@@ -62,11 +63,13 @@ The work done in this thesis was done with the intention of facilitating securit
 As can be seen in figure \ref{fig:CloudTrendGoogle} cloud computing space has grown over the last several years. Business and academia are looking at solutions to migrate their existing infrastructure to the cloud. There are several reasons for this type of business shift: costs, scalability, reliability \cite{DillonWuChang}. The cloud offers some precedented advantages to a standardized computational model. One is able to pay for only the resources used, with more resources added/removed depending on the demand. Another advantage is the ability to spin up/destroy several machines with little overhead. Several companies are fronting the cloud revolution, some examples are Amazon\cite{amazonaws2017}, Google\cite{GoogleCloudCompute2017}, Microsoft\cite{Azure2017}, and Digital Ocean\cite{DigitalOcian2017}. These companies are providing a public cloud environment, that is to say that anyone can pay for computer resources. A user needs to sign up, provided a credit card, and then start setting up and launching whatever configuration of system they would like.
 
 \begin{figure}[ht]
+    \centering
     \includegraphics[scale=.2]{./pic/2017-05-24-114324_946x962_scrot.png}
-    \caption{Google cloud interface}
+    \caption{Google cloud interface for controlling VMs}
+    \label{fig:GoogleInterface}
 \end{figure}
 
-The provider will then dedicate the specified hardware and allow the user to login that virtual machine and run whatever tasks the user would like to do. These public entities typically have teams dedicated to security and infrastructure monitoring. These teams have created proprietary solutions to ensure that the cloud environment \cite{SecAmazon} stay secure. As these security systems are a selling point for companies they are kept proprietary. 
+The provider will then dedicate the specified hardware and allow the user to login that virtual machine and run whatever tasks the user would like to do. An example of the Goolge cloud compute engine is shown in figure \ref{fig:GoogleInterface}.  These public entities typically have teams dedicated to security and infrastructure monitoring. These teams have created proprietary solutions to ensure that the cloud environment \cite{SecAmazon} stay secure. As these security systems are a selling point for companies they are kept proprietary. 
 
 A private cloud is a different type of model where the cloud infrastructure is physically set inside a companies domain. Many companies that would like to move over to a cloud based model but do not want to migrate there private recourses into public domain. Other companies such as RackSpace, IBM, and VMware are providing private / hybrid cloud resources. This approach has the part or the entire system built on site at the client. This allows the client to have most of the benefits of the cloud but also keep the system within there network. These clients typically don't have the recourses to create or manage a cloud security system. 
 
