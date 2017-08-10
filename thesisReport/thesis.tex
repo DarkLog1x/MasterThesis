@@ -137,7 +137,7 @@ Cloud computing also has a different threat model compared to a normal dedicated
 \end{itemize}
 
 \section{OpenStack}
-OpenStack is an open source platform for cloud computing \cite{wiki:OpenStack}. OpenStack is built of many components that are designed to provide a different set of services (Nova, Neutron, etc.) the full list can be found on the open stack website located \href{https://www.openstack.org/software/project-navigator/}{here}. OpenStack is very scalable and diverse system that can be arranged to fit the needs of any cloud environment. For this project we ran OpenStack newton version 15.0.0.0.rc1. OpenStack is very modular with several core features running as the backbone of the software. The features that were used for this project were: Nova, Neutron, and Swift.
+OpenStack is an open source platform for cloud computing \cite{OpenStack}. OpenStack is built of many components that are designed to provide a different set of services (Nova, Neutron, etc.) the full list can be found on the open stack website located \footnote{ \href{https://www.openstack.org/software/project-navigator/}{https://www.openstack.org/software/project-navigator/}}. OpenStack is very scalable and diverse system that can be arranged to fit the needs of any cloud environment. For this project we ran OpenStack newton version 15.0.0.0.rc1. OpenStack is very modular with several core features running as the backbone of the software. The features that were used for this project were: Nova, Neutron, and Swift.
 
 Nova is the service that provides access to OpenStack compute resources. It is the base service that a user would interact with the set up, run, configure, and destroy machines. Neutron is the service that controls and configures all of the networking between machines and the external network. This interlinks the Nova instances with the physical networking infrastructure.  Swift is the platform that is used for object and blob storage. It provides a large space for images, snapshots, and other storage needs to be assigned to. 
 
@@ -145,7 +145,7 @@ One of the main aspects of OpenStack is a tool called Heat \cite{HeatOS}. Heat i
 \begin{figure}[H]
     \centering
     \includegraphics[scale=.6]{./pic/openstack-sm.png}
-    \label{fig:Hypervisors}
+    \label{fig:OpenStack}
     \caption{OpenStack Cloud System}
 \end{figure}
 
