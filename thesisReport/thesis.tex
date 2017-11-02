@@ -8,6 +8,7 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{breakurl}
 \usepackage{pdfpages}
 \usepackage{float}
 \usepackage{mdframed}
@@ -16,30 +17,16 @@
     breaklines=true
 }
 
-\title{%
-    GROOT: Infrastructure Security as a Service (ISaaS)\\
-    \large Implementing Security Rules, Safeguards, and IPS tools for Private Cloud Infrastructures}
-
-
-\author{Author \\
-Aleksander Okonski \\
-    aleksander.okonski.1656@student.uu.se \\
-    aleksander.oko@gmail.com \\
-    \vspace{2cm}
-    \\
-    Supervisor: Salman Toor \\
-    Review: Bjorn Victor }
-\date{}
 
 
 \begin{document}
-\maketitle
+\includepdf{thesis_cover}
 \newpage
 \tableofcontents
 \newpage
 
 \section{Introduction}
-The last several years, cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a platform for businesses. Cloud computing is a term to describe computational resources that are located on a server running a software layer that disenfranchises the two. This allows for software to run independently of the hardware and allows a middle layer to control how the two interact. Cloud computing is not a new phenomenon\cite{rochwerger2009reservoir}.
+Cloud computing is a term to describe computational resources that are located on a server running a software layer that disenfranchises the hardware and software. This allows for software to run independently of the hardware and allows a middle layer to control how the two interact. Cloud computing is not a new phenomenon\cite{rochwerger2009reservoir}, it had its origin's in the early 2000's \cite{rochwerger2009reservoir}. The last several years, cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a platform for businesses.
 
 \begin{figure}[ht]
     \centering
@@ -48,11 +35,13 @@ The last several years, cloud computing has steadily grown (Figure \ref{fig:Clou
     \label{fig:CloudTrendGoogle}
 \end{figure}
 
-Cloud computing can be divided into 3 different categories: public, private, and hybrid.  The two main categories are public and private with the hybrid a mixture of the two. The later two are separated by two main categories, finances and physical location. Public clouds allow anyone to pay for the recourses that the individual would like to use. Therefore a user can spin up a virtual machine (VM) and then only pay for the amount of time that they use the resource. These VMs that a user spins up are usually hosted in data centers owned by the cloud provider. This means that the data the user puts onto the servers are stored on the cloud providers servers. The large players in this space are Amazon AWS \cite{amazonAWS} and Microsoft Azure \cite{Azure2017}. Private clouds typically only allow users of a particular organization to gain access to their recourses. Once the users gain access they may still need to pay for usage. The private clouds are simply more restrictive on who gains access the cloud resource. In addition, private clouds are hosted on the organization's premise.  This means that the servers hosting the cloud are located in the organization and use the organization's network. This allows users to spin up VMs and have the data and computations happen on premise.
+Cloud computing can be divided into 3 different categories: public, private, and hybrid.  The two main categories are public and private with the hybrid a mixture of these. Public and private clouds are separated by two main categories, finances and physical location. Public clouds allow anyone to pay for the resources that they would like to use. Therefore a user can spin up a virtual machine (VM) and then only pay for the amount of time that they use the resource. These VMs that a user spins up are usually hosted in data centers owned by the cloud provider. This means that the data the user puts onto the servers are stored on the cloud providers servers.
 
-What the cloud provides to users ranges depending on the feature set of the cloud and the user's needs. As a minimum, the cloud can typically create new virtual machines (VMs) that the user then has root access to. The users are then free to run any program they like. As cloud systems become more advanced with ever-expanding user needs, more and more companies and individuals are migrating over to the cloud\cite{kondo2009cost}.
+The large players in this space are Amazon AWS \cite{amazonAWS} and Microsoft Azure \cite{Azure2017}. Private clouds typically only allow users of a particular organization to gain access to their recourses. Once the users gain access they may still need to pay for usage. The private clouds are simply more restrictive on who gains access the cloud resource. In addition, private clouds are hosted at the organization's premise.  This means that the servers hosting the cloud are located in the organization and use the organization's network. This allows users to spin up VMs and have the data and computations happen on premise.
 
-The year 2017 is shaping up to have some of the largest number of public attacks on computer systems \cite{newman_2017}. Cloud systems and the VMs that run on top of them are starting to be a major target for cybercriminals \cite{kellerman}. This transition to the cloud brings about new challenges, especially in the security space involving cloud systems. The user's of the cloud spin up systems that have direct access to the Internet. These machines are susceptible to attacks especially with users not understanding the best practices in security \cite{ng2009studying,}. Users who configure software poorly lead to bugs and an expanded attack surface that then can be compromised.  Public cloud providers have created proprietary solutions to help mitigate having their users systems compromised. However private clouds do not have the manpower or funds to be able to tackle such a threat.
+What the cloud provides to users varies depending on the feature set of the cloud and the user's needs. As a minimum, the cloud can typically create new virtual machines (VMs) that the user then has root access to. The users are then free to run any program they like. As cloud systems become more advanced with ever-expanding user needs, more and more companies and individuals are migrating over to the cloud\cite{kondo2009cost}. This expenditure leads to a larger possibility for cyder attacks.
+
+The year 2017 already has some of the largest number of public attacks on computer systems \cite{newman_2017}. Cloud systems and the VMs that run on top of them are starting to be a major target for cyder criminals \cite{kellerman}. The transition to the cloud brings about new challenges, especially in the security space involving cloud systems. The users of the cloud spin up systems that have direct access to the Internet. These machines are susceptible to attacks especially with users not understanding the best practices in security \cite{ng2009studying}. Users who configure software poorly lead to a greater risk of bugs and an expanded attack surface that can then be compromised.  Public cloud providers have created proprietary solutions to help mitigate having their users systems compromised. However private clouds do not have the manpower or funds to be able to tackle such a threat.
 
 \iffalse
 It is almost on a weekly bases that news of another security breach has effected a company \cite{newman_2017}.
@@ -228,6 +217,7 @@ Slack bot is a small bot built on top of the Slack api to display information fo
 
 \subsubsection{Ansible - Sever Orchestration Tool}
 Ansible is a tool designed to automate system deployment. The tool has a scripting language that describes steps for systems to be configured.
+\newpage
 \begin{mdframed}
 \begin{lstlisting}
 ---
@@ -270,6 +260,7 @@ The picture bellow show the help command.
     \end{mdframed}
 \end{figure}
 
+\newpage
 The picture below shows how a full report for a project can be generated.
 \begin{figure}[H]
     \begin{mdframed}
@@ -277,6 +268,7 @@ The picture below shows how a full report for a project can be generated.
     \end{mdframed}
 \end{figure}
 
+\newpage
 The picture below shows how to call another bot and retrieve a projects router information.
 \begin{figure}[H]
     \begin{mdframed}
@@ -292,6 +284,7 @@ The system was designed and created in a testing environment. The environment wa
 \subsection{User Recommendation}
 A user recommendation was written to help users properly connect to initialized VMs. The recommendation focuses on how to connect to the VMs using a proper ssh key. The guild first walks thought how to set up a ssh key pair on a users local machine. This ensures that a user creates a proper strong key pair. The user is then instructed on how to add the public key to the OpenStack interface. Along with the ssh connection other simple recommendations are provided to the user. These are to help a user understand the different security implications no mater what they use the VM for. Some examples of what the recommendations looks at are, open ports and security rules. The user recommendation can be found at the following url \footnote{\href{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}}
 
+\newpage
 \subsection{Intrusion Detection System Results}
 The administrators first create a configuration file for the cloud system. This configuration file is set for the system to know what type of system configuration the servers should have. Below is a typical configuration:
 
@@ -313,9 +306,9 @@ The file is read in line by line. All lines that start with a \# are comments an
 
 Once the base system was running in our test environment a decision to scale up was made. Our test environment was compatible however a real environment with more machines and users could not have been replicated. Luckily a class was taking place that used the cloud environment. Therefor a watchdog vm was spun up in the classes cloud cluster and started to monitor the vms that were created. Immediately vms started to appear in the Slack channel. After running for a while inconsistencies were started to be found. A small snippet of the Slack channel is shown bellow. In this section 5 machines are shown, 3 of them have inconsistencies that are not in the configuration file.
 
-The following table describes how the output of the Slack bot will look like.
+The table on the next page describes how the output of the Slack bot will look like. Bellow the table is the output from the Slack channel.
 
-\begin{table}[H]
+\begin{table}[htb]
 \centering
 \caption{Slack Ouput Breakdown}
 \label{Slack Ouput Breakdown}
@@ -326,11 +319,13 @@ The following table describes how the output of the Slack bot will look like.
 Line Number & VM ID & Description \\ \hline
 1.            &  930ee1bb-e07a-461f-b09f-1e1a9c864a36     & There are 3 open ports (lines 2-4) that should be closed.  \\ \hline
 5.            &  f57b9369-4e15-4151-9b0b-7d405cbdb5e4     & The VM allows for user authentication via a username and password.            \\ \hline
-10.            &  81933a08-9451-4d16-aca4-9fb6269b4e0d     & There are 3 open ports (lines 2-4) that should be closed.            \\ \hline
+10.            &  81933a08-9451-4d16-aca4-9fb6269b4e0d     & There are 3 open ports (lines 11-13) that should be closed.            \\ \hline
 9. and 14. &  ad74be2b-e452-43df-b307-d8ad3bcd6cb7 and  6e19b2a1-1dbd-4fe1-83d6-8e57cdd08ff7    & The VMs are running and follow the configuration.             \\ \hline
 \end{tabular}
 }
 \end{table}
+
+\newpage
 
 \begin{mdframed}
 \begin{lstlisting}
@@ -351,9 +346,10 @@ Line Number & VM ID & Description \\ \hline
 \end{lstlisting}
 \end{mdframed}
 
-Once a potential problem was found the \emph[bot] can be queried to get a full report of the virtual machine in question.
+\newpage
+Once a potential problem was found the \emph{bot} can be queried to get a full report of the virtual machine in question. This can be seen in the output bellow.
 
-\begin{figure}
+\begin{figure}[H]
 \begin{mdframed}
 \begin{lstlisting}
     Tenant name: SNIC 2017/13-8
@@ -399,14 +395,19 @@ Once a compromised machine has been found a copy of the memory, disk, and system
 The data that the script pulled is a disk image, the memory of the machine, and the cpu state. The disk image saves the state of the hard drive and allows for the machine to be recreated if need be. The memory is saved as a raw memory dump. This creates a large file that represents the active memory from the virtual machine. Lastly the cpu state is saved to show the cpu usage. These 3 items provide a comprehensive overview of what the machine was doing at the time. This would then allow an administrator to further figure out the cause of the exploit. The administrator could use tools like volatility framework \cite{volitilityFram} to then import the memory dump and then attempt to find what programs nad services were running on the machine.
 
 \section{Discussion}
-Throughout the project an attempt was made to ensure that the project was well designed and created. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame. The current implementation utilizes a individual VM for every cluster. This increases resources use quickly, if a cloud system had 100 clusters then there would be 100 VMs that would only be used for monitoring. It would be beneficial if it was possible to have a smaller number of VMs used to scan multiple clusters. However the current system is unable to perform this type of task. Currently Slack is used as a medium to communicate between the administrators and the scanning mechanism. This has proved to be an interesting tool allowing for bidirectional communication and quick information retrieval. However the reliance on Slack may be jeopardized if Slack decides to change their api's, limit bots, or goes out of business. Luckily the system was designed in such a way to allow any communication medium to be added to the system. Therefor if Slack does not continue to meet the standards that an organization needs another tool can be used to replace Slack with ease. Some alternatives to Slack could be HipChat or IRC.
+Throughout the project every attempt was made to ensure that the project was well designed and created. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame.
+
+The current implementation utilizes a individual VM for every cluster. This increases resource usage quickly. If a cloud system had 100 clusters then there would be 100 VMs that would only be used for monitoring. It would be beneficial if it was possible to have a smaller number of VMs used to scan multiple clusters. However the current system is unable to perform this type of task.
+
+Currently Slack is used as a medium to communicate between the administrators and the scanning mechanism. This has proved to be an interesting tool allowing for bidirectional communication and quick information retrieval. However the reliance on Slack may be jeopardized if Slack decides to change their api, limit bots, or goes out of business. Luckily the system was designed in such a way to allow any communication medium to be added to the system. Therefor if Slack does not continue to meet the standards that an organization needs another tool can be used to replace Slack with ease. Some alternatives to Slack could be HipChat or IRC.
+
 An issue that was ran into later during the creation of the project was that the Slack channel would get cluttered if a lot of different devices were not following the configuration file. One way to sort out the higher risk targets would be to add symbol's. These symbol's would be able to indicate the severity level / risk that each output would pose. The severity level would have to be decided by the administrative team. Some ideas to fix this were thought of but were not implemented due to time constraints.
 
 \section{Future Work}
-The project has a large potential to be expanded. As the code written now is only a prototype there is more work that can be added to expand the tools usefulness. As the code is created with modularity in mind, a user can easily add new scans into the project. If a user wanted, for example, to ensure that a website is correctly configured they could add the nikto \cite{NiktoScan} vulnerability scanner. The scan can then be run and the data would be added to the database. Another future work that could be expanded on is allowing for different methods of interacting with the system. Currently Slack is used, however administrator's might want email reports or an IRC channel instead of Slack. Luckily this can easily be integrated and several systems can be used asynchronously. This allows for administrators to custom configure this system to their desired needs and specifications. In addition the project is opensource, therefore anyone is allowed to take the code and modify it. This allows for individuals to expand the project in whatever direction that they see fit.
+The project has a large potential for expansion. As the code written now is only a prototype there is more work that can be added to expand the tools usefulness. As the code is created with modularity in mind, a user can easily add new scans into the project. If a user wanted, for example, to ensure that a website is correctly configured they could add the nikto \cite{NiktoScan} vulnerability scanner. The scan can then be run and the data would be added to the database. Another future work that could be expanded on is allowing for different methods of interacting with the system. Currently Slack is used, however administrator's might want email reports or an IRC channel instead of Slack. Luckily this can easily be integrated and several systems can be used asynchronously. This allows for administrators to custom configure this system to their desired needs and specifications. In addition the project is opensource, therefore anyone is allowed to take the code and modify it. This allows for individuals to expand the project in whatever direction that they see fit.
 
 \section{Conclusion}
-As was shown the cloud environment is a complex tool that is steadily growing and innovating. These cloud recourses give users an incredibly powerful and flexible tool to create complex systems that are independent from hardware. As users gain full controls of systems directly connected to the Internet. System security becomes a user based, however as mentioned users may not know best practices therefor leaving systems vulnerable to compromise. With users and organizations switching over to using cloud resources in everyday situations new attack become ever more present. Many of the leaders in the public cloud have created proprietary solutions to attempt to protect thiere users and systems from compromise. However many of the private clouds using open source solutions, like OpenStack, may not have the recourses or knowledge to create such solutions. Therefore this project was designed and created to prototype a system that is able to actively scan private clouds for potential vulnerabilities. Administrators are able to see results and query an automated system for further information with ease. A lot was learned about the threat landscape of cloud systems and how a modular system can be designed. It is the hope of the author that this system can be used by other people to ensure that any private cloud environment is secure.
+As was shown the cloud environment is a complex system that is steadily growing and innovating. These cloud recourses give users an powerful and flexible tool to create complex systems that are independent from hardware. As users gain full controls of systems directly connected to the Internet, system security becomes user based, however as mentioned users may not know best practices therefor leaving systems vulnerable to compromise. With users and organizations switching over to using cloud resources in everyday operations new attacks become ever more present. Many of the leaders in the public cloud have created proprietary solutions to attempt to protect their users and systems from compromise. However many of the private clouds using open source solutions, like OpenStack, may not have the recourses or knowledge to create such solutions. Therefore this project was designed and created to prototype a system that is able to actively scan private clouds for potential vulnerabilities. Administrators are able to see results and query an automated system for further information with ease. This thesis provided a great learning opportunity about the threat landscape of cloud systems and how a modular system can be designed. It is the hope of the author that this system can be used by other people to ensure that any private cloud environment is secure.
 
 
 \newpage
@@ -414,6 +415,5 @@ As was shown the cloud environment is a complex tool that is steadily growing an
 \bibliography{thesis.bib}
 \newpage
 \appendix
-\section{}
 \includepdf[pages=-, scale=0.7]{README.pdf}
 \end{document}
