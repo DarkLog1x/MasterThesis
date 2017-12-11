@@ -26,7 +26,17 @@
 \newpage
 
 \section{Abstract}
-to
+Clouds are inherently complex because of the complex interconnection of underlying services. The OpenStack cloud suite eases the deployment and management of cloud services. However, security is one core area that is difficult to isolate and has to be addressed at each level, ranging from low-level system security to the user-facing multi-tenant environments. There are solutions available that offer end-to-end security but most of them are proprietary and with their sophisticated licensing scheme, expertise that might be affordable for large enterprises but difficult for medium and small-scale organizations is required.
+
+Swedish National Infrastructure for Computing (SNIC) is a meta-organization responsible for providing and coordinating HPC services to Swedish Academia. In 2014, SNIC started a pilot project to offer cloud services for Swedish research community, and the SNIC Science Cloud (SSC) has since evolved into a nationally distributed OpenStack-based IaaS. Currently, SSC is in a pre-production phase. Offering IaaS nation-wide was in itself a big task but the real challenge came when users started to utilize the resources while considering security as a low priority task. This started to become a major issue as the number of projects increased on the infrastructure.
+
+The aim of this project is to design a minimalistic security service that helps cloud administrators get first-hand information regarding any activities that may cause threats to the instance or the whole tenant in the cloud infrastructure. The project has the following three main components:
+
+Best Practices Guide: An initial document that contains steps that are important to know before utilizing the resources. These include key based logins, system updates and management of security rules.
+
+Interactive System Monitoring: This part is the major contribution of this project. The aim is to minimize the workload of the cloud administrators yet have the better understanding of activities that may create vulnerabilities. Rather than relying on log files or alerts via emails, we have opted an unconventional approach of using Watchdogs (monitoring-VMs) with SLACK BOTs (Software Robot Device). In the setup, BOTs work like active security agents that keep the cloud administrators informed regarding actions that need special attentions.
+
+Backend System Forensics: In order to safeguard the future attacks, often system/security administrators want to analyze the infected resource. For this purpose, we are working on a backend forensic tool that captures most of the important information before actually terminating the instance. This work is still in progress. The report will cover the basic idea of the project, challenges, details and last but not least current limitations and future directions.
 
 \section{Introduction}
 Cloud computing is a term to describe computational resources that are located on a server running a software layer that disenfranchises the hardware and software. This allows for software to run independently of the hardware and allows a middle layer to control how the two interact. The hardware can then run several different software systems on the same hardware with little overhead. The servers running the cloud are typically hosted in a data center in an external location.  Cloud computing is not a new phenomenon\cite{rochwerger2009reservoir}, it had its origins in the early 2000's \cite{rochwerger2009reservoir}. The last several years, cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a platform for businesses.
@@ -287,15 +297,17 @@ The picture below shows how to call another bot and retrieve a projects' router 
 \end{figure}
 
 \section{Tests}
-The system was designed and created in a testing environment. The environment was hosted in an OpenStack cloud environment with several test VMs initiated. The \emph{watchdog vm} was then spun up and the code was deployed. The code was then edited and redeployed via Ansible. New features were able to be tested on a live deployment ensuring that when deployed to other clusters they would function as needed. To ensure that the code functioned with little bugs, tests were run by spinning up new VMs and changing there configurations.
+To test the effectiveness of the created system a set of test were run in both a simulated and real world example. The testing environment was hosted in an OpenStack cloud environment. The test consisted of creating a "watchdog" VM on which the created software would be run. The configuration for the "watchdog" would be configured to accept Ubuntu 16.04 VM images but would raise alerts once other types of VMs were run. The Slack service would be run and an administrator was added to the group. Then several other VMs were initialized in the project environment. The "watchdog" VM was then spun up and the code was deployed. New VMs for both Ubuntu variety were spun up and then destroyed with some VMs having new services such as MySQL started and exposed. The running "Watchdog" system would then pick up on these changes are report them to the administrator.
+
+The final test was done in a production system. A class was being run on the OpenStack deployment and the "watchdog" service was deployed. As the service is designed to be passive and not intrusive there was no possibility of affecting running systems. The system was able to detect several instances were students deployed systems incorrectly which could potentially lead to compromised VMs. The results of this test are talked about in the following section.
 
 \section{Results}
+As the project consisted of three parts each part is separately evaluated in this section. The first part, user recommendation, describes the complication of different recourses into a final user guild. The second section describes the results for the created IPS system in a real world use case. The third part talks about how imaging tool works and presents a use case for administrators.
 
 \subsection{User Recommendation}
 A user recommendation was written to help users properly connect to initialized VMs. The recommendation focuses on how to connect to the VMs using a proper SSH key. The guild first walks through how to set up a SSH key pair on a users local machine. This ensures that a user creates a proper strong key pair. The user is then instructed on how to add the public key to the OpenStack interface. Along with the SSH connection other simple recommendations are provided to the user. These are to help a user understand the different security implications no matter what they use the VM for. Some examples of what the recommendations looks at are, open ports and security rules. The user recommendation can be found at the following url \footnote{\href{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}}
 
-\newpage
-\subsection{Intrusion Detection System Results}
+\subsection{Intrusion Prevention System Results}
 The administrators first create a configuration file for the cloud system. This configuration file is set for the system to know what type of system configuration the servers should have. Below is a typical configuration:
 
 \begin{mdframed}
