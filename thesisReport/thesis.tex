@@ -199,13 +199,29 @@ The "watchdog" is initiated in the cloud cluster. The once initiated the VM will
 These modules will gather the results from the network and collect them into a central repository. Once the data is gathered it is compared to the config file.  If a discrepancy is found between the expected results and the scanned machine is found an alert is sent to the administrator. For this project the administrator receives notification on a separate slack. This entire process is run every 20 minutes by a corn job located on the watchdog machine. This type of design allows for a flexible platform that can have each component further customized.
 
 \section{Architecture}
-For the monitoring resource an important architecture design was to ensure that the system was modular.  This enabled the system to be adapted to different cloud environments. Users would be able to create individual monitoring tools or logging techniques to be used for configuring to specific infrastructures. As for the proof of concept project Nmap and ssh\_scan were implemented.
+For the monitoring resource an important architecture design was to ensure that the system was modular. This enabled the system to be adapted to different cloud environments. Users would be able to create individual monitoring tools or logging techniques to be used for configuring to specific infrastructures. As for the proof of concept project Nmap and ssh\_scan were implemented.
+
 
 The main portion of the entire program is the database. As the system is designed in a modular manner all the data is stored and retrieved from the database. The database is a MongoDB instance that has one collection that hold all the data from different scans. The only data that is needed inside of the database is the server ID\@. This is the key to which all other data about a particular machine is added to. When data is stored the ID of the VM is passed along with the data. When a user requests data they must also provides the ID for the data they would like.
 
 Apart from the database the other modules are started from the main python program. To do this, the system will first connect to the OpenStack backend via credentials provided in a configuration file. This will pull down all of the VM IDs. This is then fed to each scanning model. These modules intern can query the backend for any additional information that they need. To illustrate this the Nmap modules will use the provided IDs to obtain the internal and external IP address for each machine. This will then feed the query to the Nmap program. The Nmap model will then obtain the data and parse out the needed information, such as open ports. Once the data from the model is as wanted it will be sent to the database to be added for each VM.
 
 To add a new model the main function must be edited so that it will call the new model. The output from the new model must follow a set standardized of $(ID: "ID number", data)$ this is then sent via the main function to the database model to be inserted into the database.
+
+A configuration file is used to tell the program how a particular system in the project should look like.  An administrator must first create this file for each project. This configuration file is set for the system to know what type of system configuration the servers should have. Below is a typical configuration:
+
+\begin{mdframed}
+    \begin{lstlisting}
+#This is a config file
+#It needs to be filled out similer to the output of the script that is run (a.k.a - NMAP, ssh\_scan, etc)
+#* special case to print all other open port
+ports: 22 - open - 7.2p2 Ubuntu 4ubuntu2.1
+ports: 80 - closed
+IP: ip_external_auth - publickey
+IP: ip_internal_auth - publickey
+    \end{lstlisting}
+\end{mdframed}
+The file is read in line by line. All lines that start with a \# are comments and are ignored. The system will then parse each line, splitting each line via the $:$ and $-$ character. The system then uses the split line to view the type of scan that the particular command is associated to, the information to look for, and then the expected result. If the result of the module scan does not match the expected output, a message is created and sent to the communication mechanism, in this case Slack. In the example above port 22 is expected open with the version of \"7.2p2 Ubuntu 4ubuntu2.1\", port 80 is to be closed, and the authentication mechanism for ssh should be strictly public key.
 
 The Slack bot uses the slack application programing interface (API) to communicate with the Slack web interface. The API allows for messages to be sent between the bot and the Slack servers.
 
@@ -290,21 +306,32 @@ The picture below shows how to call another bot and retrieve a projects' router 
 \end{figure}
 
 \section{Tests}
-To test the effectiveness of the created system a set of test were run in both a simulated and real world example. The testing environment was hosted in an OpenStack cloud environment. The test consisted of creating a "watchdog" VM on which the created software would be run. The configuration for the "watchdog" would be configured to accept Ubuntu 16.04 VM images but would raise alerts once other types of VMs were run. The Slack service would be run and an administrator was added to the group. Then several other VMs were initialized in the project environment. The "watchdog" VM was then spun up and the code was deployed. New VMs for both Ubuntu variety were spun up and then destroyed with some VMs having new services such as MySQL started and exposed. The running "Watchdog" system would then pick up on these changes are report them to the administrator.
+To ensure that the system functioned as intended, a two fold testing scenario was implemented. The first phase of testing was done in a controlled environment. The second phase was having the created system deployed in a production environment. The tests were designed in two ways, first to ensure that the created system was working as desired and second that it was able to work in a production environment.
 
-The final test was done in a production system. A class was being run on the OpenStack deployment and the "watchdog" service was deployed. As the service is designed to be passive and not intrusive there was no possibility of affecting running systems. The system was able to detect several instances were students deployed systems incorrectly which could potentially lead to compromised VMs. The results of this test are talked about in the following section.
+The first test was used as a way to ensure that the created components of the system were working as desired. For this to be achieved a set of test goals was first created.
+
+\begin{itemize}
+    \item To recognize when a new VM was created.
+    \item To scan the VMs with different probes (i.e.\ ssh scan and nmap port scan).
+    \item To synthesize the gathered information and compare it with the desired VM configuration.
+    \item To send the data to the administrators via Slack.
+\end{itemize}
+
+The "watchdog" system was then designed and coded to meet these set goals. For the first test, a separate OpenStack environment was created, this ensured that the environment could be controlled and only specific VMs would be turned on and running at a time. The test consisted of creating a "watchdog" VM (running on Ubuntu 16.04) on which the created software would be run. The "watchdog" VM was set up by running the Ansible configuration script. The configuration for the "watchdog" would be configured to accept Ubuntu 16.04 VM images but would raise alerts once other types of VMs were run. The Slack service would be run and an administrator was added to the group. Then several other VMs were initialized in the project environment. The "watchdog" VM was then spun up and the code was deployed. New VMs for both Ubuntu variety were spun up and then destroyed with some VMs having new services such as MySQL started and exposed. The running "Watchdog" system would then pick up on these changes are report them to the administrator.
+
+The second test was used to see how the system scaled with more users and how it handled in a non test environment. The test was done in an project were approximately 50 students were taking a big data course. The students had labs that used VMs were specific ports and services would be run. In this project the "watchdog" service was deployed. As the service is designed to be passive and not intrusive there was no possibility of affecting running systems. The system was able to detect several instances were students deployed systems incorrectly which could potentially lead to compromised VMs. This was able to to show that the system scaled to meet larger demands and that it was able to detect miss configured VMs in a real world scenario. The results of these tests are described in more detail in the next section.
 
 \section{Results}
 As the project consisted of three parts each part is separately evaluated in this section. The first part, user recommendation, describes the complication of different recourses into a final user guild. The second section describes the results for the created IPS system in a real world use case. The third part talks about how imaging tool works and presents a use case for administrators.
 
 \subsection{User Recommendation}
-A user recommendation was written to help users properly connect to initialized VMs. The recommendation focuses on how to connect to the VMs using a proper SSH key. The guild first walks through how to set up a SSH key pair on a users local machine. This ensures that a user creates a proper strong key pair. The user is then instructed on how to add the public key to the OpenStack interface. Along with the SSH connection other simple recommendations are provided to the user. These are to help a user understand the different security implications no matter what they use the VM for. Some examples of what the recommendations looks at are, open ports and security rules. The user recommendation can be found at the following url \footnote{\href{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}}
+A user recommendation was written to help users properly connect to initialized VMs. The recommendation focuses on how to connect to the VMs using a proper SSH key. The guild first walks through how to set up a SSH key pair on a users local machine. This ensures that a user creates a proper strong key pair. The user is then instructed on how to add the public key to the OpenStack interface. Along with the SSH connection other simple recommendations are provided to the user. These are to help a user understand the different security implications no matter what they use the VM for. Some examples of what the recommendations looks at are, open ports and security rules. The user recommendation can be found at the following url \footnote{\href{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}{https://github.com/DarkLog1x/MasterThesis/tree/master/UserRecomendation}}. The recommendations come from several years of security work in the field and an accumulation of other sources (outdated however still has good general advice \cite{bauer2005linux}) and \cite{digOcesecure}. As of the start of 2018 these are considered the first steps in securing a server that is exposed to the Internet.
 
 \subsection{Intrusion Prevention System}
 The overall results for the experiments turned out well. The system was able to be easily set up and run, this allowed the administrators to have one place to view the status for a given project. If an event occurred that needed to be taken look at, the needed information could easily be queried. The system did manage to catch systems that were deployed in a production environment that did not match the predefined configuration file.
 
 \subsubsection{Intrusion Prevention System Results}
-The administrators first create a configuration file for the cloud system. This configuration file is set for the system to know what type of system configuration the servers should have. Below is a typical configuration:
+For both tests the same configuration for the scanning was used. This was done to ensure that changing of the configuration did not affect the outcome of either test. The image bellow shows the configuration for the modules used in both the controlled and real world test.
 
 \begin{mdframed}
     \begin{lstlisting}
@@ -320,9 +347,9 @@ IP: ip_external_auth - publickey
 IP: ip_internal_auth - publickey
     \end{lstlisting}
 \end{mdframed}
-The file is read in line by line. All lines that start with a \# are comments and are ignored. The system will then parse each line, splitting each line via the $:$ and $-$ character. The system then uses the split line to view the type of scan that command is associated to, the information to look for, and then the expected result. If the result does not match the output, the output is flagged and sent to the communication mechanism, in this case Slack.
+The ports 22, 80, 443, 5000, and 6000 had values in which the expected configuration of the server matched with the created configuration file. If any other ports were opened by a service or one of the later ports was not in the correct state. A message would be created and sent to an administrator via Slack.
 
-Once the base system was running in our test environment a decision to scale up was made. Our test environment was compatible however a real environment with more machines and users could not have been replicated. Luckily a class was taking place that used the cloud environment. Therefore a watchdog VM was spun up in the classes cloud cluster and started to monitor the VMs that were created. Immediately VMs started to appear in the Slack channel. After running for a while inconsistencies were started to be found. A small snippet of the Slack channel is shown bellow. In this section 5 machines are shown, 3 of them have inconsistencies that are not in the configuration file.
+As the first test environment was used for design and development with very controlled machine states. It was decided to show some of the results from the second phase of testing. The second real world test was the main test environment were the following results were gathered. Once the system was set up in the project and verified that things were working as they should be, the system was left to gather and display information about the state of machines in the project.  After running for a while inconsistencies in the VM configuration started to be found. A small snippet of the Slack channel is shown bellow as there was a lot of data sent. In this section 5 machines are shown, 3 of them have inconsistencies that are not in the configuration file.
 
 The table on the next page describes how the output of the Slack bot will look like. Bellow the table is the output from the Slack channel.
 
@@ -412,8 +439,11 @@ Once a compromised machine has been found a copy of the memory, disk, and system
 
 The data that the script pulled is a disk image, the memory of the machine, and the cpu state. The disk image saves the state of the hard drive and allows for the machine to be recreated if need be. The memory is saved as a raw memory dump. This creates a large file that represents the active memory from the virtual machine. Lastly the CPU state is saved to show the CPU usage. These 3 items provide a comprehensive overview of what the machine was doing at the time. This would then allow an administrator to further figure out the cause of the exploit. The administrator could use tools like volatility framework \cite{volitilityFram} to then import the memory dump and then attempt to find what programs and services were running on the machine.
 
+\subsection{Overall Expectations}
+As seen above the created system was able to work as expected. The recommendations allow for individuals to have a quick overview of the best practices in working with VMs while the groot tool allows for ensuring that users follow the created guild lines. When a problem arrases with a configuration an administrator can investigate incidents and pull data about a VM in Slack without having to switch over to another tool. This allows for the administrator to have a understanding about what is occurring in a particular project, therefor meeting the expected outcome of the project.
+
 \section{Discussion}
-Throughout the project every attempt was made to ensure that the project was well designed and created. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame.
+Throughout the project every attempt was made to ensure that the good design decisions were adhered to. This meant that the system was reliable, fast, and stable. However due to time constraints the code portion of the project will be branded as a prototype. This is because there are several drawbacks that could not have been overcome in this specific time frame.
 
 The current implementation utilizes a individual VM for every cluster. This increases resource usage quickly. If a cloud system had 100 clusters then there would be 100 VMs that would only be used for monitoring. It would be beneficial if it was possible to have a smaller number of VMs used to scan multiple clusters. However the current system is unable to perform this type of task.
 
