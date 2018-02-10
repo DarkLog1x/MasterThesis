@@ -20,14 +20,11 @@
 
 
 \begin{document}
-\includepdf{thesis_cover}
+\includepdf{Exjobbsframsida}
+\includepdf{Abstractsida}
 \newpage
 \tableofcontents
 \newpage
-
-\begin{abstract}
-Clouds are a large part of todays computing space, with individuals having the ability to crate their own cloud. The OpenStack cloud suite eases the deployment and management of cloud services. However, security is one core area that is difficult to isolate and has to be addressed at each level, ranging from low-level system security to the user-facing multi-tenant environments. There are solutions available that offer end-to-end security but most of them are proprietary and with their sophisticated licensing scheme, expertise that might be affordable for large enterprises but difficult for medium and small-scale organizations is required. The aim of this project is to design a minimalistic security service for the OpenStack environment that helps cloud administrators get first-hand information regarding any activities that may cause threats to the instance or the whole tenant in the cloud infrastructure. The project created a proof of concept system that once deployed was able to detect potential misconfigurations and threats. The system was tested in a real world scenarios and proved to work, finding several machines that were launched without correct configurations.
-\end{abstract}
 
 \section{Introduction}
 Cloud computing is a term to describe computational resources that are located on a server running a software layer that disenfranchises the hardware and software. This allows for software to run independently of the hardware and allows a middle layer to control how the two interact. The hardware can then run several different software systems on the same hardware with little overhead. The servers running the cloud are typically hosted in a data center in an external location. Some examples of cloud computing are Amazon Web Services (AWS) \cite{amazonaws2017} or Microsoft Azure \cite{Azure2017}. Cloud computing is not a new phenomenon\cite{rochwerger2009reservoir}, it had its origins in the early 2000's \cite{rochwerger2009reservoir}. The last several years, cloud computing has steadily grown (Figure \ref{fig:CloudTrendGoogle}) as a platform for businesses.
